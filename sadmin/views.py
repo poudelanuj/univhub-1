@@ -4,3 +4,7 @@ from django.shortcuts import render
 
 def index(request):
     return render(request, "base_generic.html")
+
+
+def getPickup(request):
+	return render(request, "pickup.html")

@@ -3,4 +3,6 @@ from django.shortcuts import render
 # Create your views here.
 
 def index(request):
-    return render(request, "base_generic.html")
+    return render(request, "admin-dashboard.html")
+def notifications(request):
+    return render(request,"notifications.html")

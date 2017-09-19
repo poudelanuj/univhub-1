@@ -9,6 +9,7 @@ def index(request):
 
 
 
+# dffdsf
 def getPickup(request):
 	return render(request, "pickup.html")
 =======

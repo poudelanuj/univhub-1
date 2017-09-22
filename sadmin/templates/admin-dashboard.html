@@ -2,15 +2,12 @@
 <html lang="">
 <head>
 
-<<<<<<< HEAD:sadmin/templates/base_generic.html
 
 
 
 
-    {% load static %}
-=======
-  {% load static %}
->>>>>>> c9dff66fe5a7849e0a09b637e2688330e9c337af:sadmin/templates/admin-dashboard.html
+{% load static %}
+{% load static notifications_tags %}
 
 
 <meta charset="utf-8">
@@ -55,7 +52,7 @@
 					<!-- Card header -->
 					<div class="pmd-card-title">
 						<div class="media-body media-middle">
-							<a href="javascript:void(0)" class="pull-right">3 new notifications</a>
+							<a href="javascript:void(0)" class="pull-right"> <span id="notifycount"></span> new notifications</a>
 							<h3 class="pmd-card-title-text">Notifications</h3>
 						</div>
 					</div>
@@ -68,6 +65,7 @@
 								<span>You don´t have any notifications</span>
 							</p>
 						</li>
+
 						<li class="list-group-item unread">
 							<a href="javascript:void(0)">
 								<div class="media-left">
@@ -76,11 +74,12 @@
 									</span>
 								</div>
 								<div class="media-body">
-									<span class="list-group-item-heading"><span>Prathit</span> posted a new challanegs</span>
+									<span class="list-group-item-heading">{{ list}}</span>
 									<span class="list-group-item-text">5 Minutes ago</span>
 								</div>
 							</a>
 						</li>
+
 						<li class="list-group-item">
 							<a href="javascript:void(0)">
 								<div class="media-left">
@@ -1064,8 +1063,8 @@
 		});
 		$('.aside_students').click(function(){
 			$("#content").load('students-list.html',function(){
-				$.getScript('assets/js/propeller.js');
-				$.getScript('assets/js/circle-progress.min.js',function(){
+				$.getScript("{% static 'assets/js/propeller.js' %}");
+				$.getScript("{% static 'assets/js/circle-progress.min.js '%}",function(){
 					$('.student-progress').circleProgress({
 						startAngle: 4.75,
 						size: 80,

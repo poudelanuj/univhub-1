@@ -1,10 +1,11 @@
+{%load static%}
 <div class="container-fluid notifications">
 
     <div class="row">
         <!-- Page Content Title -->
         <div class="col-md-12">
-            <h1 class="page-content-title">Notifications</h1>	
-        </div>		
+            <h1 class="page-content-title">Notifications</h1>
+        </div>
         <!-- / Page Content Title -->
     </div>
 
@@ -34,15 +35,15 @@
                                         <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week" href="#week-noti">Week</a></li>
                                         <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month" href="#month-noti">Month</a></li>
                                     </ul>
-                            </div>	
-                        </div>	
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-content notifications-tab-content">
                         <ul role="tabpanel" id="today-noti" class="tab-pane active list-group pmd-list pmd-card-list">
                             <li class="list-group-item">
                                 <a href="javascript:void(0);">
                                     <div class="media-left">
-                                        <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
+                                        <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
                                     </div>
                                     <div class="media-body">
                                         <h3 class="list-group-item-heading">This is notification title</h3>
@@ -50,13 +51,13 @@
                                         <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
                                         <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
                                     </div>
-                                    <div class="noti-time">12 min ago</div>  
+                                    <div class="noti-time">12 min ago</div>
                                 </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="javascript:void(0);">
                                     <div class="media-left">
-                                        <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
+                                        <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
                                     </div>
                                     <div class="media-body">
                                         <h3 class="list-group-item-heading">This is notification title</h3>
@@ -64,7 +65,7 @@
                                         <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
                                         <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
                                     </div>
-                                    <div class="noti-time">yesterday at 10:00 am</div>  
+                                    <div class="noti-time">yesterday at 10:00 am</div>
                                 </a>
                             </li>
                         </ul>
@@ -72,7 +73,7 @@
                             <li class="list-group-item">
                                 <a href="javascript:void(0);">
                                     <div class="media-left">
-                                        <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
+                                        <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
                                     </div>
                                     <div class="media-body">
                                         <h3 class="list-group-item-heading">This is notification title</h3>
@@ -80,7 +81,7 @@
                                         <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
                                         <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
                                     </div>
-                                    <div class="noti-time">12 min ago</div>  
+                                    <div class="noti-time">12 min ago</div>
                                 </a>
                             </li>
                         </ul>
@@ -88,7 +89,7 @@
                         </ul>
                     </div>
                 </div>
-        </div>   
+        </div>
     </div>
 </div>
 
@@ -113,7 +114,7 @@
                             <option value-="Organizing Event">Organizing Event</option>
                             <option value-="Visit Web Site Request">Visit Web Site Request</option>
                             <option value-="Other">Other</option>
-                        </select>    
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="title" class="control-label">Title:</label><br>

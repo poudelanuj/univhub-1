@@ -9,12 +9,10 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -27,10 +25,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    #"fcm_django",
+    "fcm",
     'sadmin.apps.SadminConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'notifications'
 ]
+FCM_APIKEY="AIzaSyBH-HlJabtrthLccXJqqa2vi8krqPNrpL4 "
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,21 +70,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'univhub.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'mysql': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'univhub',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
-        'USER':'root',
-        'PASSWORD':'',
-    }
-}
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': '2548',
+    },
 
+}
+DATABASES['default'] = DATABASES['mysql']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -105,7 +104,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+FCM_DJANGO_SETTINGS = {
+    "FCM_SERVER_KEY": "AAAAFvdqJHo:APA91bFRUlD_N_qKNcvHg82z83JTpXdtsvEu8LWtNWg_WrVjE_K321huaYlf0IIzLzVqq0gk3YR6QfHk3a20aZu-FEhucG6VTbnYAxO7XPfP09zVKvuZL6eXI4BFUk8u2vJLl5SqmXuq ",
+    "ONE_DEVICE_PER_USER": False,
+    "DELETE_INACTIVE_DEVICES": False
+}
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -119,8 +122,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+

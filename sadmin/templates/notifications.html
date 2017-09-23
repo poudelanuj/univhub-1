@@ -16,8 +16,8 @@
                         <button type="button" class="btn btn-notice pull-right" title="Click to Send Notice" data-target="#send-notice-modal" data-toggle="modal">Send Notice</button >
                     </div>
                     <div class="clearfix">
-                        <label for="notifications_type" class="pull-left">Notification Type:</label>
-                        <select name="notifications_type" id="notifications_type" class="pull-left form-control notifications_type">
+                        <label for="notifications_type1" class="pull-left">Notification Type:</label>
+                        <select name="notifications_type" id="notifications_type1" class="pull-left form-control notifications_type">
                             <option value-="Class Registration">Class Registration</option>
                             <option value-="Complete Profile Request">Complete Profile Request</option>
                             <option value-="Document Upload Request">Document Upload Request</option>
@@ -102,41 +102,48 @@
 				<h2 class="pmd-card-title-text text-center">Sending Notification To all Users</h2>
 			</div>
 			<div class="modal-body">
-				<form class="form-horizontal">
+				<form enctype='application/json' name="notification_create_form" id="notification_create_form" class="form-horizontal" action="create.django" method="post">
 					<div class="form-group">
-                        <label for="notifications_type" class="control-label">Notification Type:</label>
-                        <select name="notifications_type" id="notifications_type" class="form-control notifications_type">
-                            <option value-="Class Registration">Class Registration</option>
-                            <option value-="Complete Profile Request">Complete Profile Request</option>
-                            <option value-="Document Upload Request">Document Upload Request</option>
-                            <option value-="Document Receieved">Document Receieved</option>
-                            <option value-="Map">Map</option>
-                            <option value-="Organizing Event">Organizing Event</option>
-                            <option value-="Visit Web Site Request">Visit Web Site Request</option>
-                            <option value-="Other">Other</option>
+                        <label for="notifications_type2" class="control-label">Notification Type:</label>
+                        <select name="notification_type" id="notifications_type2" class="form-control notifications_type">
+
+                            <!-- TODO: get the notification type details form the table -->
+
+                            <option value="1">Class Registration</option>
+                            <option value="2">Complete Profile Request</option>
+                            <option value="3">Document Upload Request</option>
+                            <option value="4">Document Receieved</option>
+                            <option value="5">Map</option>
+                            <option value="6">Organizing Event</option>
+                            <option value="7">Visit Web Site Request</option>
+                            <option value="8">Other</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="title" class="control-label">Title:</label><br>
-                        <input type="text" id="title" class="form-control" required placeholder="Title of the Notifications">
+                        <input name="title" id="title" class="form-control" required placeholder="Title of the Notifications">
                     </div>
                     <div class="form-group">
                         <label for="description" class="control-label">Description:</label><br>
-                        <textarea required class="form-control" id="description" placeholder="Details about the Notifications"></textarea>
+                        <textarea name="details"required class="form-control" id="description" placeholder="Details about the Notifications"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="url" class="control-label">URL:</label><br>
-                        <input type="text" id="url" class="form-control" required placeholder="Paste the redirect web URL here">
+                        <input name="web_url" id="url" class="form-control" required placeholder="Paste the redirect web URL here">
                     </div>
                     <div class="form-group">
                         <label for="map" class="control-label">Map:</label><br>
-                        <input type="text" id="map" class="form-control" required placeholder="Paste the Google Map URL here">
+                        <input name="map_url" id="map" class="form-control" required placeholder="Paste the Google Map URL here">
                     </div>
+                    <input style="display:none;" type="submit" id="create_notification  _submit" name="create_notification_submit" />
+
 				</form>
 			</div>
 			<div class="pmd-modal-action clearfix">
-				<button data-dismiss="modal" class="btn btn-submit pull-right" type="button">Send</button>
+				<button onclick="create_notification_upload()" id="upload_notification" data-dismiss="modal" class="btn btn-submit pull-right" type="submit">Send</button>
 			</div>
+
 		</div>
 	</div>
 </div>
+<script type="text/javascript" ></button>

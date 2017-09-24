@@ -1,9 +1,9 @@
-<div class="container-fluid students-list"> 
+<div class="container-fluid students-list">
     <div class="row">
         <!-- Page Content Title -->
         <div class="col-md-12">
-            <h1 class="page-content-title">Students</h1>	
-        </div>		
+            <h1 class="page-content-title">Students</h1>
+        </div>
         <!-- / Page Content Title -->
     </div>
 
@@ -19,15 +19,15 @@
                             <option value-="USA">USA</option>
                             <option value-="Australia">Australia</option>
                         </select>
-                    </div> 
+                    </div>
                     <div class="form-group pull-left">
                         <label for="student-status" class="pull-left">Status:</label>
                         <select name="student-status" id="student-status" class="pull-left form-control student-status">
                             <option value-="Visa Processing">Visa Processing</option>
                             <option value-="Visa Granted">Visa Granted</option>
                         </select>
-                    </div>      
-                </div> 
+                    </div>
+                </div>
                 <div class="pull-right">
                     <div class="form-group">
                         <div class="form-group clearfix">
@@ -37,26 +37,29 @@
                                 <option value-="25">30</option>
                                 <option value-="25">35</option>
                             </select>
-                        </div> 
+                        </div>
                     </div>
-                </div>       
+                </div>
             </div>
             <div class="list-group pmd-list pmd-card-list">
+            <ul>
+            {%for student in students %}
+
                 <li class="list-group-item">
                     <a href="javascript:;" class="clearfix">
                         <div class="media-left">
                            <div class="student-progress text-center" data-value="0.2">
-                                <img src="assets/images/user.png" alt="Student" class="student-progress-image">   
+                                <img src="assets/images/user.png" alt="Student" class="student-progress-image">
                                 <span class="student-progress-percent">20%</span>
-                            </div> 
+                            </div>
                         </div>
                         <div class="media-body">
-                            <h3 class="list-group-item-heading">Mithai Lal Jadav</h3>
-                            <span class="list-group-item-text">Apply For: &nbsp;&nbsp;&nbsp;<img src="assets/images/aus-flag.png" class="country-flag">Australia</span><br>
-                            <span class="list-group-item-text">Program: &nbsp;&nbsp;Bachelor</span><br>
-                            <span class="list-group-item-text">Major:&nbsp;&nbsp;Computer Science</span>	
+                            <h3 class="list-group-item-heading">{{student}}</h3>
+                            <span class="list-group-item-text">Apply For: &nbsp;&nbsp;&nbsp;<img src="assets/images/aus-flag.png" class="country-flag">{{student.userprofile.apply_for}}</span><br>
+                            <span class="list-group-item-text">Program: &nbsp;&nbsp;{{student.apply_for}}</span><br>
+                            <span class="list-group-item-text">Major:&nbsp;&nbsp;{{student.major.major_name}}</span>
                         </div>
-                    </a>    
+                    </a>
                     <div class="media-right">
                             <span class="dropdown pmd-dropdown clearfix pickup-settings">
                                 <button class="btn dropdown-toggle btn-icon" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-cog" aria-hidden="true"></i></button>
@@ -70,34 +73,8 @@
                             </span>
                         </div>
                 </li>
-                <li class="list-group-item">
-                    <a href="javascript:;" class="clearfix">
-                        <div class="media-left">
-                            <div class="student-progress text-center" data-value="0.7">
-                                <img src="assets/images/user.png" alt="Student" class="student-progress-image">   
-                                <span class="student-progress-percent">70%</span>
-                            </div> 
-                        </div>
-                        <div class="media-body">
-                            <h3 class="list-group-item-heading">Mithai Lal Jadav</h3>
-                            <span class="list-group-item-text">Apply For: &nbsp;&nbsp;&nbsp;<img src="assets/images/aus-flag.png" class="country-flag">Australia</span><br>
-                            <span class="list-group-item-text">Program: &nbsp;&nbsp;Bachelor</span><br>
-                            <span class="list-group-item-text">Major:&nbsp;&nbsp;Computer Science</span>	
-                        </div>
-                    </a>    
-                    <div class="media-right">
-                        <span class="dropdown pmd-dropdown clearfix pickup-settings">
-                            <button class="btn dropdown-toggle btn-icon" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                            <ul aria-labelledby="pickup-settings" role="menu" class="dropdown-menu dropdown-menu-right">
-                                <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem"  data-target="#schedule-date" data-toggle="modal">Assign to An Agent</a></li>
-                                <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Chat</a></li>
-                                <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Send Notification</a></li>
-                                <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Block</a></li>
-                                <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Delete</a></li>
-                            </ul>
-                        </span>
-                    </div>
-                </li>
+                {% endfor %}
+                </ul>
             </div>
             <div class="pagination">
                 <nav aria-label="Page navigation">
@@ -120,7 +97,7 @@
                     </ul>
                 </nav>
             </div>
-        </div> 
+        </div>
     </div>
     </div>
 </div>

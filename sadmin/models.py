@@ -10,6 +10,14 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 
+# (what to be entered, what to be shown)
+statusTypes = {
+    ('Pending', 'Pending'),
+    ('Scheduled', 'Scheduled'),
+    ('Picked', 'Picked'),
+    ('Unpicked', 'Unpicked'),
+}
+
 
 class Header(models.Model):
     title = models.CharField(max_length=100)
@@ -41,12 +49,6 @@ class RequirementBySubject(models.Model):
     sub = models.ForeignKey('Requirements', models.DO_NOTHING)
     requirement_description = models.TextField(blank=True, null=True)
 
-class Document(models.Model):
-    student=models.ForeignKey(User)
-    name=models.CharField(max_length=25)
-    DOCTYPE_CHOICES=(('a','first'),('b','second'),('c','third'),('d','fourth'))
-    doctype=models.CharField(max_length=25,choices=DOCTYPE_CHOICES,help_text='Document Type')
-    location=models.TextField()
     class Meta:
         db_table = 'requirement_by_subject'
 
@@ -122,50 +124,45 @@ class UniversityRequirement(models.Model):
         db_table = 'university_requirement'
 
 
-
-class District(models.Model):   #location of students
-    districtname=models.CharField(max_length=15)
+class District(models.Model):  # location of students
+    districtname = models.CharField(max_length=15)
 
     class Meta:
         db_table = "district"
 
 
-
-class Country(models.Model):    #available country for which students can apply
-    countryname=models.CharField(max_length=15)
+class Country(models.Model):  # available country for which students can apply
+    countryname = models.CharField(max_length=15)
 
     class Meta:
         db_table = "country"
 
 
-
-class ApplyType(models.Model):  #student apply or dependendent apply ?
-    applytype: models.CharField(max_length=15)
+class ApplyType(models.Model):  # student apply or dependendent apply ?
+    applytype = models.CharField(max_length=15)
 
     class Meta:
         db_table = "applytype"
 
 
-class ProgramsOffered(models.Model):    # bachelor, masters, phd or diploma
+class ProgramsOffered(models.Model):  # bachelor, masters, phd or diploma
     programOffered = models.CharField(max_length=20)
 
     class Meta:
-        db_table="programsOffered"
-
-
+        db_table = "programsOffered"
 
 
 class UserProfile(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     dob = models.DateField()
     mobile = models.IntegerField()
     remember_token = models.CharField(max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
-    scholarship = models.BooleanField() # apply for scholarship or not ?
+    scholarship = models.BooleanField()  # apply for scholarship or not ?
     citizenship = models.CharField(max_length=15)
     passport = models.CharField(max_length=15, blank=True, null=True)
-    
+
     district = models.ForeignKey(District, models.DO_NOTHING)
     apply_for = models.ForeignKey(Country, models.DO_NOTHING)
     sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
@@ -173,50 +170,100 @@ class UserProfile(models.Model):
     program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
 
     class Meta:
+        db_table = 'user_profile'
 
-        db_table = 'users'
+
 class Notification(models.Model):
-    receiver=models.ForeignKey(User,on_delete=models.CASCADE,related_name='receiver')
-    sender = models.ForeignKey(User,related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    sender = models.ForeignKey(User, related_name='sender')
     read = models.BooleanField(default=False)
-    title=models.CharField(blank=True,null=True,max_length=50)
+    title = models.CharField(blank=True, null=True, max_length=50)
     Type = models.IntegerField()
     message = models.TextField()
     created = models.DateTimeField()
 
-
     class Meta:
-
         db_table = 'notifications'
 
+
 class AdminProfile(models.Model):
-    consultancyName= models.CharField(max_length=30)
-    pan_vat= models.CharField(max_length=20)
-    reg_no= models.CharField(max_length=20)
-    location= models.CharField(max_length=20)
+    consultancyName = models.CharField(max_length=30)
+    pan_vat = models.CharField(max_length=20)
+    reg_no = models.CharField(max_length=20)
+    location = models.CharField(max_length=20)
     website = models.CharField(max_length=50)
     phone = models.IntegerField()
     description = models.TextField()
-    user= models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     class Meta:
-        db_table="adminprofile"
+        db_table = "adminprofile"
 
 
 class ModeratorProfile(models.Model):
     mobile = models.IntegerField()
-    user= models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=20)
 
     class Meta:
-        db_table="moderatorprofile"
+        db_table = "moderatorprofile"
 
 
 class CounselorProfile(models.Model):
     mobile = models.IntegerField()
-    user= models.ForeignKey(User, on_delete=models.CASCADE,related_name='userid')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userid')
     address = models.CharField(max_length=20)
-    admin= models.ForeignKey(User,on_delete=models.CASCADE,default=None,related_name='adminid')
+    admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
 
     class Meta:
         db_table = "counselorprofile"
+
+
+class documenttype(models.Model):
+    name = models.CharField(max_length=30)
+
+    class Meta:
+        db_table = 'documenttype'
+
+    def __str__(self):
+        return self.name
+
+
+class uploadeddocuments(models.Model):
+    student_id = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
+    doctype = models.ForeignKey(documenttype)
+    docname = models.CharField(max_length=30)
+    url = models.CharField(max_length=250)
+
+    class Meta:
+        db_table = 'uploadeddocuments'
+
+    def __str__(self):
+        return str(self.student_id) + " : " + str(self.docname)
+
+
+class pickup(models.Model):
+    pickupof = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
+    date_from = models.DateField()
+    date_to = models.DateField()
+    time = models.TimeField()
+    location = models.CharField(max_length=50)
+    status = models.CharField(max_length=9, choices=statusTypes, default='Pending')
+
+    class Meta:
+        db_table = 'pickup'
+
+    def __str__(self):
+        return str(self.pickupof.username)
+
+
+class pickupdetails(models.Model):
+    pickupid = models.ForeignKey(pickup, on_delete=models.CASCADE)
+    documentid = models.ForeignKey(uploadeddocuments, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'pickupdetails'
+
+    def __str__(self):
+        return str(self.pickupid) + str(self.documentid)
+

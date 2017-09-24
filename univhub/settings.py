@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'notifications'
+
 ]
 
 MIDDLEWARE = [
@@ -70,7 +70,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'univhub.wsgi.application'
-
+LOGIN_REDIRECT_URL = '/'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
+EMAIL_HOST_USER = 'enishpaneru2017@gmail.com' # email id
+EMAIL_HOST_PASSWORD = 'newpw2017' #password
+EMAIL_PORT = 587
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

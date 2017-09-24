@@ -13,7 +13,6 @@ class Header(models.Model):
     title = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
         db_table = 'header'
 
 
@@ -21,7 +20,6 @@ class Major(models.Model):
     major_name = models.CharField(max_length=250)
 
     class Meta:
-        managed = False
         db_table = 'major'
 
 
@@ -32,7 +30,6 @@ class Ranking(models.Model):
     type_reference_table = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'ranking'
 
 class Document(models.Model):
@@ -52,7 +49,6 @@ class RequirementBySubject(models.Model):
     requirement_description = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'requirement_by_subject'
 
 
@@ -60,7 +56,6 @@ class Requirements(models.Model):
     name = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'requirements'
 
 
@@ -68,7 +63,6 @@ class SubHeader(models.Model):
     title = models.CharField(max_length=250)
 
     class Meta:
-        managed = False
         db_table = 'sub_header'
 
 
@@ -77,7 +71,6 @@ class SubMajor(models.Model):
     sub_major_name = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'sub_major'
 
 
@@ -89,7 +82,6 @@ class UniAddress(models.Model):
     zip_code = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'uni_address'
 
 
@@ -99,7 +91,6 @@ class UniAddressMapping(models.Model):
     is_main = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'uni_address_mapping'
 
 
@@ -109,7 +100,6 @@ class Universities(models.Model):
     logo_url = models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'universities'
 
 
@@ -120,7 +110,6 @@ class UniversityContent(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'university_content'
 
 
@@ -131,7 +120,7 @@ class UniversityRequirement(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+
         db_table = 'university_requirement'
 
 
@@ -148,3 +137,48 @@ class UserProfile(models.Model):
     class Meta:
 
         db_table = 'users'
+class Notification(models.Model):
+    receiver=models.ForeignKey(User,on_delete=models.CASCADE,related_name='receiver')
+    sender = models.ForeignKey(User,related_name='sender')
+    read = models.BooleanField(default=False)
+    title=models.CharField(blank=True,null=True,max_length=50)
+    Type = models.IntegerField()
+    message = models.TextField()
+    created = models.DateTimeField()
+
+
+    class Meta:
+
+        db_table = 'notifications'
+
+class AdminProfile(models.Model):
+    consultancyName= models.CharField(max_length=30)
+    pan_vat= models.CharField(max_length=20)
+    reg_no= models.CharField(max_length=20)
+    location= models.CharField(max_length=20)
+    website = models.CharField(max_length=50)
+    phone = models.IntegerField()
+    description = models.TextField()
+    user= models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+
+    class Meta:
+        db_table="adminprofile"
+
+
+class ModeratorProfile(models.Model):
+    mobile = models.IntegerField()
+    user= models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.CharField(max_length=20)
+
+    class Meta:
+        db_table="moderatorprofile"
+
+
+class CounselorProfile(models.Model):
+    mobile = models.IntegerField()
+    user= models.ForeignKey(User, on_delete=models.CASCADE,related_name='userid')
+    address = models.CharField(max_length=20)
+    admin= models.ForeignKey(User,on_delete=models.CASCADE,default=None,related_name='adminid')
+
+    class Meta:
+        db_table = "counselorprofile"

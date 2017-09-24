@@ -8,5 +8,4 @@ import notifications.urls
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'sadmin/',include('sadmin.urls')),
-    url('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ]

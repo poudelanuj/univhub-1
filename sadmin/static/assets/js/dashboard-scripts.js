@@ -52,6 +52,63 @@
 					}
 			});
 		});
+		setInterval(function(){
+			$.ajax({
+
+	 url:"getnotifications/",
+		dataType: 'json',
+	 success: function(data){
+
+		 $("#notifycountbadge").attr("data-badge",data['notifycount'])
+		$("#notifycount").replaceWith('<span id="notifycount">' + data['notifycount'] + '</span >');
+
+	 },
+
+	});
+		},10000);
+		$('#notificationdropshow').click(function(){
+
+			$.ajax({
+
+				url: "getnotificationslist/",
+
+				success : function(data) {
+						 $('#notifylist').html(data);
+				 }
+				});
+				});
+		$('#addmoderatorbutton').click(function(){
+
+
+
+			$.ajax({
+				type: 'POST',
+				url: "addmoderator/",
+				data: $("#addmoderatorform").serialize(),
+				success : function(data) {
+
+						$('#add-moderator').modal('toggle');
+
+
+				 }
+});
+		});
+			$('#addadminbutton').click(function(){
+
+
+
+				$.ajax({
+				type: 'POST',
+				url: "addadmin/",
+				data: $("#addadminform").serialize(),
+				success : function(data) {
+
+				$('#add-admin').modal('toggle');
+
+
+				}
+				});
+				});
 
 
         $(".pmd-sidebar .pmd-sidebar-nav li a").on("click", function(e) {

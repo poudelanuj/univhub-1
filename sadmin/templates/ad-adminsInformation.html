@@ -8,9 +8,9 @@
 				<span class="dropdown pmd-dropdown clearfix">
 					<button class="btn dropdown-toggle btn-blue" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="material-icons md-dark pmd-sm">add</i>Add</button>
 					<ul aria-labelledby="admin-CRUD" role="menu" class="dropdown-menu dropdown-menu-right pmd-z-depth-2">
-						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Admin</a></li>
-						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Moderator</a></li>
-						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Counselor</a></li>
+						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-admin">Admin</a></li>
+						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-moderator">Moderator</a></li>
+						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-counselor">Counselor</a></li>
 					</ul>
 				</span>
 			</div>
@@ -30,7 +30,7 @@
 									<button type="button" class="btn btn-blue" >
 										<i class="material-icons md-dark pmd-sm" >fiber_manual_record</i>Edit
 									</button>
-									
+
 									<button type="button" class="btn btn-yellow ajaxCallForActivationRole" value={{admins.id}}>
 										<i class="material-icons md-dark pmd-sm" >fiber_manual_record</i>
 										{% if admins.is_active %}

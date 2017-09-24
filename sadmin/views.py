@@ -6,7 +6,7 @@ from .models import Document,Notification
 from django.contrib.auth.models import User
 from django.http import JsonResponse,HttpResponse
 from django.template.loader import render_to_string
-from .forms import SignupForm,AddModeratorForm,AddAdminForm
+from .forms import SignupForm,AddModeratorForm,AddAdminForm,AddCounselorForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -118,17 +118,19 @@ def addmoderator(request):
 
     return JsonResponse(errors)
 
-# def addcounselor(request):
-# 	print("before all")
-# 	form = AddCounselorForm(request.POST or None)
-# 	if request.method == 'POST':
-# 		print("request sent")
-# 		if form.is_valid():
-# 			print("form valid")
-# 			form.save()
-# 			return HttpResponseRedirect(reverse('admin-dashboard'))
-# 	else:
-# 		print("request not post")
-# 		form = AddCounselorForm()
+def addcounselor(request):
+    user=request.user
+    form = AddCounselorForm(request.POST,user=user or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            errors=form.errorlist
+            print(errors)
+            return JsonResponse(errors)
+        else:
+            errors=form.errorlist
+            print(errors)
+            return JsonResponse(errors)
 
-# 	return render(request, 'addcounsellor.html', {'form': form})
+
+    return JsonResponse(errors)

@@ -10,7 +10,8 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import UserProfile,AdminProfile, ModeratorProfile, CounselorProfile
 
 
-class AddAdminForm(ModelForm):
+class AddAdminForm(forms.Form):
+    username = forms.CharField(max_length=25)
     consultancyName= forms.CharField(max_length=30)
     pan_vat= forms.CharField(max_length=20)
     reg_no= forms.CharField(max_length=20)
@@ -28,7 +29,7 @@ class AddAdminForm(ModelForm):
         username = cleaned_data.get('username')
         password = cleaned_data.get('password')
         email = cleaned_data.get('email')
-
+        password2 = cleaned_data.get('password2')
         if username in User.objects.all().values_list('username', flat=True):
             self.errorlist['username']='This username already exists'
             raise forms.ValidationError("This username already exists")
@@ -57,9 +58,6 @@ class AddAdminForm(ModelForm):
         m1.save()
         return new_user
 
-    class Meta:
-        model = User
-        fields = ('first_name','last_name','username','email','password')
 
 
 class AddModeratorForm(forms.Form):
@@ -96,8 +94,8 @@ class AddModeratorForm(forms.Form):
 
     def save(self):
         new_user=User.objects.create_user(username=self.cleaned_data['username'],
-                                    first_name="no",
-                                    last_name="non",
+                                    first_name="moderator",
+                                    last_name="moderator",
                                     password=self.cleaned_data['password'],
                                     email=self.cleaned_data['email'],
                                     is_superuser=False,
@@ -111,40 +109,59 @@ class AddModeratorForm(forms.Form):
 
 
 
-# class AddCounselorForm(ModelForm):
-#     mobile = forms.IntegerField()
-#     address = forms.CharField(max_length=20)
-#     admin = forms.
+class AddCounselorForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
 
-#     def clean(self):
-#         cleaned_data=super(AddCounselorForm, self).clean()
-#         username = cleaned_data.get('username')
-#         password = cleaned_data.get('password')
-#         email = cleaned_data.get('email')
+        super(AddCounselorForm, self).__init__(*args, **kwargs)
+    username = forms.CharField(max_length=25)
+    address= forms.CharField(max_length=20)
+    email = forms.EmailField(max_length=200, help_text='Required')
+    password = forms.CharField(widget=forms.PasswordInput())
+    password2 = forms.CharField(widget=forms.PasswordInput())
+    errorlist={}
 
-#         validators.validate_password(password=password,user=username)
-#         if email in User.objects.all().values_list('email', flat=True):
-#             raise forms.ValidationError("This email already exists")
-#         # if password != password2:
-#         #     raise forms.ValidationError("The two password fields must match. Got it!!??")
-#         return cleaned_data
+    def clean(self):
+        cleaned_data=super(AddCounselorForm, self).clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+        email = cleaned_data.get('email')
+        address = cleaned_data.get('address')
+        print(username)
+        print(email)
+        print(password)
+        print(password2)
+        print(address)
 
-#     def save(self):
-#         new_user=User.objects.create_user(username=self.cleaned_data['username'],
-#                                     first_name=self.cleaned_data['first_name'],
-#                                     last_name=self.cleaned_data['last_name'],
-#                                     password=self.cleaned_data['password'],
-#                                     email=self.cleaned_data['email'],
-#                                     )
-#         m1=CounselorProfile(user=new_user, mobile=self.cleaned_data.get('mobile'),
-#                          address=self.cleaned_data.get('address'),
-#                          admin = self.cleaned_data.get('admin'))
-#         m1.save()
-#         return new_user
+        if username in User.objects.all().values_list('username', flat=True):
+            self.errorlist['username']='This username already exists'
+            raise forms.ValidationError("This username already exists")
+        if email in User.objects.all().values_list('email', flat=True):
+            self.errorlist['email']='This email already exists'
+            raise forms.ValidationError("This email already exists")
+        if password != password2:
+            self.errorlist['password']='The two password fields must match. Got it!!??'
+            raise forms.ValidationError("The two password fields must match. Got it!!??")
 
-#     class Meta:
-#         model = User
-#         fields = ('first_name','last_name','username','email','password','is_superuser')
+        return cleaned_data
+
+    def save(self):
+        new_user=User.objects.create_user(username=self.cleaned_data['username'],
+                                    first_name=self.cleaned_data['first_name'],
+                                    last_name=self.cleaned_data['last_name'],
+                                    password=self.cleaned_data['password'],
+                                    email=self.cleaned_data['email'],
+                                    is_staff=False,
+                                    is_superuser=False,
+                                    )
+        m1=CounselorProfile(user=new_user, mobile=self.cleaned_data.get('mobile'),
+                         address=self.cleaned_data.get('address'),
+                         admin = self.user)
+        m1.save()
+        return new_user
+
+
 class SignupForm(forms.Form):
     username = forms.CharField(max_length=25)
     email = forms.EmailField(max_length=200, help_text='Required')

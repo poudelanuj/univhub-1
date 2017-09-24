@@ -43,85 +43,15 @@
 			<!-- Notifications -->
             <div class="dropdown pull-left notification icons pmd-dropdown">
 
-				<a href="javascript:void(0)" title="Notification" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="true">
-					<div data-badge="3" class="material-icons md-light pmd-sm pmd-badge  pmd-badge-overlap">notifications_none</div>
+				<a id="notificationdropshow" href="javascript:void(0)" title="Notification" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="true">
+					<div id="notifycountbadge"  class="material-icons md-light pmd-sm pmd-badge  pmd-badge-overlap">notifications_none</div>
 				</a>
 
 				<div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default" role="menu">
 					<!-- Card header -->
-					<div class="pmd-card-title">
-						<div class="media-body media-middle">
-							<a href="javascript:void(0)" class="pull-right"> <span id="notifycount"></span> new notifications</a>
-							<h3 class="pmd-card-title-text">Notifications</h3>
-						</div>
-					</div>
-
-					<!-- Notifications list -->
-					<ul class="list-group pmd-list-avatar pmd-card-list">
-						<li class="list-group-item" style="display:none">
-							<p class="notification-blank">
-								<span class="dic dic-notifications-none"></span>
-								<span>You don´t have any notifications</span>
-							</p>
-						</li>
-
-						<li class="list-group-item unread">
-							<a href="javascript:void(0)">
-								<div class="media-left">
-									<span class="avatar-list-img40x40">
-										<img alt="40x40" class="img-responsive" src="" data-holder-rendered="true">
-									</span>
-								</div>
-								<div class="media-body">
-									<span class="list-group-item-heading">{{ list}}</span>
-									<span class="list-group-item-text">5 Minutes ago</span>
-								</div>
-							</a>
-						</li>
-
-						<li class="list-group-item">
-							<a href="javascript:void(0)">
-								<div class="media-left">
-									<span class="avatar-list-img40x40">
-										<img alt="40x40" class="img-responsive" src="" data-holder-rendered="true">
-									</span>
-								</div>
-								<div class="media-body">
-									<span class="list-group-item-heading"><span>Keel</span> Cloned 2 challenges.</span>
-									<span class="list-group-item-text">15 Minutes ago</span>
-								</div>
-							</a>
-						</li>
-						<li class="list-group-item unread">
-							<a href="javascript:void(0)">
-								<div class="media-left">
-									<span class="avatar-list-img40x40">
-										<img alt="40x40" class="img-responsive" src="" data-holder-rendered="true">
-									</span>
-								</div>
-
-								<div class="media-body">
-									<span class="list-group-item-heading"><span>John</span> posted new collection.</span>
-									<span class="list-group-item-text">25 Minutes ago</span>
-								</div>
-							</a>
-						</li>
-						<li class="list-group-item unread">
-							<a href="javascript:void(0)">
-								<div class="media-left">
-									<span class="avatar-list-img40x40">
-										<img alt="40x40" class="img-responsive" src="" data-holder-rendered="true">
-									</span>
-								</div>
-								<div class="media-body">
-									<span class="list-group-item-heading"><span>Valerii</span> Shared 5 collection.</span>
-									<span class="list-group-item-text">30 Minutes ago</span>
-								</div>
-							</a>
-						</li>
-					</ul><!-- End notifications list -->
-
-				</div>
+					<div id="notifylist">
+						{% include 'notification_drop.html'%}
+				</div></div>
 
 
 			</div> <!-- End notifications -->
@@ -300,9 +230,9 @@
 							<span class="dropdown pmd-dropdown clearfix">
 								<button class="btn dropdown-toggle btn-blue" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="material-icons md-dark pmd-sm">add</i>Add</button>
 								<ul aria-labelledby="admin-CRUD" role="menu" class="dropdown-menu dropdown-menu-right pmd-z-depth-2">
-									<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Admin</a></li>
-									<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Moderator</a></li>
-									<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Counselor</a></li>
+									<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-admin">Admin</a></li>
+									<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-moderator">Moderator</a></li>
+									<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-counselor">Counselor</a></li>
 								</ul>
 							</span>
 						</div>
@@ -999,7 +929,181 @@
 </footer> -->
 <!--footer end-->
 <!-- Footer Ends -->
+<!-- Modals Start -->
 
+
+<div tabindex="-1" class="modal fade add-modal" id="add-admin" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header pmd-modal-bordered">
+				    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+					<h2 class="text-center">Admin Registration</h2>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal"  id="addadminform">
+				{% csrf_token %}
+
+						<div class="form-group">
+								<label for="company_name" class="control-label">Company Name:</label><br>
+								<input type="text" id="company_name" class="form-control" required placeholder="Company Name" name="consultancyName">
+							</div>
+						<div class="form-group">
+							<label for="panvat" class="control-label">PAN/VAT:</label><br>
+							<input type="text" id="panvat" class="form-control" required placeholder="PAN/VAT" name="pan_vat">
+						</div>
+						<div class="form-group">
+							<label for="registration_no" class="control-label">Registration No:</label><br>
+							<input type="text" id="registration_no" class="form-control" required placeholder="Registration No" name="reg_no">
+						</div>
+						<div class="form-group clearfix">
+							<label for="registration_no" class="control-label">Company Logo:</label><br>
+							<div class="company-logo-name">
+								my_company_logo.png
+							<label for="upload-file-selector" class="pull-right">
+							<input id="upload-file-selector" type="file">
+							<span type="button" class="btn btn-upload">Upload</span>
+							</div>
+							</label>
+						</div>
+						<div class="form-group">
+							<label for="username" class="control-label">Username:</label><br>
+							<input type="text" id="Company_Location" class="form-control" required placeholder="Company Location" name="username">
+						</div>
+						<div class="form-group">
+							<label for="email" class="control-label">Email:</label><br>
+							<input type="text" id="email" class="form-control" required placeholder="Email" name="email">
+						</div>
+						<div class="form-group">
+							<label for="password" class="control-label">Password:</label><br>
+							<input type="password" id="password" class="form-control" required placeholder="Password" name="password">
+						</div>
+						<div class="form-group">
+							<label for="confirm_password" class="control-label">Confirm Password:</label><br>
+							<input type="password" id="confirm_password" class="form-control" required placeholder="Confirm Password" name="password2">
+						</div>
+						<div class="form-group">
+							<label for="Company_Location" class="control-label">Company Location:</label><br>
+							<input type="text" id="Company_Location" class="form-control" required placeholder="Company Location" name="location">
+						</div>
+						<div class="form-group">
+							<label for="website" class="control-label">Website:</label><br>
+							<input type="text" id="website" class="form-control" required placeholder="Website" name="website">
+						</div>
+						<div class="form-group">
+							<label for="phone" class="control-label">Phone:</label><br>
+							<input type="text" id="phone" class="form-control" required placeholder="Phone" name="phone">
+						</div>
+						<div class="form-group">
+							<label for="company_desc" class="control-label">Your Company Description:</label><br>
+							<textarea id="company_desc" required class="form-control" placeholder="Your Company Description" name="description"></textarea>
+						</div>
+				</form>
+			</div>
+			<div class="pmd-modal-action clearfix">
+				<button class="btn btn-submit pull-right" type="button" id="addadminbutton">Register</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div tabindex="-1" class="modal fade add-modal" id="add-moderator" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header pmd-modal-bordered">
+						<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+						<h2 class="text-center">Moderator Registration</h2>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" id="addmoderatorform">
+						{% csrf_token %}
+							<div class="form-group">
+								<label for="mod_name" class="control-label">Name:</label><br>
+								<input type="text" id="mod_name" class="form-control" required placeholder="Name" name="username">
+							</div>
+							<div class="form-group">
+								<label for="email" class="control-label">Email:</label><br>
+								<input type="text" id="email" class="form-control" required placeholder="Email" name="email">
+							</div>
+							<div class="form-group">
+								<label for="password" class="control-label">Password:</label><br>
+								<input type="password" id="password" class="form-control" required placeholder="Password" name="password">
+							</div>
+							<div class="form-group">
+								<label for="confirm_password" class="control-label">Confirm Password:</label><br>
+								<input type="password" id="confirm_password" class="form-control" required placeholder="Confirm Password" name="password2">
+							</div>
+							<div class="form-group">
+								<label for="address" class="control-label">Address:</label><br>
+								<input type="text" id="address" class="form-control" required placeholder="Address" name="location">
+							</div>
+							<div class="form-group clearfix">
+								<label for="registration_no" class="control-label">Profile Image:</label><br>
+								<div class="company-logo-name">
+									my_image.png
+								<label for="upload-file-selector" class="pull-right">
+								<input id="upload-file-selector" type="file">
+								<span type="button" class="btn btn-upload">Upload</span>
+								</div>
+								</label>
+							</div>
+					</form>
+				</div>
+				<div class="pmd-modal-action clearfix">
+					<button class="btn btn-submit pull-right" type="button" id="addmoderatorbutton">Register</button>
+				</div>
+			</div>
+	</div>
+</div>
+
+<div tabindex="-1" class="modal fade add-modal" id="add-counselor" style="display: none;" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header pmd-modal-bordered">
+					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+					<h2 class="text-center">Counselor Registration</h2>
+			</div>
+			<div class="modal-body">
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label for="counselor_name" class="control-label">Name:</label><br>
+							<input type="text" id="counselor_name" class="form-control" required placeholder="Name" name="username">
+						</div>
+						<div class="form-group">
+							<label for="email" class="control-label">Email:</label><br>
+							<input type="text" id="email" class="form-control" required placeholder="Email" name="email">
+						</div>
+						<div class="form-group">
+							<label for="password" class="control-label">Password:</label><br>
+							<input type="password" id="password" class="form-control" required placeholder="Password" name="password">
+						</div>
+						<div class="form-group">
+							<label for="confirm_password" class="control-label">Confirm Password:</label><br>
+							<input type="password" id="confirm_password" class="form-control" required placeholder="Confirm Password" name="password2">
+						</div>
+						<div class="form-group">
+							<label for="address" class="control-label">Address:</label><br>
+							<input type="text" id="address" class="form-control" required placeholder="Address" name="address">
+						</div>
+						<div class="form-group clearfix">
+							<label for="registration_no" class="control-label">Profile Image:</label><br>
+							<div class="company-logo-name">
+								my_image.png
+							<label for="upload-file-selector" class="pull-right">
+							<input id="upload-file-selector" type="file">
+							<span type="button" class="btn btn-upload">Upload</span>
+							</div>
+							</label>
+						</div>
+					</form>
+			</div>
+			<div class="pmd-modal-action clearfix">
+				<button class="btn btn-submit pull-right" type="button">Register</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modals End -->
 <!-- Scripts Starts -->
 <!-- Jquery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -1050,7 +1154,49 @@
 		$(".select-simple").select2({
 		theme: "bootstrap"
 		});
+		$('#notificationdropshow').click(function(){
 
+			$.ajax({
+
+        url: "{% url 'getnotificationslist'%}",
+
+        success : function(data) {
+             $('#notifylist').html(data);
+         }
+});
+		});
+		$('#addmoderatorbutton').click(function(){
+
+
+
+			$.ajax({
+				type: 'POST',
+				url: "{% url 'addmoderator'%}",
+				data: $("#addmoderatorform").serialize(),
+				success : function(data) {
+
+						$('#add-moderator').modal('toggle');
+
+
+				 }
+});
+		});
+		$('#addadminbutton').click(function(){
+
+
+
+			$.ajax({
+				type: 'POST',
+				url: "{% url 'addadmin'%}",
+				data: $("#addadminform").serialize(),
+				success : function(data) {
+
+						$('#add-admin').modal('toggle');
+
+
+				 }
+});
+		});
 		$('.aside_notifications').click(function(){
 			$("#content").load('notifications.html')
 		});
@@ -1131,7 +1277,20 @@
         "app_on_process": 16
     }
 	];
+	setInterval(function(){
+		$.ajax({
 
+ url:"{% url 'getnotifications'%}",
+	dataType: 'json',
+ success: function(data){
+
+	 $("#notifycountbadge").attr("data-badge",data['notifycount'])
+	$("#notifycount").replaceWith('<span id="notifycount">' + data['notifycount'] + '</span >');
+
+ },
+
+});
+	},10000);
 	function hover(){
 		$('#geo_select option[value="Default"]').attr("selected", true);
 		$('.map g path').css("fill","rgb(204, 204, 204)");

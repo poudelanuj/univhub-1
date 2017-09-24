@@ -28,8 +28,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #"fcm_django",
-    "fcm",
     'sadmin.apps.SadminConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,6 +67,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'univhub.wsgi.application'
+LOGIN_REDIRECT_URL = '/'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
+EMAIL_HOST_USER = 'enishpaneru2017@gmail.com' # email id
+EMAIL_HOST_PASSWORD = 'newpw2017' #password
+EMAIL_PORT = 587
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -77,12 +82,11 @@ DATABASES = {
     'mysql': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'univhub',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': '2548',
-    },
-
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
+        'USER':'root',
+        'PASSWORD':'',
+    }
 }
 DATABASES['default'] = DATABASES['mysql']
 

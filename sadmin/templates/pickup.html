@@ -1,219 +1,235 @@
-<div class="container-fluid notifications pickup">
-    
-        <div class="row">
-            <!-- Page Content Title -->
-            <div class="col-md-12">
-                <h1 class="page-content-title">Pickup</h1>	
-            </div>		
-            <!-- / Page Content Title -->
-        </div>
-    
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Parent Tabs -->
-                    <div class="card">
-                        <!-- Parent Tab Navs -->
-                        <div class="clearfix">
-                            <div class="pull-left">
-                                <div class="pmd-tabs activities-tab">
-                                    <div class="pmd-tab-active-bar"></div>
+
+<div id="idForPickup">
+
+<div class="container-fluid notifications pickup" >
+
+    <div class="row">
+        <!-- Page Content Title -->
+        <div class="col-md-12">
+            <h1 class="page-content-title">Pickup</h1>	
+        </div>		
+        <!-- / Page Content Title -->
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Parent Tabs -->
+                <div class="card">
+                    <!-- Parent Tab Navs -->
+                    <div class="clearfix">
+                        <div class="pull-left">
+                            <div class="pmd-tabs activities-tab">
+                                <div class="pmd-tab-active-bar"></div>
+                                <ul role="tablist" class="nav nav-tabs">
+                                    <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="pending" href="#pending">Pending</a></li>
+                                    <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled" href="#scheduled">Scheduled</a></li>
+                                    <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="picked" href="#picked">Picked</a></li>
+                                    <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked" href="#unpicked">Unpicked</a></li>
+                                </ul>
+                            </div>	
+                        </div>	
+                    </div>
+                    <!-- / Parent Tab Navs -->                        
+                    <!-- Parent Tab Content -->                        
+                    <div class="tab-content notifications-tab-content pick-up-tab-content pick-up-tab-main-content">
+                        <ul role="tabpanel1" id="pending" class="tab-pane active list-group pmd-list pmd-card-list">
+                            <div class="clearfix">                                  
+                            <div class="pull-right">
+                                <div class="activities-tab">
                                     <ul role="tablist" class="nav nav-tabs">
-                                        <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="pending" href="#pending">Pending</a></li>
-                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled" href="#scheduled">Scheduled</a></li>
-                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="picked" href="#picked">Picked</a></li>
-                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked" href="#unpicked">Unpicked</a></li>
+                                        <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="pending" href="#pending-today">Today</a></li>
+                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled" href="#pending-week">Week</a></li>
+                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked" href="#pending-month">Month</a></li>
                                     </ul>
                                 </div>	
-                            </div>	
-                        </div>
-                        <!-- / Parent Tab Navs -->                        
-                        <!-- Parent Tab Content -->                        
-                        <div class="tab-content notifications-tab-content pick-up-tab-content pick-up-tab-main-content">
-                            <ul role="tabpanel1" id="pending" class="tab-pane active list-group pmd-list pmd-card-list">
-                                <div class="clearfix">                                  
-                                <div class="pull-right">
-                                    <div class="activities-tab">
-                                        <ul role="tablist" class="nav nav-tabs">
-                                            <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="pending" href="#pending-today">Today</a></li>
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled" href="#pending-week">Week</a></li>
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked" href="#pending-month">Month</a></li>
-                                        </ul>
-                                    </div>	
-                                </div>
-                                <div class="tab-content notifications-tab-content pick-up-tab-content">
-                                    <ul role="tabpanel11" id="pending-today" class="tab-pane active list-group pmd-list pmd-card-list">
-                                            <li class="list-group-item">
-                                                    <div class="media-left">
-                                                        <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
-                                                    </div>
-                                                    <div class="media-body media-middle user-name">Mithai Lal Jadav</div>
-                                                    <div class="media-right">
-                                                        <span class="dropdown pmd-dropdown clearfix pickup-settings">
-                                                            <button class="btn dropdown-toggle btn-icon" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                            <ul aria-labelledby="pickup-settings" role="menu" class="dropdown-menu dropdown-menu-right">
-                                                                <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem"  data-target="#schedule-date" data-toggle="modal">Schedule a Date</a></li>
-                                                                <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem">Mark as Picked</a></li>
-                                                                <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem">Marked as Unpicked</a></li>
-                                                            </ul>
-                                                        </span>
-                                                    </div>
-                                                    <h4>Document For: Financial Verification</h4>
-                                                    <div class="included_docs">Included Document: <span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
-                                                    </del></span><span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
-                                                    </del></span><span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
-                                                    </del></span></div> 
-                                                    <div class="pick-up-location">Location: street, colony, district, zone <a href="javascript:;"><i class="fa fa-map-marker" aria-hidden="true"></i>View on Google Map</a></div> 
-                                                    <div class="pick-up-date">Pick Up Date: <span>From 17th Sept to 20th Sept 	&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;&nbsp;&nbsp;&nbsp; 10:00am</span></div> 
-                                                </li>
-                                    </ul>
-                                    <ul role="tabpanel12" id="pending-week" class="tab-pane list-group pmd-list pmd-card-list">
-                                        
-                                    </ul>
-                                    <ul role="tabpanel13" id="pending-month" class="tab-pane list-group pmd-list pmd-card-list">
+                            </div>
+                            <div class="tab-content notifications-tab-content pick-up-tab-content">
 
-                                    </ul>
-                                </div>
-                                </div>
-                            </ul>
-                            <ul role="tabpanel2" id="scheduled" class="tab-pane clearfix list-group pmd-list pmd-card-list">
-                                <div class="clearfix">                                  
-                                <div class="pull-right">
-                                    <div class="activities-tab">
-                                        <ul role="tablist" class="nav nav-tabs">
-                                            <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled-today" href="#scheduled-today">Today</a></li>
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled-week" href="#scheduled-week">Week</a></li>
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled-month" href="#scheduled-month">Month</a></li>
-                                        </ul>
-                                    </div>	
-                                </div>
-                                <div class="tab-content notifications-tab-content pick-up-tab-content">
-                                    <ul role="tabpane21" id="scheduled-today" class="tab-pane active list-group pmd-list pmd-card-list">
-                                        
-                                    </ul>
-                                    <ul role="tabpane22" id="scheduled-week" class="tab-pane list-group pmd-list pmd-card-list">
-                                            <li class="list-group-item">
-                                                    <div class="media-left">
-                                                        <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
-                                                    </div>
-                                                    <div class="media-body media-middle user-name">Mithai Lal Jadav</div>
-                                                    <div class="media-right">
-                                                        <span class="dropdown pmd-dropdown clearfix pickup-settings">
-                                                            <button class="btn dropdown-toggle btn-icon" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-cog" aria-hidden="true"></i></button>
-                                                            <ul aria-labelledby="pickup-settings" role="menu" class="dropdown-menu dropdown-menu-right">
-                                                                <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem"  data-target="#schedule-date" data-toggle="modal">Schedule a Date</a></li>
-                                                                <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem">Mark as Picked</a></li>
-                                                                <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem">Marked as Unpicked</a></li>
-                                                            </ul>
-                                                        </span>
-                                                    </div>
-                                                    <h4>Document For: Financial Verification</h4>
-                                                    <div class="included_docs">Included Document: <span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
-                                                    </del></span><span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
-                                                    </del></span><span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
-                                                    </del></span></div> 
-                                                    <div class="pick-up-location">Location: street, colony, district, zone <a href="javascript:;"><i class="fa fa-map-marker" aria-hidden="true"></i>View on Google Map</a></div> 
-                                                    <div class="pick-up-date">Pick Up Date: <span>From 17th Sept to 20th Sept 	&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;&nbsp;&nbsp;&nbsp; 10:00am</span></div> 
-                                                </li>
-                                    </ul>
-                                    <ul role="tabpane23" id="scheduled-month" class="tab-pane list-group pmd-list pmd-card-list">
+                                <ul role="tabpanel11" id="pending-today" class="tab-pane active list-group pmd-list pmd-card-list">
 
-                                    </ul>
-                                </div>
-                                </div>
-                            </ul>
-                            <ul role="tabpanel3" id="picked" class="tab-pane clearfix list-group pmd-list pmd-card-list">
-                                <div class="clearfix">                                  
-                                <div class="pull-right">
-                                    <div class="activities-tab">
-                                        <ul role="tablist" class="nav nav-tabs">
-                                            <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="picked-today" href="#picked-today">Today</a></li>
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="picked-week" href="#picked-week">Week</a></li>
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="picked-month" href="#picked-month">Month</a></li>
-                                        </ul>
-                                    </div>	
-                                </div>
-                                <div class="tab-content notifications-tab-content pick-up-tab-content">
-                                    <ul role="tabpane31" id="picked-today" class="tab-pane active list-group pmd-list pmd-card-list">
-                                        
-                                    </ul>
-                                    <ul role="tabpane32" id="picked-week" class="tab-pane list-group pmd-list pmd-card-list">
+                                {% for pickup in all_pickups %}
 
+                                        <li class="list-group-item">
+                                                <div class="media-left">
+                                                    <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
+                                                </div>
+                                                <div class="media-body media-middle user-name">{{pickup.pickupof}}</div>
+                                                <div class="media-right">
+                                                    <span class="dropdown pmd-dropdown clearfix pickup-settings">
+                                                        <button class="btn dropdown-toggle btn-icon" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-cog" aria-hidden="true"></i></button>
+                                                        <ul aria-labelledby="pickup-settings" role="menu" class="dropdown-menu dropdown-menu-right">
+                                                            <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem"  data-target="#schedule-date" data-toggle="modal">Schedule a Date</a></li>
+                                                            <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem">Mark as Picked</a></li>
+                                                            <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem">Marked as Unpicked</a></li>
+                                                        </ul>
+                                                    </span>
+                                                </div>
+                                                <h4>Document For: {{pickup.doctype}} </h4>
+                                                <div class="included_docs">Included Document: 
+                                                    {% for document in all_documents %} 
+                                                        {% if document.pickupid.id is pickup.id %} 
+                                                                <span> 
+                                                                    {{document.documentid.docname}} --
+                                                                <del class="ajaxRemovePickupDocument" value={{document.id}}"><i class="fa fa-times"></i></del>
+                                                                </span>
+                                                        {% endif %}
+                                                    {% endfor %}
+
+
+                                                <div class="pick-up-location"> Location : {{pickup.location}} <a href="javascript:;"><i class="fa fa-map-marker" aria-hidden="true"></i>View on Google Map</a></div> 
+                                                <div class="pick-up-date">Pick Up Date: <span>From&nbsp;&nbsp;{{pickup.date_from}} To &nbsp;&nbsp;{{pickup.date_to}} 	&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;&nbsp;&nbsp;&nbsp; {{pickup.time}}</span></div> 
+                                            </li>
+                                        {% endfor %}
+                                </ul>
+                                <ul role="tabpanel12" id="pending-week" class="tab-pane list-group pmd-list pmd-card-list">
+                                    
+                                </ul>
+                                <ul role="tabpanel13" id="pending-month" class="tab-pane list-group pmd-list pmd-card-list">
+
+                                </ul>
+                            </div>
+                            </div>
+                        </ul>
+                        <ul role="tabpanel2" id="scheduled" class="tab-pane clearfix list-group pmd-list pmd-card-list">
+                            <div class="clearfix">                                  
+                            <div class="pull-right">
+                                <div class="activities-tab">
+                                    <ul role="tablist" class="nav nav-tabs">
+                                        <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled-today" href="#scheduled-today">Today</a></li>
+                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled-week" href="#scheduled-week">Week</a></li>
+                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="scheduled-month" href="#scheduled-month">Month</a></li>
                                     </ul>
-                                    <ul role="tabpane33" id="picked-month" class="tab-pane list-group pmd-list pmd-card-list">
-                                        
+                                </div>	
+                            </div>
+                            <div class="tab-content notifications-tab-content pick-up-tab-content">
+                                <ul role="tabpane21" id="scheduled-today" class="tab-pane active list-group pmd-list pmd-card-list">
+                                    
+                                </ul>
+                                <ul role="tabpane22" id="scheduled-week" class="tab-pane list-group pmd-list pmd-card-list">
+                                        <li class="list-group-item">
+                                                <div class="media-left">
+                                                    <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
+                                                </div>
+                                                <div class="media-body media-middle user-name">Mithai Lal Jadav</div>
+                                                <div class="media-right">
+                                                    <span class="dropdown pmd-dropdown clearfix pickup-settings">
+                                                        <button class="btn dropdown-toggle btn-icon" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-cog" aria-hidden="true"></i></button>
+                                                        <ul aria-labelledby="pickup-settings" role="menu" class="dropdown-menu dropdown-menu-right">
+                                                            <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem"  data-target="#schedule-date" data-toggle="modal">Schedule a Date</a></li>
+                                                            <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem">Mark as Picked</a></li>
+                                                            <li role="presentation"><a href="javascript:;" tabindex="-1" role="menuitem">Marked as Unpicked</a></li>
+                                                        </ul>
+                                                    </span>
+                                                </div>
+                                                <h4>Document For: Financial Verification</h4>
+                                                <div class="included_docs">Included Document: <span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
+                                                </del></span><span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
+                                                </del></span><span>Bank Loan <del><i class="fa fa-times" aria-hidden="true"></i>
+                                                </del></span></div> 
+                                                <div class="pick-up-location">Location: street, colony, district, zone <a href="javascript:;"><i class="fa fa-map-marker" aria-hidden="true"></i>View on Google Map</a></div> 
+                                                <div class="pick-up-date">Pick Up Date: <span>From 17th Sept to 20th Sept 	&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;&nbsp;&nbsp;&nbsp; 10:00am</span></div> 
+                                            </li>
+                                </ul>
+                                <ul role="tabpane23" id="scheduled-month" class="tab-pane list-group pmd-list pmd-card-list">
+
+                                </ul>
+                            </div>
+                            </div>
+                        </ul>
+                        <ul role="tabpanel3" id="picked" class="tab-pane clearfix list-group pmd-list pmd-card-list">
+                            <div class="clearfix">                                  
+                            <div class="pull-right">
+                                <div class="activities-tab">
+                                    <ul role="tablist" class="nav nav-tabs">
+                                        <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="picked-today" href="#picked-today">Today</a></li>
+                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="picked-week" href="#picked-week">Week</a></li>
+                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="picked-month" href="#picked-month">Month</a></li>
                                     </ul>
-                                </div>
-                                </div>
-                            </ul>
-                            <ul role="tabpanel4" id="unpicked" class="tab-pane clearfix list-group pmd-list pmd-card-list">
-                                <div class="clearfix">                                  
-                                <div class="pull-right">
-                                    <div class="activities-tab">
-                                        <ul role="tablist" class="nav nav-tabs">
-                                            <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked-today" href="#unpicked-today">Today</a></li>
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked-week" href="#unpicked-week">Week</a></li>
-                                            <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked-month" href="#unpicked-month">Month</a></li>
-                                        </ul>
-                                    </div>	
-                                </div>
-                                <div class="tab-content notifications-tab-content pick-up-tab-content">
-                                    <ul role="tabpanel41" id="unpicked-today" class="tab-pane active list-group pmd-list pmd-card-list">
-                                        
+                                </div>	
+                            </div>
+                            <div class="tab-content notifications-tab-content pick-up-tab-content">
+                                <ul role="tabpane31" id="picked-today" class="tab-pane active list-group pmd-list pmd-card-list">
+                                    
+                                </ul>
+                                <ul role="tabpane32" id="picked-week" class="tab-pane list-group pmd-list pmd-card-list">
+
+                                </ul>
+                                <ul role="tabpane33" id="picked-month" class="tab-pane list-group pmd-list pmd-card-list">
+                                    
+                                </ul>
+                            </div>
+                            </div>
+                        </ul>
+                        <ul role="tabpanel4" id="unpicked" class="tab-pane clearfix list-group pmd-list pmd-card-list">
+                            <div class="clearfix">                                  
+                            <div class="pull-right">
+                                <div class="activities-tab">
+                                    <ul role="tablist" class="nav nav-tabs">
+                                        <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked-today" href="#unpicked-today">Today</a></li>
+                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked-week" href="#unpicked-week">Week</a></li>
+                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="unpicked-month" href="#unpicked-month">Month</a></li>
                                     </ul>
-                                    <ul role="tabpanel4" id="unpicked-week" class="tab-pane list-group pmd-list pmd-card-list">
-                                        
-                                    </ul>
-                                    <ul role="tabpane43" id="unpicked-month" class="tab-pane list-group pmd-list pmd-card-list">
-                                        
-                                    </ul>
-                                </div>
-                                </div>
-                            </ul>
-                        </div>
-                        <!-- / Parent Tab Content -->                        
+                                </div>	
+                            </div>
+                            <div class="tab-content notifications-tab-content pick-up-tab-content">
+                                <ul role="tabpanel41" id="unpicked-today" class="tab-pane active list-group pmd-list pmd-card-list">
+                                    
+                                </ul>
+                                <ul role="tabpanel4" id="unpicked-week" class="tab-pane list-group pmd-list pmd-card-list">
+                                    
+                                </ul>
+                                <ul role="tabpane43" id="unpicked-month" class="tab-pane list-group pmd-list pmd-card-list">
+                                    
+                                </ul>
+                            </div>
+                            </div>
+                        </ul>
                     </div>
-                <!-- Parent Tabs -->                    
-            </div>   
-        </div>
+                    <!-- / Parent Tab Content -->                        
+                </div>
+            <!-- Parent Tabs -->                    
+        </div>   
     </div>
-    
-    <div tabindex="-1" class="modal fade" id="schedule-date" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header pmd-modal-bordered">
-                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-                    <h2 class="pmd-card-title-text text-center">Schedule a Document Pickup</h2>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal">
+</div>
+
+<div tabindex="-1" class="modal fade" id="schedule-date" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pmd-modal-bordered">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h2 class="pmd-card-title-text text-center">Schedule a Document Pickup</h2>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="delivery_man" class="control-label">Delivery Man:</label>
+                        <select name="delivery_man" id="delivery_man" class="form-control delivery_man select-simple pmd-select2">
+                            <option value-="Tero Nokar">Tero Nokar</option>
+                            <option value-="Tero Nokar">Tero Nokar</option>
+                            <option value-="Tero Nokar">Tero Nokar</option>
+                            <option value-="Tero Nokar">Tero Nokar</option>
+                        </select>    
+                    </div>
+                    <div class="form-inline">
                         <div class="form-group">
-                            <label for="delivery_man" class="control-label">Delivery Man:</label>
-                            <select name="delivery_man" id="delivery_man" class="form-control delivery_man select-simple pmd-select2">
-                                <option value-="Tero Nokar">Tero Nokar</option>
-                                <option value-="Tero Nokar">Tero Nokar</option>
-                                <option value-="Tero Nokar">Tero Nokar</option>
-                                <option value-="Tero Nokar">Tero Nokar</option>
-                            </select>    
+                            <label class="control-label" for="delivery_date">Delivery Date:</label><br>
+                            <i class="fa fa-calendar" aria-hidden="true"></i>                                
+                            <input type="text" class="form-control" id="datepicker">
                         </div>
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <label class="control-label" for="delivery_date">Delivery Date:</label><br>
-                                <i class="fa fa-calendar" aria-hidden="true"></i>                                
-                                <input type="text" class="form-control" id="datepicker">
-                            </div>
-                            <div class="form-group">and
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="delivery_time">Delivery Time:</label><br>
-                                <i class="fa fa-clock-o" aria-hidden="true"></i>                                    
-                                <input type="text" class="form-control" id="timepicker">
-                            </div>
+                        <div class="form-group">and
                         </div>
-                    </form>
-                </div>
-                <div class="pmd-modal-action clearfix">
-                    <button data-dismiss="modal" class="btn btn-submit pull-right" type="button">OK</button>
-                </div>
+                        <div class="form-group">
+                            <label class="control-label" for="delivery_time">Delivery Time:</label><br>
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>                                    
+                            <input type="text" class="form-control" id="timepicker">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="pmd-modal-action clearfix">
+                <button data-dismiss="modal" class="btn btn-submit pull-right" type="button">OK</button>
             </div>
         </div>
     </div>
+</div>
+</div>

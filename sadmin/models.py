@@ -9,6 +9,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+
+
 class Header(models.Model):
     title = models.CharField(max_length=100)
 
@@ -32,15 +34,6 @@ class Ranking(models.Model):
     class Meta:
         db_table = 'ranking'
 
-class Document(models.Model):
-    student=models.ForeignKey(User)
-    name=models.CharField(max_length=25)
-    DOCTYPE_CHOICES=(('a','first'),('b','second'),('c','third'),('d','fourth'))
-    doctype=models.CharField(max_length=25,choices=DOCTYPE_CHOICES,help_text='Document Type')
-    location=models.TextField()
-    class Meta:
-        db_table='Document'
-
 
 class RequirementBySubject(models.Model):
     u = models.ForeignKey('Universities', models.DO_NOTHING)
@@ -48,6 +41,12 @@ class RequirementBySubject(models.Model):
     sub = models.ForeignKey('Requirements', models.DO_NOTHING)
     requirement_description = models.TextField(blank=True, null=True)
 
+class Document(models.Model):
+    student=models.ForeignKey(User)
+    name=models.CharField(max_length=25)
+    DOCTYPE_CHOICES=(('a','first'),('b','second'),('c','third'),('d','fourth'))
+    doctype=models.CharField(max_length=25,choices=DOCTYPE_CHOICES,help_text='Document Type')
+    location=models.TextField()
     class Meta:
         db_table = 'requirement_by_subject'
 
@@ -120,19 +119,58 @@ class UniversityRequirement(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-
         db_table = 'university_requirement'
+
+
+
+class District(models.Model):   #location of students
+    districtname=models.CharField(max_length=15)
+
+    class Meta:
+        db_table = "district"
+
+
+
+class Country(models.Model):    #available country for which students can apply
+    countryname=models.CharField(max_length=15)
+
+    class Meta:
+        db_table = "country"
+
+
+
+class ApplyType(models.Model):  #student apply or dependendent apply ?
+    applytype: models.CharField(max_length=15)
+
+    class Meta:
+        db_table = "applytype"
+
+
+class ProgramsOffered(models.Model):    # bachelor, masters, phd or diploma
+    programOffered = models.CharField(max_length=20)
+
+    class Meta:
+        db_table="programsOffered"
+
+
 
 
 class UserProfile(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
 
-    apply_for = models.CharField(max_length=255)
     dob = models.DateField()
     mobile = models.IntegerField()
     remember_token = models.CharField(max_length=100, blank=True, null=True)
-
     updated_at = models.DateTimeField(blank=True, null=True)
+    scholarship = models.BooleanField() # apply for scholarship or not ?
+    citizenship = models.CharField(max_length=15)
+    passport = models.CharField(max_length=15, blank=True, null=True)
+    
+    district = models.ForeignKey(District, models.DO_NOTHING)
+    apply_for = models.ForeignKey(Country, models.DO_NOTHING)
+    sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
+    apply_type = models.ForeignKey(ApplyType, models.DO_NOTHING, )
+    program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
 
     class Meta:
 

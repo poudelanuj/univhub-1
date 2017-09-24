@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import documenttype,uploadeddocuments,pickup,pickupdetails
 
-# Register your models here.
+admin.site.register(documenttype)
+admin.site.register(uploadeddocuments)
+admin.site.register(pickup)
+admin.site.register(pickupdetails)
+
+

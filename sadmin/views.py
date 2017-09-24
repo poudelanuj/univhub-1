@@ -152,12 +152,8 @@ def addmoderator(request):
 
 
 def getPickupPage(request):
-    print("init")
     all_pickups = pickup.objects.filter(status="pending")
-    print("2nd print")
-    print(all_pickups)
     all_documents = pickupdetails.objects.filter(pickupid__in=all_pickups)
-    print(all_documents)
     json = {'all_pickups': all_pickups, 'all_documents': all_documents}
     return render(request, 'pickup.html', json)
 

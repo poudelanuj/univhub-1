@@ -9,6 +9,7 @@ import datetime
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 
+# Create your views here.
 
 
 
@@ -34,19 +35,15 @@ def index(request):
 def getNotificationsPage(request):
 	return render(request,"notifications.html",)
 
-
+def getNotificationsPage(request):
+    return render(request,"notifications.html",)
+def getPickupPage(request):
+    return render(request,"pickup.html")
 def getStudentslistPage(request):
-    all_students = User.objects.filter(groups=4)
-    paginator= Paginator(all_students,10)
-    page = request.GET.get('page',1) #get page or 1
-    try:
-       students = paginator.page(page)
-       print (students)
-    except PageNotAnInteger:				 #if page is not an integer
-       students = paginator.page(1)
-       print ("page not an integer")
-    except EmptyPage:						 #if the page number goes out of bound
-       students = paginator.page(paginator.num_pages)
+    return render(request,"students-list.html")
+def StudentDetail(request,pk):
+    student=get_object_or_404(User,pk=pk)
+    documents=Document.objects.filter(student=student)
 
     print (students)
     return render(request, 'students-list.html',{'students':students})

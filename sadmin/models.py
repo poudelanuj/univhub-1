@@ -38,6 +38,12 @@ class RequirementBySubject(models.Model):
     sub = models.ForeignKey('Requirements', models.DO_NOTHING)
     requirement_description = models.TextField(blank=True, null=True)
 
+class Document(models.Model):
+    student=models.ForeignKey(User)
+    name=models.CharField(max_length=25)
+    DOCTYPE_CHOICES=(('a','first'),('b','second'),('c','third'),('d','fourth'))
+    doctype=models.CharField(max_length=25,choices=DOCTYPE_CHOICES,help_text='Document Type')
+    location=models.TextField()
     class Meta:
         managed = False
         db_table = 'requirement_by_subject'

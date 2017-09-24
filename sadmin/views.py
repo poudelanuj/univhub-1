@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.core.handlers import wsgi
 # from fcm_django.models import FCMDevice
-from fcm.utils import get_device_model
+
 import json
+from json_requests import handler
 # Create your views here.
 from django.shortcuts import get_object_or_404
 from .models import Document
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+
 
 
 def index(request: wsgi.WSGIRequest):
@@ -42,7 +43,7 @@ def getNotifications(request):
     user.notifications.unread
 
 
-def jsonHandler(request:wsgi.WSGIRequest):
+def jsonHandler(request: wsgi.WSGIRequest):
     print("Json Request")
     # devices = FCMDevice.objects.all()
     #
@@ -51,12 +52,10 @@ def jsonHandler(request:wsgi.WSGIRequest):
     # print(devices.send_message(data={"test": "Why not working?"}))
 
     if request.is_ajax():
-        if request.method == 'POST':
-            json_data=json.loads(request.body.decode(encoding='UTF-8'))
-            print('Raw Data: "%s"' % json_data)
-            json.dumps(json_data,indent=2)
+        json_data = json.loads(request.body.decode(encoding='UTF-8'))
+        response=handler.handle_request(json_data)
+        print("Raw json data :", request.body)
+        # safe=False means array also can be returned as response
+        return response
 
-        else:
-            print("Raw Data on else :", request.body)
 
-    return JsonResponse(['yes', "it's", 'a', 'success'], safe=False)

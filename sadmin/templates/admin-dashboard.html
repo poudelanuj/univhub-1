@@ -1270,11 +1270,13 @@ var check = $.inArray(geo_name,ids);
 
         return json;
     };
+
 })(jQuery);
 
 function create_notification_upload(){
     data=$("#notification_create_form").serializeObject();
-    data['action']={'action':'notification',operation:'create'}
+
+    data['action']={data:'notification',operation:'create'}
 
      $.ajax({ // create an AJAX call...
         "data":JSON.stringify(data)  , // get the form data
@@ -1282,6 +1284,7 @@ function create_notification_upload(){
         contentType: "application/json",
         url: 'jsonhandler.django', // the file to call
         success: function(response) { // on success..
+                alert(JSON.stringify(response))
         }
      });
 

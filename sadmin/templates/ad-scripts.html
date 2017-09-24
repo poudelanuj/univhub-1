@@ -54,7 +54,6 @@
 		// remove documents from pickup
 		$('body').on('click', '.ajaxRemovePickupDocument', function() {
 			var documentID = $(this).val();
-			alert(documentID);
 			$.ajax({
 				url: "{% url 'ajaxRemovePickupDocument' %}",
 				data: {'documentID':documentID},
@@ -64,7 +63,6 @@
 						$('#idForPickup').html(data);
 					}
 			});
-
 		});
 
 

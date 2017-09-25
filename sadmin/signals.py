@@ -8,5 +8,5 @@ import datetime
 
 @receiver(post_save,sender=User)
 def save_user_profile(sender,instance,created,**kwargs):
-   print("hello")
+   print("user profile created")
    

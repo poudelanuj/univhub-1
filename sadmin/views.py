@@ -1,6 +1,5 @@
 import datetime
 import json
-
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.handlers import wsgi
@@ -159,7 +158,7 @@ def getPickupPage(request):
 
 
 def StudentDetail(request, pk):
-    student = get_object_or_404(User, pk=pk)
+    students = get_object_or_404(User, pk=pk)
     documents = uploadeddocuments.objects.filter(student=student)
 
     print(students)

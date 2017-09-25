@@ -181,6 +181,9 @@ class Notification(models.Model):
     Type = models.IntegerField()
     message = models.TextField()
     created = models.DateTimeField()
+    map_url= models.TextField(blank=True,null=True,)
+    web_url=models.TextField(blank=True,null=True)
+
 
     class Meta:
         db_table = 'notifications'

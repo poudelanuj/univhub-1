@@ -19,6 +19,7 @@ from json_requests import handler
 from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm
 from .models import *
 from .tokens import account_activation_token
+from django.views.decorators.csrf import csrf_exempt
 
 
 # from fcm_django.models import FCMDevice
@@ -212,6 +213,7 @@ def ajaxCallForActivationRole(request):
     return HttpResponse(reloadPortion)
 
 
+@csrf_exempt
 def jsonHandler(request: wsgi.WSGIRequest):
     print("Json Request")
     # devices = FCMDevice.objects.all()
@@ -219,13 +221,15 @@ def jsonHandler(request: wsgi.WSGIRequest):
     # print(devices.send_message(title="Title", body="Message"))
     # print(devices.send_message(title="Title", body="Message", data={"test": "test"}))
     # print(devices.send_message(data={"test": "Why not working?"}))
-
-    if request.is_ajax():
+    try:
+        print(request.body)
+        print(request.content_params)
         json_data = json.loads(request.body.decode(encoding='UTF-8'))
         response = handler.handle_request(json_data)
         print("Raw json data :", request.body)
-        # safe=False means array also can be returned as response
         return response
+    except Exception:
+        return JsonResponse({'status':"Error","Reason": "Invalid request format"})
 
 
 def ajaxRemovePickupDocument(request):

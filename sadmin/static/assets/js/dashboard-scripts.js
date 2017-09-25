@@ -12,7 +12,7 @@
 		$('body').on('click','.ajaxCallForDeleteRole', function () {
 			var userId = $(this).val();
 			$.ajax({
-				url: "{% url 'ajaxCallForDeleteRole' %}",
+				url: "",
 				data: {'userId':userId},
 				success:
 					function (data)
@@ -71,7 +71,7 @@
 
 		$('.aside_pickup').click(function(){
 			$("#content").load('pickup.html',function(){
-				var datetimepickerStyles = " {% static 'assets/css/bootstrap-datetimepicker.css' %}";
+				var datetimepickerStyles = " /static/assets/css/bootstrap-datetimepicker.css";
 				var pmddatetimepickerStyles = "{% static 'assets/css/pmd-datetimepicker.css' %}";
 				$.get(datetimepickerStyles, function(css){
 				$('<style type="text/css"></style>')
@@ -221,6 +221,29 @@ var check = $.inArray(geo_name,ids);
 });
 
 
+	$(document).ready(function() {
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length;
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
+        $(function () {
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+
+                }
+            });
+        });
+    });
 
 //the function to serialie the json object
 (function($){
@@ -296,7 +319,7 @@ function create_notification_upload(){
     data['action']={data:'notification',operation:'create'}
 
      $.ajax({ // create an AJAX call...
-        "data":JSON.stringify(data)  , // get the form data
+        data:JSON.stringify(data)  , // get the form data
         type: "post", // GET or POST
         contentType: "application/json",
         url: 'jsonhandler.django', // the file to call

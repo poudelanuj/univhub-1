@@ -1,0 +1,3 @@
+
+def handle(request):
+    return {}

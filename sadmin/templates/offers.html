@@ -1,0 +1,154 @@
+{%load static %}
+
+<div class="container-fluid notifications offers">
+        
+            <div class="row">
+                <!-- Page Content Title -->
+                <div class="col-md-12">
+                    <h1 class="page-content-title">Offers From Univhub To Our Students</h1>	
+                </div>		
+                <!-- / Page Content Title -->
+            </div>
+        
+            <div class="row">
+                <div class="col-md-12">
+                        <div class="card">
+                            <div class="clearfix">
+                                <button type="button" class="btn btn-notice pull-right" title="Click to Create Offer" data-target="#create-offer-modal" data-toggle="modal">Create Offer</button >
+                            </div>
+                            <div class="clearfix">
+                                <label for="offers_type" class="pull-left">Offer Type:</label>
+
+                                <select name="offers_type" id="offers_type" class="pull-left form-control notifications_type">
+                                    {% for offertype in  all_offertypes %}
+                                    <option>{{ offertype }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <div class="pull-right">
+                                    <div class="pmd-tabs activities-tab">
+                                            <div class="pmd-tab-active-bar"></div>
+                                            <ul role="tablist" class="nav nav-tabs">
+                                                <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="today" href="#today-noti">Today</a></li>
+                                                <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week" href="#week-noti">Week</a></li>
+                                                <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month" href="#month-noti">Month</a></li>
+                                            </ul>
+                                    </div>	
+                                </div>	
+                            </div>
+                            <div class="tab-content notifications-tab-content">
+                                <ul role="tabpanel" id="today-noti" class="tab-pane active list-group pmd-list pmd-card-list">
+                                    {% for offer in all_offers %}
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0);">
+                                            <div class="media-left">
+                                                <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
+                                            </div>
+                                            <div class="media-body">
+                                                <h3 class="list-group-item-heading">{{ offer.title }}</h3>
+                                                <span class="list-group-item-text">Description: {{ offer.description }}</span>
+
+                                                {% ifequal offer.offertype.title "Scholarship" %}
+                                                <span class="list-group-item-text">University: {{ offer.university.name }}</span>
+                                                <span class="list-group-item-text">Scholarship Percentage: {{ offer.scholarshippercent }}</span>
+                                                {% endifequal %}
+
+                                                {% ifequal offer.offertype.title "Test Classes Discount" %}
+                                                <span class="list-group-item-text">Class: {{ offer.offerinclass }}</span>
+                                                <span class="list-group-item-text">Discount Percentage: {{ offer.discountpercent }}</span>
+
+                                                {% else %}
+                                                <span class="list-group-item-text">Discount Percentage: {{ offer.discountpercent }}</span>
+                                                {% endifequal %}
+
+                                                <span class="list-group-item-text"><b>Offer Valid Till: {{ offer.validity }}</b></span>
+                                            </div>
+                                            <div class="media-right">
+                                                <div class="dropdown pickup-settings">
+                                                <a id="dLabel dropdownMenuBottomRight" class="btn-icon" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pmd-dropdown-menu-top-right" aria-labelledby="dLabel">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">Update</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">View Enrolled</a></li>
+                                                </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <ul role="tabpanel" id="week-noti" class="tab-pane list-group pmd-list pmd-card-list">
+                                </ul>
+                                <ul role="tabpanel" id="month-noti" class="tab-pane list-group pmd-list pmd-card-list">
+                                </ul>
+                            </div>
+                        </div>
+                </div>   
+            </div>
+        </div>
+        
+        <!-- Send Notice Modal -->
+        <div tabindex="-1" class="modal fade" id="create-offer-modal" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header pmd-modal-bordered">
+                        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                        <h2 class="pmd-card-title-text text-center">Create Offer</h2>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="offer_title" class="control-label">Offer Title:</label><br>
+                                <input type="text" id="offer_title" class="form-control" required placeholder="Offer Title">
+                            </div> 
+                            <div class="form-group">
+                                <label for="offer_description" class="control-label">Offer Description:</label><br>
+                                <textarea required class="form-control" id="offer_description" placeholder="Description of the offer"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="offer_type" class="control-label">Offer Type:</label>
+                                <select name="offer_type" id="offer_type" class="form-control offer_type">
+                                    <option value-="Test Classes Discount">Test Classes Discount</option>
+                                    <option value-="Scholarship">Scholarship</option>
+                                    <option value-="Discount">Discount</option>
+                                </select>    
+                            </div>
+                            <div class="form-group">
+                                <label for="offer_class" class="control-label">Class:</label><br>
+                                <input type="text" id="offer_class" class="form-control" required placeholder="Class">
+                            </div>
+                            <div class="form-group">
+                                <label for="discount_percentage" class="control-label">Discount Percentage:</label><br>
+                                <input type="text" required class="form-control" id="discount_percentage" placeholder="Discount Percentage">
+                            </div>
+                            <div class="form-group">
+                                <label for="offer_university" class="control-label">University:</label><br>
+                                <input type="text" id="offer_university" class="form-control" required placeholder="University">
+                            </div>
+                            <div class="form-group">
+                                <label for="scholarship_percentage" class="control-label">Scholarship Percentage:</label><br>
+                                <input type="text" required class="form-control" id="scholarship_percentage" placeholder="Scholarship Percentage">
+                            </div>
+                            <div class="form-group" style="position:relative">
+                                <label class="control-label" for="offer_valid_date">Offer Valid Till:</label>
+                                <input type="text" class="form-control" id="offer-datepicker">
+                            </div>
+                            <div class="form-group clearfix">
+                                <label for="registration_no" class="control-label">Profile Image:</label><br>
+                                <div class="company-logo-name">
+                                    my_image.png
+                                <label for="upload-file-selector" class="pull-right">
+                                <input id="upload-file-selector" type="file">
+                                <span type="button" class="btn btn-upload">Upload</span>
+                                </div>							
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="pmd-modal-action clearfix">
+                        <button data-dismiss="modal" class="btn btn-submit pull-right" type="button">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -12,7 +12,7 @@
 		$('body').on('click','.ajaxCallForDeleteRole', function () {
 			var userId = $(this).val();
 			$.ajax({
-				url: "{% url 'ajaxCallForDeleteRole' %}",
+				url: "ajax/CallForDeleteRole/",
 				data: {'userId':userId},
 				success:
 					function (data)
@@ -27,7 +27,7 @@
 			var userId = $(this).val();
 			alert(userId);
 			$.ajax({
-				url: "{% url 'ajaxCallForActivationRole' %}",
+				url: "ajax/CallForActivationRole/",
 				data: {'userId':userId},
 				success:
 					function (data)
@@ -43,7 +43,7 @@
 		$('body').on('click', '.ajaxRemovePickupDocument', function() {
 			var documentID = $(this).val();
 			$.ajax({
-				url: "{% url 'ajaxRemovePickupDocument' %}",
+				url: "ajax/ajaxRemovePickupDocument/",
 				data: {'documentID':documentID},
 				success:
 					function(data)
@@ -109,8 +109,22 @@
 				}
 				});
 				});
+				$('#addcounselorbutton').click(function(){
 
 
+
+					$.ajax({
+					type: 'POST',
+					url: "addcounselor/",
+					data: $("#addcounselorform").serialize(),
+					success : function(data) {
+
+					$('#add-counselor').modal('toggle');
+
+
+					}
+					});
+					});
         $(".pmd-sidebar .pmd-sidebar-nav li a").on("click", function(e) {
             // e.preventDefault();
             $(".pmd-sidebar .pmd-sidebar-nav li a").removeClass("active");
@@ -128,8 +142,8 @@
 
 		$('.aside_pickup').click(function(){
 			$("#content").load('pickup.html',function(){
-				var datetimepickerStyles = " {% static 'assets/css/bootstrap-datetimepicker.css' %}";
-				var pmddatetimepickerStyles = "{% static 'assets/css/pmd-datetimepicker.css' %}";
+				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
+				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
 				$.get(datetimepickerStyles, function(css){
 				$('<style type="text/css"></style>')
 					.html(css)
@@ -141,9 +155,9 @@
 					.appendTo("head");
 				});
 
-				$.getScript("{% static 'assets/js/propeller.js' %}");
-				$.getScript("{% static 'assets/js/moment-with-locales.js' %}");
-				$.getScript("{% static 'assets/js/bootstrap-datetimepicker.js' %}",function(){
+				$.getScript('/static/assets/js/propeller.js');
+				$.getScript('/static/assets/js/moment-with-locales.js');
+				$.getScript('/static/assets/js/bootstrap-datetimepicker.js',function(){
 					$('#datepicker').datetimepicker({
 					format: 'DD/MM/YYYY'
 				});
@@ -158,8 +172,8 @@
 		});
 		$('.aside_students').click(function(){
 			$("#content").load('students-list.html',function(){
-				$.getScript("{% static 'assets/js/propeller.js' %}");
-				$.getScript("{% static 'assets/js/circle-progress.min.js '%}",function(){
+				$.getScript("/static 'assets/js/propeller.js'");
+				$.getScript("/static/assets/js/circle-progress.min.js",function(){
 					$('.student-progress').circleProgress({
 						startAngle: 4.75,
 						size: 80,

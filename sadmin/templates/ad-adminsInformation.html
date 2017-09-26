@@ -1,38 +1,49 @@
-<div class="col-md-6" >
-	<div class="card pmd-z-depth">
-		<div class="admin-crud clearfix">
-			<div class="pull-left pmd-textfield admin-dash-crud-search">
-				<form action=""><i class="material-icons md-dark pmd-sm">search</i><input type="text" id="admin-dash-crud-search" class="form-control"></form>
-			</div>
-			<div class="pull-right">
+<div class="col-md-6">
+    <div class="card pmd-z-depth">
+        <div class="admin-crud clearfix">
+            <div class="pull-left pmd-textfield admin-dash-crud-search">
+                <form action=""><i class="material-icons md-dark pmd-sm">search</i><input type="text"
+                                                                                          id="admin-dash-crud-search"
+                                                                                          class="form-control"></form>
+            </div>
+            <div class="pull-right">
 				<span class="dropdown pmd-dropdown clearfix">
-					<button class="btn dropdown-toggle btn-blue" type="button" id="dropdownMenuBottomRight" data-toggle="dropdown" aria-expanded="true"><i class="material-icons md-dark pmd-sm">add</i>Add</button>
-					<ul aria-labelledby="admin-CRUD" role="menu" class="dropdown-menu dropdown-menu-right pmd-z-depth-2">
-						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-admin">Admin</a></li>
-						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-moderator">Moderator</a></li>
-						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem" data-toggle="modal" data-target="#add-counselor">Counselor</a></li>
+					<button class="btn dropdown-toggle btn-blue" type="button" id="dropdownMenuBottomRight"
+                            data-toggle="dropdown" aria-expanded="true"><i class="material-icons md-dark pmd-sm">add</i>Add</button>
+					<ul aria-labelledby="admin-CRUD" role="menu"
+                        class="dropdown-menu dropdown-menu-right pmd-z-depth-2">
+						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem"
+                                                   data-toggle="modal" data-target="#add-admin">Admin</a></li>
+						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem"
+                                                   data-toggle="modal" data-target="#add-moderator">Moderator</a></li>
+						<li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem"
+                                                   data-toggle="modal" data-target="#add-counselor">Counselor</a></li>
 					</ul>
 				</span>
-			</div>
-		</div>
-		<div class="panel-group pmd-accordion" id="admin-crud" role="tablist" aria-multiselectable="true" >
-				<div class="panel">
-					<div class="panel-heading" role="tab">
-						<h4 class="panel-title">
-							<a data-toggle="collapse" href="#admin" data-parent="#admin-crud" aria-expanded="true" aria-controls="admin" data-expandable="false"><i class="material-icons pmd-sm pmd-accordion-icon-left">verified_user</i>Admin - <span>{{ adminGroup.count }}</span><i class="material-icons md-dark pmd-sm pmd-accordion-arrow">keyboard_arrow_down</i></a>
-						</h4>
-					</div>
-					<div id="admin" class="panel-collapse collapse" role="tabpanel" aria-labelledby="admin">
-						<ul class="panel-body admin-crud-accor">
-						{% for admins in adminGroup %}
-							<li>{{admins}}
-								<span>
-									<button type="button" class="btn btn-blue" >
-										<i class="material-icons md-dark pmd-sm" >fiber_manual_record</i>Edit
+            </div>
+        </div>
+        <div class="panel-group pmd-accordion" id="admin-crud" role="tablist" aria-multiselectable="true">
+            <div class="panel">
+                <div class="panel-heading" role="tab">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#admin" data-parent="#admin-crud" aria-expanded="true"
+                           aria-controls="admin" data-expandable="false"><i
+                                class="material-icons pmd-sm pmd-accordion-icon-left">verified_user</i>Admin - <span>{{ adminGroup.count }}</span><i
+                                class="material-icons md-dark pmd-sm pmd-accordion-arrow">keyboard_arrow_down</i></a>
+                    </h4>
+                </div>
+                <div id="admin" class="panel-collapse collapse" role="tabpanel" aria-labelledby="admin">
+                    <ul class="panel-body admin-crud-accor">
+                        {% for admins in adminGroup %}
+                        <li>{{admins}}
+                            <span>
+									<button type="button" class="btn btn-blue">
+										<i class="material-icons md-dark pmd-sm">fiber_manual_record</i>Edit
 									</button>
 
-									<button type="button" class="btn btn-yellow ajaxCallForActivationRole" value={{admins.id}}>
-										<i class="material-icons md-dark pmd-sm" >fiber_manual_record</i>
+									<button type="button" class="btn btn-yellow ajaxCallForActivationRole"
+                                            value={{admins.id}}>
+										<i class="material-icons md-dark pmd-sm">fiber_manual_record</i>
 										{% if admins.is_active %}
 										Deactivate
 										{% else %}
@@ -45,26 +56,30 @@
 									</button>
 
 								</span>
-							{% endfor%}
-						</ul>
-					</div>
-				</div>
-				<div class="panel">
-					<div class="panel-heading" role="tab">
-						<h4 class="panel-title">
-							<a  data-toggle="collapse" href="#moderator" data-parent="#admin-crud" aria-expanded="false" aria-controls="moderator"  data-expandable="false"><i class="material-icons pmd-sm pmd-accordion-icon-left">people</i>Moderator - <span>{{ moderatorGroup.count }}</span><i class="material-icons md-dark pmd-sm pmd-accordion-arrow">keyboard_arrow_down</i></a>
-						</h4>
-					</div>
-					<div id="moderator" class="panel-collapse collapse" role="tabpanel" aria-labelledby="moderator">
-						<ul class="panel-body admin-crud-accor">
-							{% for moderator in moderatorGroup %}
-							<li>{{moderator}}
-								<span>
+                            {% endfor%}
+                    </ul>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-heading" role="tab">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#moderator" data-parent="#admin-crud" aria-expanded="false"
+                           aria-controls="moderator" data-expandable="false"><i
+                                class="material-icons pmd-sm pmd-accordion-icon-left">people</i>Moderator - <span>{{ moderatorGroup.count }}</span><i
+                                class="material-icons md-dark pmd-sm pmd-accordion-arrow">keyboard_arrow_down</i></a>
+                    </h4>
+                </div>
+                <div id="moderator" class="panel-collapse collapse" role="tabpanel" aria-labelledby="moderator">
+                    <ul class="panel-body admin-crud-accor">
+                        {% for moderator in moderatorGroup %}
+                        <li>{{moderator}}
+                            <span>
 									<button type="button" class="btn btn-blue">
 										<i class="material-icons md-dark pmd-sm">fiber_manual_record</i>Edit
 									</button>
 
-									<button type="button" class="btn btn-yellow ajaxCallForActivationRole" value={{moderator.id}}>
+									<button type="button" class="btn btn-yellow ajaxCallForActivationRole"
+                                            value={{moderator.id}}>
 										<i class="material-icons md-dark pmd-sm">fiber_manual_record</i>
 										{% if moderator.is_active%}
 										Deactivate
@@ -73,33 +88,39 @@
 										{% endif %}
 									</button>
 
-									<button type="button" class="btn btn-red ajaxCallForDeleteRole" value={{moderator.id}}>
-										<i class="material-icons md-dark pmd-sm" >fiber_manual_record</i>Delete
+									<button type="button" class="btn btn-red ajaxCallForDeleteRole"
+                                            value={{moderator.id}}>
+										<i class="material-icons md-dark pmd-sm">fiber_manual_record</i>Delete
 									</button>
-								</a>
+                                </a>
 								</span>
-							</li>
-							{% endfor %}
-						</ul>
-					</div>
-				</div>
-				<div class="panel">
-					<div class="panel-heading" role="tab">
-						<h4 class="panel-title">
-							<a  data-toggle="collapse" href="#counsellor" data-parent="#admin-crud" aria-expanded="false" aria-controls="counsellor"  data-expandable="false"><i class="material-icons pmd-sm pmd-accordion-icon-left">supervisor_account</i>Counselors - <span>{{ counsellorGroup.count }}</span><i class="material-icons md-dark pmd-sm pmd-accordion-arrow">keyboard_arrow_down</i></a>
-						</h4>
-					</div>
-					<div id="counsellor" class="panel-collapse collapse" role="tabpanel" aria-labelledby="counsellor">
-						<ul class="panel-body admin-crud-accor">
-							{% for counsellor in counsellorGroup %}
-							<li>{{counsellor}}
-								<span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-heading" role="tab">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#counsellor" data-parent="#admin-crud" aria-expanded="false"
+                           aria-controls="counsellor" data-expandable="false"><i
+                                class="material-icons pmd-sm pmd-accordion-icon-left">supervisor_account</i>Counselors -
+                            <span>{{ counsellorGroup.count }}</span><i
+                                    class="material-icons md-dark pmd-sm pmd-accordion-arrow">keyboard_arrow_down</i></a>
+                    </h4>
+                </div>
+                <div id="counsellor" class="panel-collapse collapse" role="tabpanel" aria-labelledby="counsellor">
+                    <ul class="panel-body admin-crud-accor">
+                        {% for counsellor in counsellorGroup %}
+                        <li>{{counsellor}}
+                            <span>
 
 									<button type="button" class="btn btn-blue">
 										<i class="material-icons md-dark pmd-sm">fiber_manual_record</i>Edit
 									</button>
 
-									<button type="button" class="btn btn-yellow ajaxCallForActivationRole" value={{counselor.id}}>
+									<button type="button" class="btn btn-yellow ajaxCallForActivationRole"
+                                            value={{counselor.id}}>
 										<i class="material-icons md-dark pmd-sm">fiber_manual_record</i>
 										{% if counsellor.is_active %}
 										Deactivate
@@ -108,17 +129,18 @@
 										{% endif %}
 									</button>
 
-									<button type="button" class="btn btn-red ajaxCallForDeleteRole" value={{counselor.id}}>
+									<button type="button" class="btn btn-red ajaxCallForDeleteRole"
+                                            value={{counselor.id}}>
 										<i class="material-icons md-dark pmd-sm">fiber_manual_record</i>Delete
 									</button>
-								</a>
+                                </a>
 
 								</span>
-							</li>
-							{% endfor %}
-						</ul>
-					</div>
-				</div>
-			</div>
-	</div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

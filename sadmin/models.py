@@ -266,4 +266,3 @@ class pickupdetails(models.Model):
 
     def __str__(self):
         return str(self.pickupid) + str(self.documentid)
-

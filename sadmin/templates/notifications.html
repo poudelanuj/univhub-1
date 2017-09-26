@@ -11,101 +11,113 @@
 
     <div class="row">
         <div class="col-md-12">
-                <div class="card">
-                    <div class="clearfix">
-                        <button type="button" class="btn btn-notice pull-right" title="Click to Send Notice" data-target="#send-notice-modal" data-toggle="modal">Send Notice</button >
-                    </div>
-                    <div class="clearfix">
-                        <label for="notifications_type1" class="pull-left">Notification Type:</label>
-                        <select name="notifications_type" id="notifications_type1" class="pull-left form-control notifications_type">
-                            <option value-="Class Registration">Class Registration</option>
-                            <option value-="Complete Profile Request">Complete Profile Request</option>
-                            <option value-="Document Upload Request">Document Upload Request</option>
-                            <option value-="Document Receieved">Document Receieved</option>
-                            <option value-="Map">Map</option>
-                            <option value-="Organizing Event">Organizing Event</option>
-                            <option value-="Visit Web Site Request">Visit Web Site Request</option>
-                            <option value-="Other">Other</option>
-                        </select>
-                        <div class="pull-right">
-                            <div class="pmd-tabs activities-tab">
-                                    <div class="pmd-tab-active-bar"></div>
-                                    <ul role="tablist" class="nav nav-tabs">
-                                        <li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="today" href="#today-noti">Today</a></li>
-                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week" href="#week-noti">Week</a></li>
-                                        <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month" href="#month-noti">Month</a></li>
-                                    </ul>
-                            </div>
+            <div class="card">
+                <div class="clearfix">
+                    <button type="button" class="btn btn-notice pull-right" title="Click to Send Notice"
+                            data-target="#send-notice-modal" data-toggle="modal">Send Notice
+                    </button>
+                </div>
+                <div class="clearfix">
+                    <label for="notifications_type1" class="pull-left">Notification Type:</label>
+                    <select name="notifications_type" id="notifications_type1"
+                            class="pull-left form-control notifications_type">
+                        <option value-="Class Registration">Class Registration</option>
+                        <option value-="Complete Profile Request">Complete Profile Request</option>
+                        <option value-="Document Upload Request">Document Upload Request</option>
+                        <option value-="Document Receieved">Document Receieved</option>
+                        <option value-="Map">Map</option>
+                        <option value-="Organizing Event">Organizing Event</option>
+                        <option value-="Visit Web Site Request">Visit Web Site Request</option>
+                        <option value-="Other">Other</option>
+                    </select>
+                    <div class="pull-right">
+                        <div class="pmd-tabs activities-tab">
+                            <div class="pmd-tab-active-bar"></div>
+                            <ul role="tablist" class="nav nav-tabs">
+                                <li class="active" role="presentation"><a data-toggle="tab" role="tab"
+                                                                          aria-controls="today"
+                                                                          href="#today-noti">Today</a></li>
+                                <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week"
+                                                           href="#week-noti">Week</a></li>
+                                <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month"
+                                                           href="#month-noti">Month</a></li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="tab-content notifications-tab-content">
-                        <ul role="tabpanel" id="today-noti" class="tab-pane active list-group pmd-list pmd-card-list">
-                            <li class="list-group-item">
-                                <a href="javascript:void(0);">
-                                    <div class="media-left">
-                                        <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
-                                    </div>
-                                    <div class="media-body">
-                                        <h3 class="list-group-item-heading">This is notification title</h3>
-                                        <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span class="see_more">see more...</span></span>
-                                        <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
-                                        <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
-                                    </div>
-                                    <div class="noti-time">12 min ago</div>
-                                </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="javascript:void(0);">
-                                    <div class="media-left">
-                                        <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
-                                    </div>
-                                    <div class="media-body">
-                                        <h3 class="list-group-item-heading">This is notification title</h3>
-                                        <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span class="see_more">see more...</span></span>
-                                        <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
-                                        <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
-                                    </div>
-                                    <div class="noti-time">yesterday at 10:00 am</div>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul role="tabpanel" id="week-noti" class="tab-pane list-group pmd-list pmd-card-list">
-                            <li class="list-group-item">
-                                <a href="javascript:void(0);">
-                                    <div class="media-left">
-                                        <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
-                                    </div>
-                                    <div class="media-body">
-                                        <h3 class="list-group-item-heading">This is notification title</h3>
-                                        <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span class="see_more">see more...</span></span>
-                                        <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
-                                        <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
-                                    </div>
-                                    <div class="noti-time">12 min ago</div>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul role="tabpanel" id="month-noti" class="tab-pane list-group pmd-list pmd-card-list">
-                        </ul>
-                    </div>
                 </div>
+                <div class="tab-content notifications-tab-content">
+                    <ul role="tabpanel" id="today-noti" class="tab-pane active list-group pmd-list pmd-card-list">
+                        <li class="list-group-item">
+                            <a href="javascript:void(0);">
+                                <div class="media-left">
+                                    <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
+                                </div>
+                                <div class="media-body">
+                                    <h3 class="list-group-item-heading">This is notification title</h3>
+                                    <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span
+                                            class="see_more">see more...</span></span>
+                                    <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
+                                    <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
+                                </div>
+                                <div class="noti-time">12 min ago</div>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="javascript:void(0);">
+                                <div class="media-left">
+                                    <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
+                                </div>
+                                <div class="media-body">
+                                    <h3 class="list-group-item-heading">This is notification title</h3>
+                                    <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span
+                                            class="see_more">see more...</span></span>
+                                    <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
+                                    <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
+                                </div>
+                                <div class="noti-time">yesterday at 10:00 am</div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul role="tabpanel" id="week-noti" class="tab-pane list-group pmd-list pmd-card-list">
+                        <li class="list-group-item">
+                            <a href="javascript:void(0);">
+                                <div class="media-left">
+                                    <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
+                                </div>
+                                <div class="media-body">
+                                    <h3 class="list-group-item-heading">This is notification title</h3>
+                                    <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span
+                                            class="see_more">see more...</span></span>
+                                    <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
+                                    <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
+                                </div>
+                                <div class="noti-time">12 min ago</div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul role="tabpanel" id="month-noti" class="tab-pane list-group pmd-list pmd-card-list">
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Send Notice Modal -->
 <div tabindex="-1" class="modal fade" id="send-notice-modal" style="display: none;" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header pmd-modal-bordered">
-				<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-				<h2 class="pmd-card-title-text text-center">Sending Notification To all Users</h2>
-			</div>
-			<div class="modal-body">
-				<form enctype='application/json' name="notification_create_form" id="notification_create_form" class="form-horizontal" action="create.django" method="post">
-					<div class="form-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pmd-modal-bordered">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h2 class="pmd-card-title-text text-center">Sending Notification To all Users</h2>
+            </div>
+            <div class="modal-body">
+                <form enctype='application/json' name="notification_create_form" id="notification_create_form"
+                      class="form-horizontal" action="create.django" method="post">
+                    <div class="form-group">
                         <label for="notifications_type2" class="control-label">Notification Type:</label>
-                        <select name="notification_type" id="notifications_type2" class="form-control notifications_type">
+                        <select name="notification_type" id="notifications_type2"
+                                class="form-control notifications_type">
 
                             <!-- TODO: get the notification type details form the table -->
 
@@ -121,29 +133,36 @@
                     </div>
                     <div class="form-group">
                         <label for="title" class="control-label">Title:</label><br>
-                        <input name="title" id="title" class="form-control" required placeholder="Title of the Notifications">
+                        <input name="title" id="title" class="form-control" required
+                               placeholder="Title of the Notifications">
                     </div>
                     <div class="form-group">
                         <label for="description" class="control-label">Description:</label><br>
-                        <textarea name="details"required class="form-control" id="description" placeholder="Details about the Notifications"></textarea>
+                        <textarea name="details" required class="form-control" id="description"
+                                  placeholder="Details about the Notifications"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="url" class="control-label">URL:</label><br>
-                        <input name="web_url" id="url" class="form-control" required placeholder="Paste the redirect web URL here">
+                        <input name="web_url" id="url" class="form-control" required
+                               placeholder="Paste the redirect web URL here">
                     </div>
                     <div class="form-group">
                         <label for="map" class="control-label">Map:</label><br>
-                        <input name="map_url" id="map" class="form-control" required placeholder="Paste the Google Map URL here">
+                        <input name="map_url" id="map" class="form-control" required
+                               placeholder="Paste the Google Map URL here">
                     </div>
-                    <input style="display:none;" type="submit" id="create_notification  _submit" name="create_notification_submit" />
+                    <input style="display:none;" type="submit" id="create_notification  _submit"
+                           name="create_notification_submit"/>
 
-				</form>
-			</div>
-			<div class="pmd-modal-action clearfix">
-				<button onclick="create_notification_upload()" id="upload_notification" data-dismiss="modal" class="btn btn-submit pull-right" type="submit">Send</button>
-			</div>
+                </form>
+            </div>
+            <div class="pmd-modal-action clearfix">
+                <button onclick="create_notification_upload()" id="upload_notification" data-dismiss="modal"
+                        class="btn btn-submit pull-right" type="submit">Send
+                </button>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 </div>
-<script type="text/javascript" ></button>
+<script type="text/javascript"></button>

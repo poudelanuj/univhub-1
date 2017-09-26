@@ -3,33 +3,32 @@
 <head>
 
 
- 
- {% load static %}
+    {% load static %}
 
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="Super Admin Dashboard">
-<meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Super Admin Dashboard">
+    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
 
-<title>Admin Dashboard</title>
+    <title>Admin Dashboard</title>
 
-<!-- Google icon -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
+    <!-- Google icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 
-	<!-- Bootstrap css -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 
-<!-- propeller css -->
-<link rel="stylesheet" type="text/css" href="{% static 'assets/css/propeller.css' %}">
-<!-- Select2 css -->
-<link href="{% static 'assets/css/select2.min.css' %}" type="text/css" rel="stylesheet"/>
-<link href="{% static 'assets/css/select2-bootstrap.css' %}" type="text/css" rel="stylesheet"/>
-<!-- Univhub super admin theme css-->
-<link rel="stylesheet" type="text/css" href="{% static 'assets/css/univhub-super-admin.css' %}">
+    <!-- propeller css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/propeller.css' %}">
+    <!-- Select2 css -->
+    <link href="{% static 'assets/css/select2.min.css' %}" type="text/css" rel="stylesheet"/>
+    <link href="{% static 'assets/css/select2-bootstrap.css' %}" type="text/css" rel="stylesheet"/>
+    <!-- Univhub super admin theme css-->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/univhub-super-admin.css' %}">
 
 </head>
 
@@ -38,48 +37,57 @@
 <!--Start Nav bar -->
 <nav class="navbar navbar-inverse navbar-fixed-top pmd-navbar">
 
-	<div class="container-fluid">
-		<div class="pmd-navbar-right-icon pull-right navigation">
-			<!-- Notifications -->
+    <div class="container-fluid">
+        <div class="pmd-navbar-right-icon pull-right navigation">
+            <!-- Notifications -->
             <div class="dropdown pull-left notification icons pmd-dropdown">
 
-				<a id="notificationdropshow" href="javascript:void(0)" title="Notification" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="true">
-					<div id="notifycountbadge"  class="material-icons md-light pmd-sm pmd-badge  pmd-badge-overlap">notifications_none</div>
-				</a>
+                <a id="notificationdropshow" href="javascript:void(0)" title="Notification" class="dropdown-toggle"
+                   data-toggle="dropdown" role="button" aria-expanded="true">
+                    <div id="notifycountbadge" class="material-icons md-light pmd-sm pmd-badge  pmd-badge-overlap">
+                        notifications_none
+                    </div>
+                </a>
 
-				<div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default" role="menu">
-					<!-- Card header -->
-					<div id="notifylist">
-						{% include 'notification_drop.html'%}
-				</div></div>
+                <div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default" role="menu">
+                    <!-- Card header -->
+                    <div id="notifylist">
+                        {% include 'notification_drop.html'%}
+                    </div>
+                </div>
 
 
-			</div> <!-- End notifications -->
-			<div class="dropdown pull-left notification icons pmd-dropdown user-menu">
-				<a href="javascript:void(0)" title="Notification" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="true">
-					<div class="user-img"><img src="assets/images/avatar-icon-40x40.png" class="img-responsive" alt="User Image"></div>
-				</a>
+            </div> <!-- End notifications -->
+            <div class="dropdown pull-left notification icons pmd-dropdown user-menu">
+                <a href="javascript:void(0)" title="Notification" class="dropdown-toggle" data-toggle="dropdown"
+                   role="button" aria-expanded="true">
+                    <div class="user-img"><img src="assets/images/avatar-icon-40x40.png" class="img-responsive"
+                                               alt="User Image"></div>
+                </a>
 
-				<div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default" role="menu">
-					<!-- Notifications list -->
-					<ul class="list-group pmd-list-avatar pmd-card-list">
-						<li class="list-group-item"><a href="javscript:;">Profile</a></li>
-						<li class="list-group-item"><a href="javscript:;">Inbox</a></li>
-						<li class="list-group-item"><a href="javscript:;">Logout</a></li>
-					</ul><!-- End notifications list -->
-				</div>
-			</div> <!-- End notifications -->
-			<a href="javascript:void(0);" class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-sidebar-toggle-right pull-left"><i class="material-icons">more_vert</i></a>
+                <div class="dropdown-menu dropdown-menu-right pmd-card pmd-card-default" role="menu">
+                    <!-- Notifications list -->
+                    <ul class="list-group pmd-list-avatar pmd-card-list">
+                        <li class="list-group-item"><a href="javscript:;">Profile</a></li>
+                        <li class="list-group-item"><a href="javscript:;">Inbox</a></li>
+                        <li class="list-group-item"><a href="javscript:;">Logout</a></li>
+                    </ul><!-- End notifications list -->
+                </div>
+            </div> <!-- End notifications -->
+            <a href="javascript:void(0);"
+               class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-sidebar-toggle-right pull-left"><i class="material-icons">more_vert</i></a>
 
-		</div>
-		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
-			<a href="javascript:void(0);" class="btn btn-sm pmd-btn-fab pmd-btn-flat pull-left margin-r8 pmd-sidebar-toggle"><i class="material-icons">menu</i></a>
-		  <a href="{% url 'admin-dashboard' %}" class="navbar-brand">
-			  UNIVHUB
-		  </a>
-		</div>
-	</div>
+        </div>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a href="javascript:void(0);"
+               class="btn btn-sm pmd-btn-fab pmd-btn-flat pull-left margin-r8 pmd-sidebar-toggle"><i
+                    class="material-icons">menu</i></a>
+            <a href="{% url 'admin-dashboard' %}" class="navbar-brand">
+                UNIVHUB
+            </a>
+        </div>
+    </div>
 
 </nav><!--End Nav bar -->
 <!-- Header Ends -->
@@ -88,86 +96,88 @@
 <div class="pmd-sidebar-overlay"></div>
 
 <!-- Left sidebar -->
-<aside class="pmd-sidebar sidebar-default pmd-z-depth pmd-sidebar-slide-push pmd-sidebar-left pmd-sidebar-open sidebar-with-icons" role="navigation">
-	<ul class="nav pmd-sidebar-nav">
-		<li>
-			<a class="active" href="admin-dashboard.html">
-				<i class="media-left media-middle fa fa-dashboard"></i>
-				<span class="media-body">Dashboard</span>
-			</a>
-		</li>
-		<li>
-				<a href="javascript:;" class="aside_students">
-					<i class="media-left media-middle fa fa-users"></i>
-					<span class="media-body">Students</span>
-				</a>
-		</li>
-		<li>
-				<a href="javascript:;">
-					<i class="media-left media-middle fa fa-bell"></i>
-					<span class="media-body">Notices</span>
-				</a>
-		</li>
-		<li>
-				<a href="javascript:;">
-					<i class="media-left media-middle fa fa-comments-o"></i>
-					<span class="media-body">Messeges</span>
-				</a>
-		</li>
+<aside class="pmd-sidebar sidebar-default pmd-z-depth pmd-sidebar-slide-push pmd-sidebar-left pmd-sidebar-open sidebar-with-icons"
+       role="navigation">
+    <ul class="nav pmd-sidebar-nav">
+        <li>
+            <a class="active" href="admin-dashboard.html">
+                <i class="media-left media-middle fa fa-dashboard"></i>
+                <span class="media-body">Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" class="aside_students">
+                <i class="media-left media-middle fa fa-users"></i>
+                <span class="media-body">Students</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;">
+                <i class="media-left media-middle fa fa-bell"></i>
+                <span class="media-body">Notices</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;">
+                <i class="media-left media-middle fa fa-comments-o"></i>
+                <span class="media-body">Messeges</span>
+            </a>
+        </li>
 
-		<li class="dropdown pmd-dropdown">
-			<a aria-expanded="false" data-toggle="dropdown" class="btn-user dropdown-toggle media" data-sidebar="true" href="javascript:void(0);">
-				<i class="media-left media-middle fa fa-sitemap"></i>
-				<span class="media-body">Site Contain</span>
-				<i class="media-right fa fa-angle-right"></i>
-				<!-- <div class="media-right media-bottom"><i class="fa fa-chevron-down"></i></div> -->
-			</a>
-			<ul class="dropdown-menu">
-				<li><a href="javascript:;"><i class="media-left media-middle fa fa-university"></i>
-					<span class="media-body">Universities</span></a></li>
-				<li><a href="javascript:;"><i class="media-left media-middle fa fa-paperclip"></i>
-					<span class="media-body">Blog</span></a></li>
-				<li><a href="javascript:;"><i class="media-left media-middle fa fa-map-marker"></i>
-					<span class="media-body">Location Expenses</span></a></li>
-			</ul>
-		</li>
-		<li>
-				<a href="javascript:;">
-					<i class="media-left media-middle fa fa-money"></i>
-					<span class="media-body">Payment</span>
-				</a>
-		</li>
-		<li>
-				<a href="javascript:;">
-					<i class="media-left media-middle fa fa-comment"></i>
-					<span class="media-body">Feedback</span>
-				</a>
-		</li>
-		<li>
-				<a href="javascript:;" class="aside_notifications">
-					<i class="media-left media-middle fa fa-bell-o"></i>
-					<span class="media-body">Notifications</span>
-				</a>
-		</li>
-		<li>
-				<a href="javascript:;" class="aside_pickup">
-					<i class="media-left media-middle fa fa-truck"></i>
-					<span class="media-body">Pick Up</span>
-				</a>
-		</li>
+        <li class="dropdown pmd-dropdown">
+            <a aria-expanded="false" data-toggle="dropdown" class="btn-user dropdown-toggle media" data-sidebar="true"
+               href="javascript:void(0);">
+                <i class="media-left media-middle fa fa-sitemap"></i>
+                <span class="media-body">Site Contain</span>
+                <i class="media-right fa fa-angle-right"></i>
+                <!-- <div class="media-right media-bottom"><i class="fa fa-chevron-down"></i></div> -->
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="javascript:;"><i class="media-left media-middle fa fa-university"></i>
+                    <span class="media-body">Universities</span></a></li>
+                <li><a href="javascript:;"><i class="media-left media-middle fa fa-paperclip"></i>
+                    <span class="media-body">Blog</span></a></li>
+                <li><a href="javascript:;"><i class="media-left media-middle fa fa-map-marker"></i>
+                    <span class="media-body">Location Expenses</span></a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="javascript:;">
+                <i class="media-left media-middle fa fa-money"></i>
+                <span class="media-body">Payment</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;">
+                <i class="media-left media-middle fa fa-comment"></i>
+                <span class="media-body">Feedback</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" class="aside_notifications">
+                <i class="media-left media-middle fa fa-bell-o"></i>
+                <span class="media-body">Notifications</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:;" class="aside_pickup">
+                <i class="media-left media-middle fa fa-truck"></i>
+                <span class="media-body">Pick Up</span>
+            </a>
+        </li>
 
 
-	</ul>
+    </ul>
 </aside><!-- End Left sidebar -->
 <!-- Sidebar Ends -->
 
 <!-- Right sidebar -->
 
 <aside class="right-side-sidebar pmd-sidebar pmd-z-depth sidebar-custom pmd-sidebar-right-fixed" role="navigation">
-	<!-- Sidebar navigation -->
-	<ul class="nav pmd-sidebar-nav">
-		<li> <a href="javascript:void(0);">Settings</a> </li>
-	</ul>
+    <!-- Sidebar navigation -->
+    <ul class="nav pmd-sidebar-nav">
+        <li><a href="javascript:void(0);">Settings</a></li>
+    </ul>
 </aside>
 
 
@@ -175,159 +185,166 @@
 
 <div id="content" class="pmd-content content-area dashboard">
 
-	<div class="container-fluid">
-		<div class="row">
-			<!-- Page Content Title -->
-			<div class="col-md-12">
-				<h1 class="page-content-title">Dashboard <span>Activity and Statistics</span></h1>
-			</div>
-			<!-- / Page Content Title -->
-		</div>
-		<div class="row counts" id="card-masonry">
-			<!-- Dashboard Count -->
-			<div class="col-md-3 col-sm-3 col-xs-6 text-center">
-				<div class="count card">
-					<strong>{{studentCount}}</strong>
-					<small>Total Students</small>
-				</div>
-			</div>
-			<!-- Dashboard Count -->
-			<!-- Dashboard Count -->
-			<div class="col-md-3 col-sm-3 col-xs-6 text-center">
-				<div class="count card">
-					<strong>{{todayjoined}}</strong>
-					<small>Today Regsitered</small>
-				</div>
-			</div>
-			<!-- Dashboard Count -->
-			<!-- Dashboard Count -->
-			<div class="col-md-3 col-sm-3 col-xs-6 text-center">
-				<div class="count card">
-					<strong>96</strong>
-					<small>Application on Process</small>
-				</div>
-			</div>
-			<!-- Dashboard Count -->
-			<!-- Dashboard Count -->
-			<div class="col-md-3 col-sm-3 col-xs-6 text-center">
-				<div class="count card">
-					<strong>126</strong>
-					<small>Visa Granted</small>
-				</div>
-			</div>
-			<!-- Dashboard Count -->
-		</div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Page Content Title -->
+            <div class="col-md-12">
+                <h1 class="page-content-title">Dashboard <span>Activity and Statistics</span></h1>
+            </div>
+            <!-- / Page Content Title -->
+        </div>
+        <div class="row counts" id="card-masonry">
+            <!-- Dashboard Count -->
+            <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                <div class="count card">
+                    <strong>{{studentCount}}</strong>
+                    <small>Total Students</small>
+                </div>
+            </div>
+            <!-- Dashboard Count -->
+            <!-- Dashboard Count -->
+            <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                <div class="count card">
+                    <strong>{{todayjoined}}</strong>
+                    <small>Today Regsitered</small>
+                </div>
+            </div>
+            <!-- Dashboard Count -->
+            <!-- Dashboard Count -->
+            <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                <div class="count card">
+                    <strong>96</strong>
+                    <small>Application on Process</small>
+                </div>
+            </div>
+            <!-- Dashboard Count -->
+            <!-- Dashboard Count -->
+            <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                <div class="count card">
+                    <strong>126</strong>
+                    <small>Visa Granted</small>
+                </div>
+            </div>
+            <!-- Dashboard Count -->
+        </div>
 
-		<div class="row">
-			<!-- admins informations -->
-			<div id="admininformations">
-			{% include 'ad-adminsInformation.html' %}
-		</div>
-			<!-- / admins informations -->
-			<!-- activites -->
-			<div class="col-md-6">
-				<div class="card pmd-z-depth activities">
-					<div class="activities-title clearfix">
-						<h3 class="pull-left card-title">Activities - <span>257</span></h3>
-						<div class="pull-right">
-							<div class="pmd-tabs activities-tab">
-									<div class="pmd-tab-active-bar"></div>
-									<ul role="tablist" class="nav nav-tabs">
-										<li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="today" href="#today-fixed">Today</a></li>
-										<li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week" href="#week-fixed">Week</a></li>
-										<li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month" href="#month-fixed">Month</a></li>
-									</ul>
-							</div>
-						</div>
-					</div>
-					<div class="tab-content activities-tab-content">
-						<ul role="tabpanel" class="tab-pane active" id="today-fixed">
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
-						</ul>
-						<ul role="tabpanel" class="tab-pane" id="week-fixed">
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
-						</ul>
-						<ul role="tabpanel" class="tab-pane" id="month-fixed">
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
-							<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<!-- / activites -->
-		</div>
+        <div class="row">
+            <!-- admins informations -->
+            <div id="admininformations">
+                {% include 'ad-adminsInformation.html' %}
+            </div>
+            <!-- / admins informations -->
+            <!-- activites -->
+            <div class="col-md-6">
+                <div class="card pmd-z-depth activities">
+                    <div class="activities-title clearfix">
+                        <h3 class="pull-left card-title">Activities - <span>257</span></h3>
+                        <div class="pull-right">
+                            <div class="pmd-tabs activities-tab">
+                                <div class="pmd-tab-active-bar"></div>
+                                <ul role="tablist" class="nav nav-tabs">
+                                    <li class="active" role="presentation"><a data-toggle="tab" role="tab"
+                                                                              aria-controls="today" href="#today-fixed">Today</a>
+                                    </li>
+                                    <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week"
+                                                               href="#week-fixed">Week</a></li>
+                                    <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month"
+                                                               href="#month-fixed">Month</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content activities-tab-content">
+                        <ul role="tabpanel" class="tab-pane active" id="today-fixed">
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
+                        </ul>
+                        <ul role="tabpanel" class="tab-pane" id="week-fixed">
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
+                        </ul>
+                        <ul role="tabpanel" class="tab-pane" id="month-fixed">
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- / activites -->
+        </div>
 
-		<!-- Task Pending -->
-		<div class="row">
-				<div class="col-md-12">
-						<div class="card pmd-z-depth activities tesk-pending">
-							<div class="activities-title clearfix">
-								<h3 class="pull-left">Task Pending - <span>257</span></h3>
-								<div class="pull-right">
-									<div class="pmd-tabs activities-tab">
-											<div class="pmd-tab-active-bar"></div>
-											<ul role="tablist" class="nav nav-tabs">
-												<li class="active" role="presentation"><a data-toggle="tab" role="tab" aria-controls="today" href="#today-fixed">Today</a></li>
-												<li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week" href="#week-fixed">Week</a></li>
-												<li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month" href="#month-fixed">Month</a></li>
-											</ul>
-									</div>
-								</div>
-							</div>
-							<div class="tab-content activities-tab-content">
-								<ul role="tabpanel" class="tab-pane active" id="today-fixed">
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
-								</ul>
-								<ul role="tabpanel" class="tab-pane" id="week-fixed">
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
-								</ul>
-								<ul role="tabpanel" class="tab-pane" id="month-fixed">
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
-									<li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
-								</ul>
-							</div>
-						</div>
-				</div>
-			</div>
-			<!-- / Task Pending -->
-		<div class="row">
-			<!-- geographical student map -->
-			{% include 'ad-geography.html' %}
-		</div>
-			<!-- / geographical student map -->
+        <!-- Task Pending -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card pmd-z-depth activities tesk-pending">
+                    <div class="activities-title clearfix">
+                        <h3 class="pull-left">Task Pending - <span>257</span></h3>
+                        <div class="pull-right">
+                            <div class="pmd-tabs activities-tab">
+                                <div class="pmd-tab-active-bar"></div>
+                                <ul role="tablist" class="nav nav-tabs">
+                                    <li class="active" role="presentation"><a data-toggle="tab" role="tab"
+                                                                              aria-controls="today" href="#today-fixed">Today</a>
+                                    </li>
+                                    <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week"
+                                                               href="#week-fixed">Week</a></li>
+                                    <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month"
+                                                               href="#month-fixed">Month</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content activities-tab-content">
+                        <ul role="tabpanel" class="tab-pane active" id="today-fixed">
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
+                        </ul>
+                        <ul role="tabpanel" class="tab-pane" id="week-fixed">
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
+                        </ul>
+                        <ul role="tabpanel" class="tab-pane" id="month-fixed">
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>Today</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 day ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>3 days ago</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>29 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>28 Aug</span></li>
+                            <li>Saugat Rana (Student) has been approved by Milan Adhikari<span>1 month ago</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- / Task Pending -->
+        <div class="row">
+            <!-- geographical student map -->
+            {% include 'ad-geography.html' %}
+        </div>
+        <!-- / geographical student map -->
 
-	</div>
+    </div>
 
 </div><!--end content area-->
-
 
 
 <!-- Footer Starts -->
@@ -343,183 +360,201 @@
 
 
 <div tabindex="-1" class="modal fade add-modal" id="add-admin" style="display: none;" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header pmd-modal-bordered">
-				    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-					<h2 class="text-center">Admin Registration</h2>
-			</div>
-			<div class="modal-body">
-				<form class="form-horizontal"  id="addadminform">
-				{% csrf_token %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pmd-modal-bordered">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h2 class="text-center">Admin Registration</h2>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addadminform">
+                    {% csrf_token %}
 
-						<div class="form-group">
-								<label for="company_name" class="control-label">Company Name:</label><br>
-								<input type="text" id="company_name" class="form-control" required placeholder="Company Name" name="consultancyName">
-							</div>
-						<div class="form-group">
-							<label for="panvat" class="control-label">PAN/VAT:</label><br>
-							<input type="text" id="panvat" class="form-control" required placeholder="PAN/VAT" name="pan_vat">
-						</div>
-						<div class="form-group">
-							<label for="registration_no" class="control-label">Registration No:</label><br>
-							<input type="text" id="registration_no" class="form-control" required placeholder="Registration No" name="reg_no">
-						</div>
-						<div class="form-group clearfix">
-							<label for="registration_no" class="control-label">Company Logo:</label><br>
-							<div class="company-logo-name">
-								my_company_logo.png
-							<label for="upload-file-selector" class="pull-right">
-							<input id="upload-file-selector" type="file">
-							<span type="button" class="btn btn-upload">Upload</span>
-							</div>
-							</label>
-						</div>
-						<div class="form-group">
-							<label for="username" class="control-label">Username:</label><br>
-							<input type="text" id="Company_Location" class="form-control" required placeholder="Company Location" name="username">
-						</div>
-						<div class="form-group">
-							<label for="email" class="control-label">Email:</label><br>
-							<input type="text" id="email" class="form-control" required placeholder="Email" name="email">
-						</div>
-						<div class="form-group">
-							<label for="password" class="control-label">Password:</label><br>
-							<input type="password" id="password" class="form-control" required placeholder="Password" name="password">
-						</div>
-						<div class="form-group">
-							<label for="confirm_password" class="control-label">Confirm Password:</label><br>
-							<input type="password" id="confirm_password" class="form-control" required placeholder="Confirm Password" name="password2">
-						</div>
-						<div class="form-group">
-							<label for="Company_Location" class="control-label">Company Location:</label><br>
-							<input type="text" id="Company_Location" class="form-control" required placeholder="Company Location" name="location">
-						</div>
-						<div class="form-group">
-							<label for="website" class="control-label">Website:</label><br>
-							<input type="text" id="website" class="form-control" required placeholder="Website" name="website">
-						</div>
-						<div class="form-group">
-							<label for="phone" class="control-label">Phone:</label><br>
-							<input type="text" id="phone" class="form-control" required placeholder="Phone" name="phone">
-						</div>
-						<div class="form-group">
-							<label for="company_desc" class="control-label">Your Company Description:</label><br>
-							<textarea id="company_desc" required class="form-control" placeholder="Your Company Description" name="description"></textarea>
-						</div>
-				</form>
-			</div>
-			<div class="pmd-modal-action clearfix">
-				<button class="btn btn-submit pull-right" type="button" id="addadminbutton">Register</button>
-			</div>
-		</div>
-	</div>
+                    <div class="form-group">
+                        <label for="company_name" class="control-label">Company Name:</label><br>
+                        <input type="text" id="company_name" class="form-control" required placeholder="Company Name"
+                               name="consultancyName">
+                    </div>
+                    <div class="form-group">
+                        <label for="panvat" class="control-label">PAN/VAT:</label><br>
+                        <input type="text" id="panvat" class="form-control" required placeholder="PAN/VAT"
+                               name="pan_vat">
+                    </div>
+                    <div class="form-group">
+                        <label for="registration_no" class="control-label">Registration No:</label><br>
+                        <input type="text" id="registration_no" class="form-control" required
+                               placeholder="Registration No" name="reg_no">
+                    </div>
+                    <div class="form-group clearfix">
+                        <label for="registration_no" class="control-label">Company Logo:</label><br>
+                        <div class="company-logo-name">
+                            my_company_logo.png
+                            <label for="upload-file-selector" class="pull-right">
+                                <input id="upload-file-selector" type="file">
+                                <span type="button" class="btn btn-upload">Upload</span>
+                        </div>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="username" class="control-label">Username:</label><br>
+                        <input type="text" id="Company_Location" class="form-control" required
+                               placeholder="Company Location" name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="control-label">Email:</label><br>
+                        <input type="text" id="email" class="form-control" required placeholder="Email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">Password:</label><br>
+                        <input type="password" id="password" class="form-control" required placeholder="Password"
+                               name="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password" class="control-label">Confirm Password:</label><br>
+                        <input type="password" id="confirm_password" class="form-control" required
+                               placeholder="Confirm Password" name="password2">
+                    </div>
+                    <div class="form-group">
+                        <label for="Company_Location" class="control-label">Company Location:</label><br>
+                        <input type="text" id="Company_Location" class="form-control" required
+                               placeholder="Company Location" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label for="website" class="control-label">Website:</label><br>
+                        <input type="text" id="website" class="form-control" required placeholder="Website"
+                               name="website">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="control-label">Phone:</label><br>
+                        <input type="text" id="phone" class="form-control" required placeholder="Phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="company_desc" class="control-label">Your Company Description:</label><br>
+                        <textarea id="company_desc" required class="form-control" placeholder="Your Company Description"
+                                  name="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="pmd-modal-action clearfix">
+                <button class="btn btn-submit pull-right" type="button" id="addadminbutton">Register</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div tabindex="-1" class="modal fade add-modal" id="add-moderator" style="display: none;" aria-hidden="true">
-	<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header pmd-modal-bordered">
-						<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-						<h2 class="text-center">Moderator Registration</h2>
-				</div>
-				<div class="modal-body">
-					<form class="form-horizontal" id="addmoderatorform">
-						{% csrf_token %}
-							<div class="form-group">
-								<label for="mod_name" class="control-label">Name:</label><br>
-								<input type="text" id="mod_name" class="form-control" required placeholder="Name" name="username">
-							</div>
-							<div class="form-group">
-								<label for="email" class="control-label">Email:</label><br>
-								<input type="text" id="email" class="form-control" required placeholder="Email" name="email">
-							</div>
-							<div class="form-group">
-								<label for="password" class="control-label">Password:</label><br>
-								<input type="password" id="password" class="form-control" required placeholder="Password" name="password">
-							</div>
-							<div class="form-group">
-								<label for="confirm_password" class="control-label">Confirm Password:</label><br>
-								<input type="password" id="confirm_password" class="form-control" required placeholder="Confirm Password" name="password2">
-							</div>
-							<div class="form-group">
-								<label for="address" class="control-label">Address:</label><br>
-								<input type="text" id="address" class="form-control" required placeholder="Address" name="location">
-							</div>
-							<div class="form-group clearfix">
-								<label for="registration_no" class="control-label">Profile Image:</label><br>
-								<div class="company-logo-name">
-									my_image.png
-								<label for="upload-file-selector" class="pull-right">
-								<input id="upload-file-selector" type="file">
-								<span type="button" class="btn btn-upload">Upload</span>
-								</div>
-								</label>
-							</div>
-					</form>
-				</div>
-				<div class="pmd-modal-action clearfix">
-					<button class="btn btn-submit pull-right" type="button" id="addmoderatorbutton">Register</button>
-				</div>
-			</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pmd-modal-bordered">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h2 class="text-center">Moderator Registration</h2>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addmoderatorform">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="mod_name" class="control-label">Name:</label><br>
+                        <input type="text" id="mod_name" class="form-control" required placeholder="Name"
+                               name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="control-label">Email:</label><br>
+                        <input type="text" id="email" class="form-control" required placeholder="Email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">Password:</label><br>
+                        <input type="password" id="password" class="form-control" required placeholder="Password"
+                               name="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password" class="control-label">Confirm Password:</label><br>
+                        <input type="password" id="confirm_password" class="form-control" required
+                               placeholder="Confirm Password" name="password2">
+                    </div>
+                    <div class="form-group">
+                        <label for="address" class="control-label">Address:</label><br>
+                        <input type="text" id="address" class="form-control" required placeholder="Address"
+                               name="location">
+                    </div>
+                    <div class="form-group clearfix">
+                        <label for="registration_no" class="control-label">Profile Image:</label><br>
+                        <div class="company-logo-name">
+                            my_image.png
+                            <label for="upload-file-selector" class="pull-right">
+                                <input id="upload-file-selector" type="file">
+                                <span type="button" class="btn btn-upload">Upload</span>
+                        </div>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="pmd-modal-action clearfix">
+                <button class="btn btn-submit pull-right" type="button" id="addmoderatorbutton">Register</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div tabindex="-1" class="modal fade add-modal" id="add-counselor" style="display: none;" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header pmd-modal-bordered">
-					<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
-					<h2 class="text-center">Counselor Registration</h2>
-			</div>
-			<div class="modal-body">
-					<form class="form-horizontal">
-						<div class="form-group">
-							<label for="counselor_name" class="control-label">Name:</label><br>
-							<input type="text" id="counselor_name" class="form-control" required placeholder="Name" name="username">
-						</div>
-						<div class="form-group">
-							<label for="email" class="control-label">Email:</label><br>
-							<input type="text" id="email" class="form-control" required placeholder="Email" name="email">
-						</div>
-						<div class="form-group">
-							<label for="password" class="control-label">Password:</label><br>
-							<input type="password" id="password" class="form-control" required placeholder="Password" name="password">
-						</div>
-						<div class="form-group">
-							<label for="confirm_password" class="control-label">Confirm Password:</label><br>
-							<input type="password" id="confirm_password" class="form-control" required placeholder="Confirm Password" name="password2">
-						</div>
-						<div class="form-group">
-							<label for="address" class="control-label">Address:</label><br>
-							<input type="text" id="address" class="form-control" required placeholder="Address" name="address">
-						</div>
-						<div class="form-group clearfix">
-							<label for="registration_no" class="control-label">Profile Image:</label><br>
-							<div class="company-logo-name">
-								my_image.png
-							<label for="upload-file-selector" class="pull-right">
-							<input id="upload-file-selector" type="file">
-							<span type="button" class="btn btn-upload">Upload</span>
-							</div>
-							</label>
-						</div>
-					</form>
-			</div>
-			<div class="pmd-modal-action clearfix">
-				<button class="btn btn-submit pull-right" type="button">Register</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pmd-modal-bordered">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h2 class="text-center">Counselor Registration</h2>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="addcounselorform">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="counselor_name" class="control-label">Name:</label><br>
+                        <input type="text" id="counselor_name" class="form-control" required placeholder="Name"
+                               name="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="control-label">Email:</label><br>
+                        <input type="text" id="email" class="form-control" required placeholder="Email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">Password:</label><br>
+                        <input type="password" id="password" class="form-control" required placeholder="Password"
+                               name="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password" class="control-label">Confirm Password:</label><br>
+                        <input type="password" id="confirm_password" class="form-control" required
+                               placeholder="Confirm Password" name="password2">
+                    </div>
+                    <div class="form-group">
+                        <label for="address" class="control-label">Address:</label><br>
+                        <input type="text" id="address" class="form-control" required placeholder="Address"
+                               name="address">
+                    </div>
+                    <div class="form-group clearfix">
+                        <label for="registration_no" class="control-label">Profile Image:</label><br>
+                        <div class="company-logo-name">
+                            my_image.png
+                            <label for="upload-file-selector" class="pull-right">
+                                <input id="upload-file-selector" type="file">
+                                <span type="button" class="btn btn-upload">Upload</span>
+                        </div>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="pmd-modal-action clearfix">
+                <button class="btn btn-submit pull-right" type="button" id="addcounselorbutton">Register</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modals End -->
 <!-- Scripts Starts -->
 <!-- Jquery -->
 <script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
 <!-- Bootstrap JS -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <!-- Propeller JS -->
@@ -529,7 +564,8 @@
 <script type="text/javascript" src="{% static 'assets/js/pmd-select2.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'assets/js/dashboard-scripts.js' %}"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.css" >
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.css">
 
 </body>
 

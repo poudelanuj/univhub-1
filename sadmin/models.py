@@ -166,7 +166,7 @@ class UserProfile(models.Model):
 
     district = models.ForeignKey(District, models.DO_NOTHING)
     apply_for = models.ForeignKey(Country, models.DO_NOTHING)
-    sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
+    # sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
     apply_type = models.ForeignKey(ApplyType, models.DO_NOTHING, )
     program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
 
@@ -271,6 +271,7 @@ class pickupdetails(models.Model):
 
 class Tutor(models.Model):
     name = models.CharField(max_length=200)
+    qualification = models.TextField()
 
     class Meta:
         db_table='tutor'
@@ -295,7 +296,7 @@ class OfferedClass(models.Model):
     startdate = models.DateField()
     enddate = models.DateField()
     discountpercent = models.IntegerField()
-    tutorname = models.ForeignKey(Tutor, on_delete=models.CASCADE)
+    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
     scholarshippercent = models.IntegerField()
     location = models.CharField(max_length=100)
     starttime = models.TimeField()

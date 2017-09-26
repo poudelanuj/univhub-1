@@ -36,7 +36,7 @@
                             </div>
                             <div class="tab-content notifications-tab-content">
                                 <ul role="tabpanel" id="today-noti" class="tab-pane active list-group pmd-list pmd-card-list">
-                                    {% for class in all_offeredclass %}
+                                    {% for class in offeredclass_today %}
                                     <li class="list-group-item">
                                         <a href="javascript:void(0);">
                                             <div class="media-left">
@@ -45,7 +45,35 @@
                                             <div class="media-body">
                                                 <h3 class="list-group-item-heading">{{ class.name }} ({{ class.starttime }} - {{ class.endtime }})</h3>
                                                 <span class="list-group-item-text">Date: {{ class.startdate }} - {{ class.enddate }}</span>
-                                                <span class="list-group-item-text">Tutor: {{ class.tutorname }}</span>
+                                                <span class="list-group-item-text">Tutor: {{ class.tutor.name }} ( {{ class.tutor.qualification }} )</span>
+                                                <span class="list-group-item-text">Location: {{ class.location }}</span>
+                                            </div>
+                                            <div class="media-right">
+                                                <div class="dropdown pickup-settings">
+                                                <a id="dLabel dropdownMenuBottomRight" class="btn-icon" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pmd-dropdown-menu-top-right" aria-labelledby="dLabel">
+                                                    <li><a class="dropdown-item  data-target="#create-class-modal" data-toggle="modal"" href="javascript:void(0);">Delete</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">Update</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">View Enrolled</a></li>
+                                                </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <ul role="tabpanel" id="week-noti" class="tab-pane list-group pmd-list pmd-card-list">
+                                    {% for class in offeredclass_week %}
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0);">
+                                            <div class="media-left">
+                                                <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
+                                            </div>
+                                            <div class="media-body">
+                                                <h3 class="list-group-item-heading">{{ class.name }} ({{ class.starttime }} - {{ class.endtime }})</h3>
+                                                <span class="list-group-item-text">Date: {{ class.startdate }} - {{ class.enddate }}</span>
+                                                <span class="list-group-item-text">Tutor: {{ class.tutor.name }} ( {{ class.tutor.qualification }} )</span>
                                                 <span class="list-group-item-text">Location: {{ class.location }}</span>
                                             </div>
                                             <div class="media-right">
@@ -63,9 +91,33 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
-                                <ul role="tabpanel" id="week-noti" class="tab-pane list-group pmd-list pmd-card-list">
-                                </ul>
                                 <ul role="tabpanel" id="month-noti" class="tab-pane list-group pmd-list pmd-card-list">
+                                    {% for class in offeredclass_month %}
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0);">
+                                            <div class="media-left">
+                                                <img alt="40x40" src="assets/images/avatar-icon-40x40.png">
+                                            </div>
+                                            <div class="media-body">
+                                                <h3 class="list-group-item-heading">{{ class.name }} ({{ class.starttime }} - {{ class.endtime }})</h3>
+                                                <span class="list-group-item-text">Date: {{ class.startdate }} - {{ class.enddate }}</span>
+                                                <span class="list-group-item-text">Tutor: {{ class.tutor.name }} ( {{ class.tutor.qualification }} )</span>
+                                                <span class="list-group-item-text">Location: {{ class.location }}</span>
+                                            </div>
+                                            <div class="media-right">
+                                                <div class="dropdown pickup-settings">
+                                                <a id="dLabel dropdownMenuBottomRight" class="btn-icon" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pmd-dropdown-menu-top-right" aria-labelledby="dLabel">
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">Update</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">View Enrolled</a></li>
+                                                </ul>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                         </div>
@@ -124,14 +176,14 @@
                                 <label for="upload-file-selector" class="pull-right">
                                 <input id="upload-file-selector" type="file">
                                 <span type="button" class="btn btn-upload">Upload</span>
-                                </div>							
-                                </label>
-                            </div>
-                        </form>
+                        </div>
+                        </label>
                     </div>
-                    <div class="pmd-modal-action clearfix">
-                        <button data-dismiss="modal" class="btn btn-submit pull-right" type="button">Create</button>
-                    </div>
-                </div>
+                </form>
+            </div>
+            <div class="pmd-modal-action clearfix">
+                <button data-dismiss="modal" class="btn btn-submit pull-right" type="button">Create</button>
             </div>
         </div>
+    </div>
+</div>

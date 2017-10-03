@@ -8,7 +8,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
-from django.db import models
+import datetime
 
 # (what to be entered, what to be shown)
 statusTypes = {
@@ -273,3 +273,85 @@ class pickupdetails(models.Model):
 
     def __str__(self):
         return str(self.pickupid) + str(self.documentid)
+==== BASE ====
+<<<<<<<<< Temporary merge branch 1
+==== BASE ====
+=======
+
+
+class Tutor(models.Model):
+    name = models.CharField(max_length=200)
+    qualification = models.TextField()
+
+    class Meta:
+        db_table='tutor'
+
+    def __str__(self):
+        return self.name
+
+
+class ClassType(models.Model):
+    title = models.CharField(max_length=50)
+
+    class Meta:
+        db_table='classtype'
+
+    def __str__(self):
+        return self.title
+
+
+class OfferedClass(models.Model):
+    name = models.CharField(max_length=100)
+    classtype = models.ForeignKey(ClassType, on_delete=models.CASCADE)
+    startdate = models.DateField()
+    enddate = models.DateField()
+    discountpercent = models.IntegerField()
+    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
+    scholarshippercent = models.IntegerField()
+    location = models.CharField(max_length=100)
+    starttime = models.TimeField()
+    endtime = models.TimeField()
+    created = models.DateTimeField(default= datetime.datetime.now())
+
+    class Meta:
+        db_table='offeredclass'
+
+    def __str__(self):
+        return self.name
+
+
+class RegisteredClass(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table='registeredclass'
+
+
+class OfferType(models.Model):
+    title = models.CharField(max_length=50)
+
+    class Meta:
+        db_table='offertype'
+
+    def __str__(self):
+        return self.title
+
+
+class Offer(models.Model):
+    title =  models.CharField(max_length=50)
+    description = models.TextField()
+    offertype = models.ForeignKey(OfferType, on_delete=models.CASCADE)
+    offerinclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE, blank=True, null=True)
+    discountpercent = models.IntegerField(null=True, blank=True)
+    university = models.ForeignKey(Universities, on_delete=models.CASCADE, blank=True, null=True)
+    scholarshippercent = models.IntegerField(null=True, blank=True)
+    validity = models.DateField()
+    created = models.DateTimeField(default= datetime.datetime.now())
+
+    class Meta:
+        db_table='offer'
+
+    def __str__(self):
+        return self.title
+>>>>>>> c:\users\bolt220\appdata\local\temp\meld-tmp-Remote-rfgkb0

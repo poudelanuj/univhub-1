@@ -159,6 +159,7 @@ class AddCounselorForm(forms.Form):
         return new_user
 
 
+
 class SignupForm(forms.Form):
     username = forms.CharField(max_length=25)
     email = forms.EmailField(max_length=200, help_text='Required')

@@ -5,7 +5,7 @@ from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.handlers import wsgi
 from django.core.mail import EmailMessage
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -25,14 +25,11 @@ from .tokens import account_activation_token
 
 def informationCenter():
     # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
-    today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
-    today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__range=(today_min, today_max),
-                                                 groups__name='studentGroup').count()
+              'todayjoined': User.objects.filter(date_joined__day=datetime.date.today().day, groups=4).count()
               }
     return parcel
 
@@ -163,17 +160,41 @@ def getPickupPage(request):
     return render(request, 'pickup.html', json)
 
 
+def getClassesPage(request):
+    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    all_classtypes = ClassType.objects.all()
+    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.date.today().day)
+    offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
+    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.date.today().month)
+    json = {'all_classtypes': all_classtypes,
+            'offeredclass_today': offeredclass_today,
+            'offeredclass_week': offeredclass_week,
+            'offeredclass_month': offeredclass_month}
+    return render(request, 'classes.html', json)
+
+
+def getOffersPage(request):
+    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    all_offertypes = OfferType.objects.all()
+    offer_today = Offer.objects.filter(created__day=datetime.date.today().day)
+    offer_week = Offer.objects.filter(created__gte=sunday)
+    offer_month = Offer.objects.filter(created__month=datetime.date.today().month)
+    json = {'all_offertypes': all_offertypes,
+            'offer_today': offer_today,
+            'offer_week': offer_week,
+            'offer_month': offer_month}
+    return render(request, 'offers.html', json)
+
+
 def StudentDetail(request, pk):
     student = get_object_or_404(User, pk=pk)
     documents = uploadeddocuments.objects.filter(student=student)
 
-    print(students)
-    return render(request, 'students-list.html', {'students': students})
+    print(student)
+    return render(request, 'students-list.html', {'students': student})
 
 
 # ajax calls handling part
-
-
 
 def addcounselor(request):
     user = request.user

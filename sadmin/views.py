@@ -215,18 +215,11 @@ def ajaxCallForActivationRole(request):
 
 @csrf_exempt
 def jsonHandler(request: wsgi.WSGIRequest):
-    print("Json Request")
-    # devices = FCMDevice.objects.all()
-    #
-    # print(devices.send_message(title="Title", body="Message"))
-    # print(devices.send_message(title="Title", body="Message", data={"test": "test"}))
-    # print(devices.send_message(data={"test": "Why not working?"}))
     try:
-        print(request.body)
-        print(request.content_params)
         json_data = json.loads(request.body.decode(encoding='UTF-8'))
         response = handler.handle_request(json_data)
-        print("Raw json data :", request.body)
+        print("Raw json data     :", request.body)
+        print("Request parameters:",request.content_params)
         return response
     except Exception:
         return JsonResponse({'status':"Error","Reason": "Invalid request format"})

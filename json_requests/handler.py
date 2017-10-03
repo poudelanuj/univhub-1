@@ -1,6 +1,7 @@
 from . import notification_handler
 from django.http import JsonResponse
 from . import document_upload
+
 action_map = {
     'notification': notification_handler,
     'document upload': document_upload

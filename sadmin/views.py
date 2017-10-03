@@ -1,5 +1,5 @@
-import datetime
 import json
+from datetime import datetime
 
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
@@ -177,6 +177,9 @@ def getOffersPage(request):
     sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
     all_offertypes = OfferType.objects.all()
     print(datetime.date.today().day)
+    print(datetime.date.today().month)
+    print(datetime.date.today())
+    print(sunday)
     offer_today = Offer.objects.filter(created__day=datetime.date.today().day)
     offer_week = Offer.objects.filter(created__gte=sunday)
     offer_month = Offer.objects.filter(created__month=datetime.date.today().month)

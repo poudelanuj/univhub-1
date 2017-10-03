@@ -200,3 +200,4 @@ class SignupForm(forms.Form):
                         apply_for=self.cleaned_data.get('apply_for'))
         m1.save()
         return new_user
+

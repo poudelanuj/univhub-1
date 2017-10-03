@@ -273,10 +273,6 @@ class pickupdetails(models.Model):
 
     def __str__(self):
         return str(self.pickupid) + str(self.documentid)
-==== BASE ====
-<<<<<<<<< Temporary merge branch 1
-==== BASE ====
-=======
 
 
 class Tutor(models.Model):
@@ -354,4 +350,3 @@ class Offer(models.Model):
 
     def __str__(self):
         return self.title
->>>>>>> c:\users\bolt220\appdata\local\temp\meld-tmp-Remote-rfgkb0

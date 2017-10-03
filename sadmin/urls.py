@@ -5,8 +5,8 @@ from . import views
 
 urlpatterns = [
     url(r'pickup.html', views.getPickupPage),
-    url(r'classes.html',views.getClassesPage),
-    url(r'offers.html',views.getOffersPage),
+    url(r'classes.html', views.getClassesPage),
+    url(r'offers.html', views.getOffersPage),
     url(r'students-list.html', views.getStudentslistPage),
     url(r'notifications.html', views.getNotificationsPage),
     url(r'^admin-dashboard', views.index, name="admin-dashboard"),

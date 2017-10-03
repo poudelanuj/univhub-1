@@ -4,11 +4,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 import datetime
 from django.forms import ModelForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 import django.contrib.auth.password_validation as validators
 from django.contrib.auth.forms import UserCreationForm
 from .models import UserProfile,AdminProfile, ModeratorProfile, CounselorProfile
-
 
 class AddAdminForm(forms.Form):
     username = forms.CharField(max_length=25)
@@ -45,6 +44,7 @@ class AddAdminForm(forms.Form):
                                     last_name="admin",
                                     password=self.cleaned_data['password'],
                                     email=self.cleaned_data['email'],
+                                    date_joined=datetime.datetime.today(),
                                     is_superuser=False,
                                     is_staff=False,
                                         )
@@ -56,6 +56,8 @@ class AddAdminForm(forms.Form):
                             phone=self.cleaned_data.get('phone'),
                             description=self.cleaned_data.get('description'))
         m1.save()
+        admingroup=get_object_or_404(Group,name="adminGroup")
+        admingroup.user_set.add(new_user)
         return new_user
 
 
@@ -74,11 +76,6 @@ class AddModeratorForm(forms.Form):
         password2 = cleaned_data.get('password2')
         email = cleaned_data.get('email')
         location = cleaned_data.get('location')
-        print(username)
-        print(email)
-        print(password)
-        print(password2)
-        print(location)
 
         if username in User.objects.all().values_list('username', flat=True):
             self.errorlist['username']='This username already exists'
@@ -98,12 +95,15 @@ class AddModeratorForm(forms.Form):
                                     last_name="moderator",
                                     password=self.cleaned_data['password'],
                                     email=self.cleaned_data['email'],
+                                    date_joined=datetime.datetime.today(),
                                     is_superuser=False,
                                     is_staff=False,
                                         )
         m1=ModeratorProfile(user=new_user, mobile=00000000,
             address=self.cleaned_data['location'])
         m1.save()
+        moderatorgroup=get_object_or_404(Group,name="moderatorGroup")
+        moderatorgroup.user_set.add(new_user)
         return new_user
 
 
@@ -114,12 +114,14 @@ class AddCounselorForm(forms.Form):
         self.user = kwargs.pop('user')
 
         super(AddCounselorForm, self).__init__(*args, **kwargs)
+
     username = forms.CharField(max_length=25)
     address= forms.CharField(max_length=20)
     email = forms.EmailField(max_length=200, help_text='Required')
     password = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
     errorlist={}
+
 
     def clean(self):
         cleaned_data=super(AddCounselorForm, self).clean()
@@ -128,18 +130,10 @@ class AddCounselorForm(forms.Form):
         password2 = cleaned_data.get('password2')
         email = cleaned_data.get('email')
         address = cleaned_data.get('address')
-        print(username)
-        print(email)
-        print(password)
-        print(password2)
-        print(address)
-
         if username in User.objects.all().values_list('username', flat=True):
             self.errorlist['username']='This username already exists'
             raise forms.ValidationError("This username already exists")
-        if email in User.objects.all().values_list('email', flat=True):
-            self.errorlist['email']='This email already exists'
-            raise forms.ValidationError("This email already exists")
+
         if password != password2:
             self.errorlist['password']='The two password fields must match. Got it!!??'
             raise forms.ValidationError("The two password fields must match. Got it!!??")
@@ -148,18 +142,22 @@ class AddCounselorForm(forms.Form):
 
     def save(self):
         new_user=User.objects.create_user(username=self.cleaned_data['username'],
-                                    first_name=self.cleaned_data['first_name'],
-                                    last_name=self.cleaned_data['last_name'],
+                                    first_name="counselor",
+                                    last_name="counselor",
                                     password=self.cleaned_data['password'],
                                     email=self.cleaned_data['email'],
+                                    date_joined=datetime.datetime.today(),
                                     is_staff=False,
                                     is_superuser=False,
                                     )
-        m1=CounselorProfile(user=new_user, mobile=self.cleaned_data.get('mobile'),
+        m1=CounselorProfile(user=new_user, mobile=00,
                          address=self.cleaned_data.get('address'),
                          admin = self.user)
         m1.save()
+        counselorgroup=get_object_or_404(Group,name="counsellorGroup")
+        counselorgroup.user_set.add(new_user)
         return new_user
+
 
 
 class SignupForm(forms.Form):

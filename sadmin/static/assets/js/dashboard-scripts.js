@@ -12,7 +12,7 @@
 		$('body').on('click','.ajaxCallForDeleteRole', function () {
 			var userId = $(this).val();
 			$.ajax({
-				url: "",
+				url: "ajax/CallForDeleteRole/",
 				data: {'userId':userId},
 				success:
 					function (data)
@@ -27,7 +27,7 @@
 			var userId = $(this).val();
 			alert(userId);
 			$.ajax({
-				url: "{% url 'ajaxCallForActivationRole' %}",
+				url: "ajax/CallForActivationRole/",
 				data: {'userId':userId},
 				success:
 					function (data)
@@ -43,7 +43,7 @@
 		$('body').on('click', '.ajaxRemovePickupDocument', function() {
 			var documentID = $(this).val();
 			$.ajax({
-				url: "{% url 'ajaxRemovePickupDocument' %}",
+				url: "ajax/ajaxRemovePickupDocument/",
 				data: {'documentID':documentID},
 				success:
 					function(data)
@@ -52,8 +52,79 @@
 					}
 			});
 		});
+		setInterval(function(){
+			$.ajax({
+
+	 url:"getnotifications/",
+		dataType: 'json',
+	 success: function(data){
+
+		 $("#notifycountbadge").attr("data-badge",data['notifycount'])
+		$("#notifycount").replaceWith('<span id="notifycount">' + data['notifycount'] + '</span >');
+
+	 },
+
+	});
+		},10000);
+		$('#notificationdropshow').click(function(){
+
+			$.ajax({
+
+				url: "getnotificationslist/",
+
+				success : function(data) {
+						 $('#notifylist').html(data);
+				 }
+				});
+				});
+		$('#addmoderatorbutton').click(function(){
 
 
+
+			$.ajax({
+				type: 'POST',
+				url: "addmoderator/",
+				data: $("#addmoderatorform").serialize(),
+				success : function(data) {
+
+						$('#add-moderator').modal('toggle');
+
+
+				 }
+});
+		});
+			$('#addadminbutton').click(function(){
+
+
+
+				$.ajax({
+				type: 'POST',
+				url: "addadmin/",
+				data: $("#addadminform").serialize(),
+				success : function(data) {
+
+				$('#add-admin').modal('toggle');
+
+
+				}
+				});
+				});
+				$('#addcounselorbutton').click(function(){
+
+
+
+					$.ajax({
+					type: 'POST',
+					url: "addcounselor/",
+					data: $("#addcounselorform").serialize(),
+					success : function(data) {
+
+					$('#add-counselor').modal('toggle');
+
+
+					}
+					});
+					});
         $(".pmd-sidebar .pmd-sidebar-nav li a").on("click", function(e) {
             // e.preventDefault();
             $(".pmd-sidebar .pmd-sidebar-nav li a").removeClass("active");
@@ -71,8 +142,8 @@
 
 		$('.aside_pickup').click(function(){
 			$("#content").load('pickup.html',function(){
-				var datetimepickerStyles = " /static/assets/css/bootstrap-datetimepicker.css";
-				var pmddatetimepickerStyles = "{% static 'assets/css/pmd-datetimepicker.css' %}";
+				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
+				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
 				$.get(datetimepickerStyles, function(css){
 				$('<style type="text/css"></style>')
 					.html(css)
@@ -84,9 +155,9 @@
 					.appendTo("head");
 				});
 
-				$.getScript("{% static 'assets/js/propeller.js' %}");
-				$.getScript("{% static 'assets/js/moment-with-locales.js' %}");
-				$.getScript("{% static 'assets/js/bootstrap-datetimepicker.js' %}",function(){
+				$.getScript('/static/assets/js/propeller.js');
+				$.getScript('/static/assets/js/moment-with-locales.js');
+				$.getScript('/static/assets/js/bootstrap-datetimepicker.js',function(){
 					$('#datepicker').datetimepicker({
 					format: 'DD/MM/YYYY'
 				});
@@ -99,10 +170,73 @@
 				});
 			});
 		});
+
 		$('.aside_students').click(function(){
 			$("#content").load('students-list.html',function(){
-				$.getScript("{% static 'assets/js/propeller.js' %}");
-				$.getScript("{% static 'assets/js/circle-progress.min.js '%}",function(){
+				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
+				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
+				$.get(datetimepickerStyles, function(css){
+				$('<style type="text/css"></style>')
+					.html(css)
+					.appendTo("head");
+				});
+				$.get(pmddatetimepickerStyles, function(css){
+				$('<style type="text/css"></style>')
+					.html(css)
+					.appendTo("head");
+				});
+
+				$.getScript('/static/assets/js/propeller.js');
+				$.getScript('/static/assets/js/moment-with-locales.js');
+				$.getScript('/static/assets/js/bootstrap-datetimepicker.js',function(){
+					$('#datepicker').datetimepicker({
+					format: 'DD/MM/YYYY'
+				});
+				$('#timepicker').datetimepicker({
+				format: 'LT'
+				});
+				$(".pickup .pick-up-tab-content .included_docs span del").click(function(){
+					$(this).parent().remove();
+				})
+				});
+			});
+		});
+
+		$('.aside_offers').click(function(){
+			$("#content").load('offers.html',function(){
+				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
+				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
+				$.get(datetimepickerStyles, function(css){
+				$('<style type="text/css"></style>')
+					.html(css)
+					.appendTo("head");
+				});
+				$.get(pmddatetimepickerStyles, function(css){
+				$('<style type="text/css"></style>')
+					.html(css)
+					.appendTo("head");
+				});
+
+				$.getScript('/static/assets/js/propeller.js');
+				$.getScript('/static/assets/js/moment-with-locales.js');
+				$.getScript('/static/assets/js/bootstrap-datetimepicker.js',function(){
+					$('#datepicker').datetimepicker({
+					format: 'DD/MM/YYYY'
+				});
+				$('#timepicker').datetimepicker({
+				format: 'LT'
+				});
+				$(".pickup .pick-up-tab-content .included_docs span del").click(function(){
+					$(this).parent().remove();
+				})
+				});
+			});
+		});
+
+		$('.aside_classes').click(function(){
+			$("#content").load('classes.html',function(){
+				$.getScript("/static 'assets/js/propeller.js'");
+				$.getScript("/static/assets/js/circle-progress.min.js",function(){
 					$('.student-progress').circleProgress({
 						startAngle: 4.75,
 						size: 80,
@@ -114,6 +248,7 @@
 			});
 		});
     });
+
 	// SAMPLE JSON DATA FOR MAP
 	var regions=[
 	{

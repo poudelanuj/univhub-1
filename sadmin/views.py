@@ -5,7 +5,7 @@ from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.handlers import wsgi
 from django.core.mail import EmailMessage
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -26,13 +26,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 def informationCenter():
     # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
-    today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
-    today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__range=(today_min, today_max), groups=4).count()
+              'todayjoined': User.objects.filter(date_joined__day=datetime.date.today().day, groups=4).count()
               }
     return parcel
 
@@ -163,29 +161,71 @@ def getPickupPage(request):
     return render(request, 'pickup.html', json)
 
 
+def getClassesPage(request):
+    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    all_classtypes = ClassType.objects.all()
+    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.date.today().day)
+    offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
+    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.date.today().month)
+    json = {'all_classtypes': all_classtypes,
+            'offeredclass_today': offeredclass_today,
+            'offeredclass_week': offeredclass_week,
+            'offeredclass_month': offeredclass_month}
+    return render(request, 'classes.html', json)
+
+
+def getOffersPage(request):
+    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    all_offertypes = OfferType.objects.all()
+    print(datetime.date.today().day)
+    offer_today = Offer.objects.filter(created__day=datetime.date.today().day)
+    offer_week = Offer.objects.filter(created__gte=sunday)
+    offer_month = Offer.objects.filter(created__month=datetime.date.today().month)
+    json = {'all_offertypes': all_offertypes,
+            'offer_today': offer_today,
+            'offer_week': offer_week,
+            'offer_month': offer_month}
+    return render(request, 'offers.html', json)
+
+
 def StudentDetail(request, pk):
     student = get_object_or_404(User, pk=pk)
     documents = uploadeddocuments.objects.filter(student=student)
 
-    print(students)
-    return render(request, 'students-list.html', {'students': students})
+    print(student)
+    return render(request, 'students-list.html', {'students': student})
 
 
 # ajax calls handling part
-
-
 
 def addcounselor(request):
     user = request.user
     form = AddCounselorForm(request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            print("form1 valid")
+            newuser = form.save()
             errors = form.errorlist
+            errors.update(dict(form.errors.items()))
             print(errors)
+
+            current_site = get_current_site(request)
+            subject = 'Activate your UnivHub Account.'
+            message = render_to_string('password_change_email.html', {
+                'user': user, 'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
+                'token': account_activation_token.make_token(newuser),
+            })
+            # user.email_user(subject, message)
+            toemail = form.cleaned_data.get('email')
+            email = EmailMessage(subject, message, to=[toemail])
+            email.send()
             return JsonResponse(errors)
         else:
+            print("form1 invalid")
             errors = form.errorlist
+            print(errors)
+            errors.update(dict(form.errors.items()))
             print(errors)
             return JsonResponse(errors)
 
@@ -235,3 +275,35 @@ def ajaxRemovePickupDocument(request):
     json = {'all_pickups': all_pickups, 'all_documents': all_documents}
     reloadPortion = render_to_string('pickup.html', json)
     return HttpResponse(reloadPortion)
+
+
+def passwordchangeform(request, uidb64, token):
+    try:
+        uid1 = uidb64
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None:
+
+        return render(request, 'passwordchangeform.html', context={'uid': uid1, 'token': token})
+    else:
+        return HttpResponse('Activation link is invalid!')
+
+
+def passwordchange(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        print(uid)
+
+        user = User.objects.get(pk=uid)
+        password = request.POST.get("password", "")
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if account_activation_token.check_token(user, token) and user is not None:
+        user.password = password
+        user.save()
+        login(request, user)
+        return HttpResponse('Password is changed')
+    else:
+        return HttpResponse('Activation link is invalid!')

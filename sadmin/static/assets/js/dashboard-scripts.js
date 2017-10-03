@@ -125,6 +125,11 @@
 					}
 					});
 					});
+				  $('#classes_type').change(function(){
+                    $( ".aside_classes").trigger( 'click', [ $(this).val() ] );
+
+
+});
         $(".pmd-sidebar .pmd-sidebar-nav li a").on("click", function(e) {
             // e.preventDefault();
             $(".pmd-sidebar .pmd-sidebar-nav li a").removeClass("active");
@@ -441,4 +446,4 @@ function create_notification_upload(){
      });
 
      alert("Serialized:"+JSON.stringify(data));
-}
+};

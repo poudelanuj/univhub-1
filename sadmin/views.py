@@ -1,19 +1,17 @@
-import datetime
 import json
 
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.handlers import wsgi
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render,render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-
+from django.core.handlers import wsgi
 from json_requests import handler
 # Create your views here.
 from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm
@@ -58,7 +56,7 @@ def getNotifications(request):
 
 def getNotificationslist(request):
     notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
-
+    return render_to_response('notification_drop.html',{'notifications':notifications})
 
 def signup(request):
     if request.method == 'POST':
@@ -121,30 +119,56 @@ def addadmin(request):
     form = AddAdminForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            print("form valid")
+            newuser = form.save()
+            print("form valid 2")
+
             errors = form.errorlist
-            print(errors)
+            errors.update(dict(form.errors.items()))
+            current_site = get_current_site(request)
+            subject = 'Activate your UnivHub Account.'
+            message = render_to_string('password_change_email.html', {
+                'user': newuser, 'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
+                'token': account_activation_token.make_token(newuser),
+            })
+            toemail = form.cleaned_data.get('email')
+            email = EmailMessage(subject, message, to=[toemail])
+            email.send()
+            Notification.objects.create(receiver=get_object_or_404(User,pk=1), sender=newuser, title="New Admin Creation",
+                                        message="New admin has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
             errors = form.errorlist
-            print(errors)
+            errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
     return JsonResponse(errors)
 
 
 def addmoderator(request):
-    errors = {}
     form = AddModeratorForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            newuser = form.save()
             errors = form.errorlist
-            print(errors)
+            errors.update(dict(form.errors.items()))
+            current_site = get_current_site(request)
+            subject = 'Activate your UnivHub Account.'
+            message = render_to_string('password_change_email.html', {
+                'user': newuser, 'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
+                'token': account_activation_token.make_token(newuser),
+            })
+            toemail = form.cleaned_data.get('email')
+            email = EmailMessage(subject, message, to=[toemail])
+            email.send()
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,title="New Moderator Creation",
+                                        message="New moderator has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
             errors = form.errorlist
-            print(errors)
+            errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
     return JsonResponse(errors)
 
@@ -163,9 +187,9 @@ def getPickupPage(request):
 def getClassesPage(request):
     sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
     all_classtypes = ClassType.objects.all()
-    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.date.today().day)
+    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.datetime.now().day)
     offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
-    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.date.today().month)
+    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.datetime.now().month)
     json = {'all_classtypes': all_classtypes,
             'offeredclass_today': offeredclass_today,
             'offeredclass_week': offeredclass_week,
@@ -202,30 +226,25 @@ def addcounselor(request):
     form = AddCounselorForm(request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
-            print("form1 valid")
             newuser = form.save()
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
-            print(errors)
-
             current_site = get_current_site(request)
             subject = 'Activate your UnivHub Account.'
             message = render_to_string('password_change_email.html', {
-                'user': user, 'domain': current_site.domain,
+                'user': newuser, 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
                 'token': account_activation_token.make_token(newuser),
             })
-            # user.email_user(subject, message)
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser, title="New Counselor Creation",
+                                        message="New Counselor has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
-            print("form1 invalid")
             errors = form.errorlist
-            print(errors)
             errors.update(dict(form.errors.items()))
-            print(errors)
             return JsonResponse(errors)
 
     return JsonResponse(errors)
@@ -297,8 +316,6 @@ def passwordchangeform(request, uidb64, token):
 def passwordchange(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        print(uid)
-
         user = User.objects.get(pk=uid)
         password = request.POST.get("password", "")
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):

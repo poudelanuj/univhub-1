@@ -2,7 +2,7 @@ from django.http import JsonResponse
 
 
 def register_class(request):
-    return JsonResponse({'return': False, 'reason': "Not implemented yet"})
+    return JsonResponse({'return': True, 'reason': "You are registered"})
 
 
 def list_class(request):

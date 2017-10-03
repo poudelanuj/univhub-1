@@ -4,13 +4,6 @@ from sadmin.models import Notification
 from django.db import models
 
 
-def handle(request, operation):
-    if operation in operations:
-        return operations['operation'](request)
-    else:
-        return JsonResponse({'status': 'Error', 'reason': "Invalid operation specified :" + operation})
-
-
 def create_notification(request):
     try:
         notification = Notification(

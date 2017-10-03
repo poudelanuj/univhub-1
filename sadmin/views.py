@@ -254,15 +254,32 @@ def ajaxCallForActivationRole(request):
 
 
 @csrf_exempt
-def jsonHandler(request: wsgi.WSGIRequest):
+def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
+    type = request.META.get('CONTENT_TYPE')
+
     try:
-        json_data = json.loads(request.body.decode(encoding='UTF-8'))
-        response = handler.handle_request(json_data)
+        # print the details
+        print("Request on jsonHandler")
         print("Raw json data     :", request.body)
-        print("Request parameters:",request.content_params)
-        return response
+        print("Request parameters:", request.content_params)
+        try:
+            # try to convert body into json object
+            json_data = json.loads(request.body.decode(encoding='UTF-8'))
+
+            # if the request is from direct url
+            if action is not None and operation is not None:
+                json_data['action'] = {'data': action, 'operation': operation}
+            return handler.handle_json(json_data)
+
+        except Exception as e:
+            # maybe the data is not json.
+            # try other methodse
+            return JsonResponse({'status': "Error", "Reason": "Not a json data"})
+
+
     except Exception:
-        return JsonResponse({'status':"Error","Reason": "Invalid request format"})
+        # some other error in non json handling
+        return JsonResponse({'status': "Error", "Reason": "Unknown error"})
 
 
 def ajaxRemovePickupDocument(request):

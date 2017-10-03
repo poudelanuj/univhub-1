@@ -78,25 +78,24 @@ EMAIL_PORT = 587
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-<<<<<<< HEAD
-# DATABASES = {
-#     'mysql': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'univhub',
-#         'HOST':'127.0.0.1',
-#         'PORT':'3306',
-#         'USER':'root',
-#         'PASSWORD':'',
-#     }
-# }
-# DATABASES['default'] = DATABASES['mysql']
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    'mysql': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'univhub',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
+        'USER':'root',
+        'PASSWORD':'',
     }
 }
+DATABASES['default'] = DATABASES['mysql']
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

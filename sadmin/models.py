@@ -7,8 +7,8 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 # (what to be entered, what to be shown)
 statusTypes = {
@@ -173,12 +173,19 @@ class UserProfile(models.Model):
         db_table = 'user_profile'
 
 
+class NotificationType(models.Model):
+    name = models.CharField(max_length=25)
+
+    class Meta:
+        db_table = 'notificationtype'
+
+
 class Notification(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
     sender = models.ForeignKey(User, related_name='sender')
     read = models.BooleanField(default=False)
     title = models.CharField(blank=True, null=True, max_length=50)
-    Type = models.IntegerField()
+    Type = models.ForeignKey(NotificationType, on_delete=models.CASCADE)
     message = models.TextField()
     created = models.DateTimeField()
 

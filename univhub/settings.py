@@ -13,7 +13,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -24,7 +24,6 @@ SECRET_KEY = '$$2k7sq*)mh@c0%e!lot0nd2bmpdni-_l$isuna&-(-_-dzu%$'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -37,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-FCM_APIKEY="AIzaSyBH-HlJabtrthLccXJqqa2vi8krqPNrpL4 "
+FCM_APIKEY = "AIzaSyBH-HlJabtrthLccXJqqa2vi8krqPNrpL4 "
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,14 +70,15 @@ WSGI_APPLICATION = 'univhub.wsgi.application'
 LOGIN_REDIRECT_URL = '/'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
-EMAIL_HOST_USER = 'enishpaneru2017@gmail.com' # email id
-EMAIL_HOST_PASSWORD = 'newpw2017' #password
+EMAIL_HOST = 'smtp.gmail.com'  # mail service smtp
+EMAIL_HOST_USER = 'enishpaneru2017@gmail.com'  # email id
+EMAIL_HOST_PASSWORD = 'newpw2017'  # password
 EMAIL_PORT = 587
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+<<<<<<< HEAD
 # DATABASES = {
 #     'mysql': {
 #         'ENGINE': 'django.db.backends.mysql',

@@ -1,5 +1,7 @@
 <!doctype html>
+<html lang="">
 <head>
+
 
     {% load static %}
 
@@ -513,7 +515,8 @@
                 <h2 class="text-center">Counselor Registration</h2>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="addcounselorform">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="counselor_name" class="control-label">Name:</label><br>
                         <input type="text" id="counselor_name" class="form-control" required placeholder="Name"
@@ -551,7 +554,7 @@
                 </form>
             </div>
             <div class="pmd-modal-action clearfix">
-                <button class="btn btn-submit pull-right" type="button">Register</button>
+                <button class="btn btn-submit pull-right" type="button" id="addcounselorbutton">Register</button>
             </div>
         </div>
     </div>

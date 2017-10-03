@@ -166,7 +166,7 @@ class UserProfile(models.Model):
 
     district = models.ForeignKey(District, models.DO_NOTHING)
     apply_for = models.ForeignKey(Country, models.DO_NOTHING)
-    # sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
+    sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
     apply_type = models.ForeignKey(ApplyType, models.DO_NOTHING, )
     program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
 

@@ -7,6 +7,7 @@
 
 	$(document).ready( function() {
 
+
 		// additional scripts for ajax call to update admins information.
 		$('body').on('click','.ajaxCallForDeleteRole', function () {
 			var userId = $(this).val();
@@ -24,6 +25,7 @@
 
 		$('body').on('click','.ajaxCallForActivationRole', function () {
 			var userId = $(this).val();
+			alert(userId);
 			$.ajax({
 				url: "ajax/CallForActivationRole/",
 				data: {'userId':userId},
@@ -37,9 +39,92 @@
 
 
 
+		// remove documents from pickup
+		$('body').on('click', '.ajaxRemovePickupDocument', function() {
+			var documentID = $(this).val();
+			$.ajax({
+				url: "ajax/ajaxRemovePickupDocument/",
+				data: {'documentID':documentID},
+				success:
+					function(data)
+					{
+						$('#idForPickup').html(data);
+					}
+			});
+		});
+		setInterval(function(){
+			$.ajax({
+
+	 url:"getnotifications/",
+		dataType: 'json',
+	 success: function(data){
+
+		 $("#notifycountbadge").attr("data-badge",data['notifycount'])
+		$("#notifycount").replaceWith('<span id="notifycount">' + data['notifycount'] + '</span >');
+
+	 },
+
+	});
+		},10000);
+		$('#notificationdropshow').click(function(){
+
+			$.ajax({
+
+				url: "getnotificationslist/",
+
+				success : function(data) {
+						 $('#notifylist').html(data);
+				 }
+				});
+				});
+		$('#addmoderatorbutton').click(function(){
 
 
 
+			$.ajax({
+				type: 'POST',
+				url: "addmoderator/",
+				data: $("#addmoderatorform").serialize(),
+				success : function(data) {
+
+						$('#add-moderator').modal('toggle');
+
+
+				 }
+});
+		});
+			$('#addadminbutton').click(function(){
+
+
+
+				$.ajax({
+				type: 'POST',
+				url: "addadmin/",
+				data: $("#addadminform").serialize(),
+				success : function(data) {
+
+				$('#add-admin').modal('toggle');
+
+
+				}
+				});
+				});
+				$('#addcounselorbutton').click(function(){
+
+
+
+					$.ajax({
+					type: 'POST',
+					url: "addcounselor/",
+					data: $("#addcounselorform").serialize(),
+					success : function(data) {
+
+					$('#add-counselor').modal('toggle');
+
+
+					}
+					});
+					});
         $(".pmd-sidebar .pmd-sidebar-nav li a").on("click", function(e) {
             // e.preventDefault();
             $(".pmd-sidebar .pmd-sidebar-nav li a").removeClass("active");
@@ -57,8 +142,8 @@
 
 		$('.aside_pickup').click(function(){
 			$("#content").load('pickup.html',function(){
-				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css/";
-				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css/";
+				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
+				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
 				$.get(datetimepickerStyles, function(css){
 				$('<style type="text/css"></style>')
 					.html(css)
@@ -70,9 +155,9 @@
 					.appendTo("head");
 				});
 
-				$.getScript("/static/assets/js/propeller.js/");
-				$.getScript("/static/assets/js/moment-with-locales.js/");
-				$.getScript("/static/assets/js/bootstrap-datetimepicker.js/",function(){
+				$.getScript('/static/assets/js/propeller.js');
+				$.getScript('/static/assets/js/moment-with-locales.js');
+				$.getScript('/static/assets/js/bootstrap-datetimepicker.js',function(){
 					$('#datepicker').datetimepicker({
 					format: 'DD/MM/YYYY'
 				});
@@ -84,43 +169,11 @@
 				})
 				});
 			});
-
-			//schedule date
-			    $('#shedulePickupForm').submit(function(event) {
-			    alert('check');
-			     /* stop form from submitting normally */
-			         event.preventDefault();
-			     /* get the action attribute from the <form action=""> element */
-			         var $form = $( this ),
-                        url = $form.attr( 'action' );
-                   /* Send the data using post with element id of all*/
-                     var posting = $.post( url, { delivery_man: $('#delivery_man').val(),
-                        datepicker: $('#datepicker').val(), timepicker: $('#timepicker').val() } );
-
-                      alert('done here');
-                     posting.done(function( data ) {
-                      alert('success');
-                      });
-
-                });
-
-                    // remove documents from pickup
-                $('#content').on('click', '.ajaxRemovePickupDocument', function() {
-                  var documentID = $(this).val();
-                 $.ajax({
-                        url: "ajax/ajaxRemovePickupDocument/",
-                        data: {'documentID':documentID}
-
-                         });
-                 $(this).parent().remove();
-                });
 		});
-
-
 		$('.aside_students').click(function(){
 			$("#content").load('students-list.html',function(){
-				$.getScript("/static/assets/js/propeller.js/" );
-				$.getScript("/static/assets/js/circle-progress.min.js/",function(){
+				$.getScript("/static 'assets/js/propeller.js'");
+				$.getScript("/static/assets/js/circle-progress.min.js",function(){
 					$('.student-progress').circleProgress({
 						startAngle: 4.75,
 						size: 80,
@@ -128,92 +181,6 @@
 						animation:false,
 						fill: "#10a084"
 					  });
-				});
-			});
-		});
-
-		$('.aside_offers').click(function(){
-			$("#content").load('offers.html',function(){
-				$.ajaxSetup({ cache: true });
-				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
-				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
-				$.get(datetimepickerStyles, function(css){
-				$('<style type="text/css"></style>')
-					.html(css)
-					.appendTo("head");
-				});
-				$.get(pmddatetimepickerStyles, function(css){
-				$('<style type="text/css"></style>')
-					.html(css)
-					.appendTo("head");
-				});
-				$.getScript("/static/assets/js/moment-with-locales.js",function(){
-					$.ajaxSetup({ cache: false });
-				});
-				$.getScript('/static/assets/js/bootstrap-datetimepicker.js',function(){
-					$('#offer-datepicker').datetimepicker({
-						format: 'DD/MM/YYYY',
-					});
-					$.ajaxSetup({ cache: false });
-				});
-				$('#offer_university, #scholarship_percentage').parent().hide();
-				$('#offer_type').each(function() {
-					$('#offer_type').on('change', function() {
-						if( $('#offer_type option : selected').text() == "Test Classes Discount" ){
-							$('#offer_university, #scholarship_percentage').parent().hide();
-							$('#offer_class,  #discount_percentage').parent().show();
-						}
-						else if( $('#offer_type option:selected').text() == "Scholarship" ){
-							$('#offer_class, #discount_percentage').parent().hide();
-							$('#offer_university, #scholarship_percentage').parent().show();
-						}
-						else if( $('#offer_type option:selected').text() == "Discount" ){
-							$('#offer_class, #offer_university, #scholarship_percentage').parent().hide();
-							$('#discount_percentage').parent().show();
-						}
-					});
-				});
-			});
-		});
-
-		$('.aside_classes').click(function(){
-			$("#content").load('classes.html',function(){
-				$.ajaxSetup({ cache: true });
-				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
-				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
-				$.get(datetimepickerStyles, function(css){
-				$('<style type="text/css"></style>')
-					.html(css)
-					.appendTo("head");
-				});
-				$.get(pmddatetimepickerStyles, function(css){
-				$('<style type="text/css"></style>')
-					.html(css)
-					.appendTo("head");
-				});
-				$.getScript('/static/assets/js/moment-with-locales.js',function(){
-					$.ajaxSetup({ cache: false });
-				});
-				$.getScript('/static/assets/js/bootstrap-datetimepicker.js',function(){
-					$('#class_start_date-datepicker').datetimepicker({
-						format: 'DD/MM/YYYY',
-					});
-					$.ajaxSetup({ cache: false });
-				});
-				$.getScript('/static/assets/js/bootstrap-datetimepicker.js',function(){
-					$('#class_end_date-datepicker').datetimepicker({
-						format: 'DD/MM/YYYY',
-						useCurrent: false
-					});
-					$.ajaxSetup({ cache: false });
-				});
-				// start date picke on chagne event [select minimun date for end date datepicker]
-				$("#class_start_date-datepicker").on("dp.change", function (e) {
-					$('#class_end_date-datepicker').data("DateTimePicker").minDate(e.date);
-				});
-				// Start date picke on chagne event [select maxmimum date for start date datepicker]
-				$("#class_end_date-datepicker").on("dp.change", function (e) {
-					$('#class_start_date-datepicker').data("DateTimePicker").maxDate(e.date);
 				});
 			});
 		});
@@ -411,5 +378,3 @@ function create_notification_upload(){
 
      alert("Serialized:"+JSON.stringify(data));
 }
-
-

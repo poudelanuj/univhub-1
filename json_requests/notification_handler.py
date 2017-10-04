@@ -19,8 +19,3 @@ def create_notification(request):
     except Exception as e:
         print("Exception", *e.args)
         return JsonResponse({'succes': False, 'Reason':"Error processing data"})
-
-
-operations = {
-    'crate': create_notification
-}

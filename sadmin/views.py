@@ -276,13 +276,14 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
 
         except Exception as e:
             # maybe the data is not json.
-            # try other methodse
+            # try other methods
             return JsonResponse({'status': "Error", "Reason": "Not a json data"})
 
 
     except Exception:
         # some other error in non json handling
         return JsonResponse({'status': "Error", "Reason": "Unknown error"})
+
 
 
 def ajaxRemovePickupDocument(request):

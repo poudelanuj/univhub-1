@@ -47,7 +47,7 @@ def handle_request(request: dict):
         return action_map[action][operation](request)
     except Exception as e:
         print(e.args, file=sys.stderr)
-        return JsonResponse({"status": "error", "cause": "Internal Server Error while serving request" + operation})
+        return JsonResponse({"status": "error", "cause": "Internal Server Error while serving request " + operation})
 
 
 action_map = __initialize__()

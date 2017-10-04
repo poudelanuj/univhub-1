@@ -18,17 +18,14 @@
                     </button>
                 </div>
                 <div class="clearfix">
-                    <label for="notifications_type1" class="pull-left">Notification Type:</label>
-                    <select name="notifications_type" id="notifications_type1"
+                    <label for="notifications_type_select" class="pull-left">Notification Type:</label>
+                    <select name="notifications_type" id="notifications_type_select"
                             class="pull-left form-control notifications_type">
-                        <option value-="Class Registration">Class Registration</option>
-                        <option value-="Complete Profile Request">Complete Profile Request</option>
-                        <option value-="Document Upload Request">Document Upload Request</option>
-                        <option value-="Document Receieved">Document Receieved</option>
-                        <option value-="Map">Map</option>
-                        <option value-="Organizing Event">Organizing Event</option>
-                        <option value-="Visit Web Site Request">Visit Web Site Request</option>
-                        <option value-="Other">Other</option>
+
+                        {% for type in types %}
+                                <option id="not_type_select_{{type.id}}" value="{{type.id}}">{{type.title}}</option>
+                        {% endfor %}
+
                     </select>
                     <div class="pull-right">
                         <div class="pmd-tabs activities-tab">
@@ -119,16 +116,16 @@
                         <select name="notification_type" id="notifications_type2"
                                 class="form-control notifications_type">
 
-                            <!-- TODO: get the notification type details form the table -->
+                            {% for type in types %}
+                                <option id="notification_type_{{type.id}}" value="{{type.id}}">{{type.title}}</option>
+                            {% endfor %}
 
-                            <option value="1">Class Registration</option>
-                            <option value="2">Complete Profile Request</option>
-                            <option value="3">Document Upload Request</option>
-                            <option value="4">Document Receieved</option>
-                            <option value="5">Map</option>
-                            <option value="6">Organizing Event</option>
-                            <option value="7">Visit Web Site Request</option>
-                            <option value="8">Other</option>
+                            <!--<option value="3">Document Upload Request</option>-->
+                            <!--<option value="4">Document Receieved</option>-->
+                            <!--<option value="5">Map</option>-->
+                            <!--<option value="6">Organizing Event</option>-->
+                            <!--<option value="7">Visit Web Site Request</option>-->
+                            <!--<option value="8">Other</option>-->
                         </select>
                     </div>
                     <div class="form-group">

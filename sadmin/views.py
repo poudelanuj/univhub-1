@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render,render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -41,7 +41,7 @@ def index(request):
 
 
 def getNotificationsPage(request):
-    return render(request, "notifications.html", )
+    return render(request, "notifications.html", context={'types': NotificationType.objects.all()})
 
 
 def StudentDetail(request, pk):
@@ -59,7 +59,7 @@ def getNotifications(request):
 
 def getNotificationslist(request):
     notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
-
+    return render_to_response('notification_drop.html',{'notifications':notifications})
 
 def signup(request):
     if request.method == 'POST':
@@ -122,30 +122,56 @@ def addadmin(request):
     form = AddAdminForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            print("form valid")
+            newuser = form.save()
+            print("form valid 2")
+
             errors = form.errorlist
-            print(errors)
+            errors.update(dict(form.errors.items()))
+            current_site = get_current_site(request)
+            subject = 'Activate your UnivHub Account.'
+            message = render_to_string('password_change_email.html', {
+                'user': newuser, 'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
+                'token': account_activation_token.make_token(newuser),
+            })
+            toemail = form.cleaned_data.get('email')
+            email = EmailMessage(subject, message, to=[toemail])
+            email.send()
+            Notification.objects.create(receiver=get_object_or_404(User,pk=1), sender=newuser, title="New Admin Creation",
+                                        message="New admin has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
             errors = form.errorlist
-            print(errors)
+            errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
     return JsonResponse(errors)
 
 
 def addmoderator(request):
-    errors = {}
     form = AddModeratorForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            newuser = form.save()
             errors = form.errorlist
-            print(errors)
+            errors.update(dict(form.errors.items()))
+            current_site = get_current_site(request)
+            subject = 'Activate your UnivHub Account.'
+            message = render_to_string('password_change_email.html', {
+                'user': newuser, 'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
+                'token': account_activation_token.make_token(newuser),
+            })
+            toemail = form.cleaned_data.get('email')
+            email = EmailMessage(subject, message, to=[toemail])
+            email.send()
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,title="New Moderator Creation",
+                                        message="New moderator has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
             errors = form.errorlist
-            print(errors)
+            errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
     return JsonResponse(errors)
 
@@ -164,9 +190,9 @@ def getPickupPage(request):
 def getClassesPage(request):
     sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
     all_classtypes = ClassType.objects.all()
-    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.date.today().day)
+    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.datetime.now().day)
     offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
-    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.date.today().month)
+    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.datetime.now().month)
     json = {'all_classtypes': all_classtypes,
             'offeredclass_today': offeredclass_today,
             'offeredclass_week': offeredclass_week,
@@ -206,30 +232,25 @@ def addcounselor(request):
     form = AddCounselorForm(request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
-            print("form1 valid")
             newuser = form.save()
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
-            print(errors)
-
             current_site = get_current_site(request)
             subject = 'Activate your UnivHub Account.'
             message = render_to_string('password_change_email.html', {
-                'user': user, 'domain': current_site.domain,
+                'user': newuser, 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
                 'token': account_activation_token.make_token(newuser),
             })
-            # user.email_user(subject, message)
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser, title="New Counselor Creation",
+                                        message="New Counselor has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
-            print("form1 invalid")
             errors = form.errorlist
-            print(errors)
             errors.update(dict(form.errors.items()))
-            print(errors)
             return JsonResponse(errors)
 
     return JsonResponse(errors)
@@ -259,31 +280,33 @@ def ajaxCallForActivationRole(request):
 @csrf_exempt
 def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
     type = request.META.get('CONTENT_TYPE')
-
     try:
         # print the details
         print("Request on jsonHandler")
         print("Raw json data     :", request.body)
         print("Request parameters:", request.content_params)
-        try:
-            # try to convert body into json object
-            json_data = json.loads(request.body.decode(encoding='UTF-8'))
+        if type == 'application/json':
+            try:
+                # try to convert body into json object
+                json_data = json.loads(request.body.decode(encoding='UTF-8'))
 
-            # if the request is from direct url
-            if action is not None and operation is not None:
-                json_data['action'] = {'data': action, 'operation': operation}
-            return handler.handle_json(json_data)
+                # if the request is from direct url
+                if action is not None and operation is not None:
+                    json_data['action'] = {'data': action, 'operation': operation}
+                return handler.handle_request(json_data)
 
-        except Exception as e:
-            # maybe the data is not json.
-            # try other methods
-            return JsonResponse({'status': "Error", "Reason": "Not a json data"})
-
+            except Exception as e:
+                # maybe the data is not json.
+                # try other methodse
+                print(request.POST)
+                print(request.GET)
+                return JsonResponse({'status': "Error", "Reason": "Not a json data"})
+        elif action is not None and operation is not None:
+            return handler.handle_request(request)
 
     except Exception:
         # some other error in non json handling
         return JsonResponse({'status': "Error", "Reason": "Unknown error"})
-
 
 
 def ajaxRemovePickupDocument(request):
@@ -315,8 +338,6 @@ def passwordchangeform(request, uidb64, token):
 def passwordchange(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        print(uid)
-
         user = User.objects.get(pk=uid)
         password = request.POST.get("password", "")
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):

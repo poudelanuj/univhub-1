@@ -178,16 +178,15 @@ class UserProfile(models.Model):
 
 
 class Notification(models.Model):
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
-    sender = models.ForeignKey(User, related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver',blank=True, null=True)
+    sender = models.ForeignKey(User, related_name='sender',blank=True,null=True)
     read = models.BooleanField(default=False)
     title = models.CharField(blank=True, null=True, max_length=50)
-    Type = models.IntegerField()
+    Type = models.IntegerField(blank=True,null=True)
     message = models.TextField()
     created = models.DateTimeField()
-    map_url= models.TextField(blank=True,null=True,)
-    web_url=models.TextField(blank=True,null=True)
-
+    map_url = models.TextField(blank=True, null=True, )
+    web_url = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'notifications'
@@ -280,7 +279,7 @@ class Tutor(models.Model):
     qualification = models.TextField()
 
     class Meta:
-        db_table='tutor'
+        db_table = 'tutor'
 
     def __str__(self):
         return self.name
@@ -290,7 +289,7 @@ class ClassType(models.Model):
     title = models.CharField(max_length=50)
 
     class Meta:
-        db_table='classtype'
+        db_table = 'classtype'
 
     def __str__(self):
         return self.title
@@ -308,10 +307,10 @@ class OfferedClass(models.Model):
     location = models.CharField(max_length=100)
     starttime = models.TimeField()
     endtime = models.TimeField()
-    created = models.DateTimeField(default= datetime.datetime.now())
+    created = models.DateTimeField(default=datetime.datetime.now())
 
     class Meta:
-        db_table='offeredclass'
+        db_table = 'offeredclass'
 
     def __str__(self):
         return self.name
@@ -322,21 +321,21 @@ class RegisteredClass(models.Model):
     offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
 
     class Meta:
-        db_table='registeredclass'
+        db_table = 'registeredclass'
 
 
 class OfferType(models.Model):
     title = models.CharField(max_length=50)
 
     class Meta:
-        db_table='offertype'
+        db_table = 'offertype'
 
     def __str__(self):
         return self.title
 
 
 class Offer(models.Model):
-    title =  models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
     description = models.TextField()
     offertype = models.ForeignKey(OfferType, on_delete=models.CASCADE)
     offerinclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE, blank=True, null=True)
@@ -344,10 +343,22 @@ class Offer(models.Model):
     university = models.ForeignKey(Universities, on_delete=models.CASCADE, blank=True, null=True)
     scholarshippercent = models.IntegerField(null=True, blank=True)
     validity = models.DateField()
-    created = models.DateTimeField(default= datetime.datetime.now())
+    created = models.DateTimeField(default=datetime.datetime.now())
 
     class Meta:
-        db_table='offer'
+        db_table = 'offer'
+
+    def __str__(self):
+        return self.title
+
+
+class NotificationType(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=400)
+
+    class Meta:
+        db_table = 'notification_type'
 
     def __str__(self):
         return self.title

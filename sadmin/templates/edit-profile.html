@@ -1,30 +1,30 @@
 <!doctype html>
 <html lang="">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="Student Profile">
-<meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Student Profile">
+    <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
 
-<title>Edit Profile - Mithai Lal Jadav</title>
+    <title>Edit Profile - Mithai Lal Jadav</title>
 
-<!-- Google icon -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Google icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-<!-- Bootstrap css -->
-<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
 
-<!-- propeller css -->
-<link rel="stylesheet" type="text/css" href="assets/css/propeller.css">
+    <!-- propeller css -->
+    <link rel="stylesheet" type="text/css" href="assets/css/propeller.css">
 
-<!-- Datepicker CSS-->
-<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-datepicker.min.css">
-<!-- Select2 css -->
-<link href="assets/css/select2.min.css" type="text/css" rel="stylesheet"/>
-<link href="assets/css/select2-bootstrap.css" type="text/css" rel="stylesheet"/>
-<!-- Univhub super admin theme css-->
-<link rel="stylesheet" type="text/css" href="assets/css/student-profile.css">
+    <!-- Datepicker CSS-->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap-datepicker.min.css">
+    <!-- Select2 css -->
+    <link href="assets/css/select2.min.css" type="text/css" rel="stylesheet"/>
+    <link href="assets/css/select2-bootstrap.css" type="text/css" rel="stylesheet"/>
+    <!-- Univhub super admin theme css-->
+    <link rel="stylesheet" type="text/css" href="assets/css/student-profile.css">
 
 
 </head>
@@ -32,240 +32,91 @@
 <body>
 <div class="pmd-sidebar-overlay"></div>
 <div class="student-profile">
-    <a href="javascript:void(0);" class="btn btn-sm pmd-btn-fab pmd-btn-flat margin-r8 pmd-sidebar-toggle" style="display:inline-block;position:absolute;left:5px;top:5px;"><i class="material-icons">menu</i></a>
-    <div class="profile-sidenav pmd-card pmd-z-depth pmd-sidebar sidebar-default pmd-sidebar-left pmd-sidebar-open pmd-sidebar-slide-push" role="navigation">
+    <a href="javascript:void(0);" class="btn btn-sm pmd-btn-fab pmd-btn-flat margin-r8 pmd-sidebar-toggle"
+       style="display:inline-block;position:absolute;left:5px;top:5px;"><i class="material-icons">menu</i></a>
+    <div class="profile-sidenav pmd-card pmd-z-depth pmd-sidebar sidebar-default pmd-sidebar-left pmd-sidebar-open pmd-sidebar-slide-push"
+         role="navigation">
         <!-- header -->
         <div class="profile-sidenav-header text-center">
             <img class="user_profile_pic" src="assets/images/user.png" alt="90*90">
             <h4 class="user_name">Mithai Lal Jadav</h4>
             <h5 class="user_type">Dependent</h5>
             <div class="social-connect">
-                <button type="button" class="btn btn-facebook">facebook</button >
-                <button type="button" class="btn btn-message">Message</button >
+                <button type="button" class="btn btn-facebook">facebook</button>
+                <button type="button" class="btn btn-message">Message</button>
             </div>
         </div>
         <!--/ header -->
         <ul class="profile-sidenav-nav nav">
-            <li><a href="javascript:;" class="active">Overview</a></li>       
-            <li><a href="uploaded-documents.html">Uploaded Documents</a></li>       
-            <li><a href="javascript:;">Applied Universities</a></li>       
-            <li><a href="javascript:;">Notices</a></li>       
-            <li><a href="javascript:;">Classes</a></li>       
-        </ul>                
+            <li><a href="javascript:;" class="active">Overview</a></li>
+            <li><a href="uploaded-documents.html">Uploaded Documents</a></li>
+            <li><a href="javascript:;">Applied Universities</a></li>
+            <li><a href="javascript:;">Notices</a></li>
+            <li><a href="javascript:;">Classes</a></li>
+        </ul>
     </div>
     <div class="profile-details pmd-content">
-        
+
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <!-- Overview Details -->
-                    <div class="pmd-card pmd-z-depth overview-details">                             
+                    <div class="pmd-card pmd-z-depth overview-details">
                         <div class="pmd-tabs overview-details-tab">
                             <div class="pmd-tab-active-bar"></div>
                             <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation"><a href="#personal_information" aria-controls="personal_information" role="tab" data-toggle="tab">Personal Information</a></li>
-                                <li role="presentation" class="active"><a href="#sponsor_list" aria-controls="sponsors" role="tab" data-toggle="tab">Sponsors</a></li>
+                                <li role="presentation"><a href="#personal_information"
+                                                           aria-controls="personal_information" role="tab"
+                                                           data-toggle="tab">Personal Information</a></li>
+                                <li role="presentation" class="active"><a href="#sponsor_list" aria-controls="sponsors"
+                                                                          role="tab" data-toggle="tab">Sponsors</a></li>
                             </ul>
                         </div>
                         <div class="pmd-card-body">
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane" id="personal_information">
-                                    <form>    
-                                    <section>
-                                        <div class="form-inline">
-                                            <div class="form-group">
-                                                <label for="first_name" class="control-label">First Name:</label><br>
-                                                <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="middle_name" class="control-label">Middle Name:</label><br>
-                                                <input type="text" id="middle_name" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="last_name" class="control-label">Last Name:</label><br>
-                                                <input type="text" id="last_name" class="form-control" required>
-                                            </div>
-                                        </div> 
-                                        	<!--Simple select -->
-									    <div class="form-group gender">
-                                            <label>Gender:</label>
-                                            <select class="select-simple form-control pmd-select2">
-                                                <option>Male</option>
-                                                <option>Female</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-inline"> 
-                                            <label>Date of Birth:</label><br>
-                                            <div class="form-group datepicker-dob-bs date">  
-                                                <input type="text" name="dob" class="form-control" required><span class="input-group-addon"><i class="material-icons">date_range</i></span>
-                                            </div>
-                                            <ins>(A.D.)</ins>
-                                            <span>and</span>
-                                            <div class="form-group datepicker-dob-ad date">
-                                                <input type="text" name="dob" class="form-control" required><span class="input-group-addon"><i class="material-icons">date_range</i></span>
-                                            </div>
-                                            <ins>(B.S.)</ins>
-                                        </div>
-                                    </section>
-                                    <hr>
-                                    <section>
-                                        <h3 class="text-center">Contacts</h3>
-                                        <div class="form-group">
-                                            <label for="first_name" class="control-label">Email:</label><br>
-                                            <input type="email" id="first_name" class="form-control" required>
-                                        </div>
-                                        <div class="form-inline">
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Phone 1:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Phone 2: (Optional)</label><br>
-                                            <input type="text" id="first_name" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Phone 3: (Optional)</label><br>
-                                            <input type="text" id="first_name" class="form-control">
-                                            </div>
-                                        </div> 
-                                        
-                                    </section>
-                                    <hr>
-                                    <section>
-                                        <h3 class="text-center">Address</h3>
-                                        <div class="form-inline">
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">District:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">City:</label><br>
-                                            <input type="text" id="first_name" class="form-control">
-                                            </div>
-                                        </div> 
-                                        <div class="form-inline">
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Address Line 1:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Address Line 2:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Address Line 3:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <ul>
-                                            <li>Is Current Address same as permanent Address: 
-                                                <span>
-                                                    <label class="radio-inline pmd-radio">
-                                                        <input type="radio" name="currentaddres_same_per" checked id="no" value="no">
-                                                        <span for="currentaddres_same_per">No</span>
-                                                    </label>
-                                                    <label class="radio-inline pmd-radio">
-                                                        <input type="radio" name="currentaddres_same_per" id="yes" value="yes">
-                                                        <span for="currentaddres_same_per">Yes</span>
-                                                    </label>
-                                                </span>
-                                            </li>
-                                        </ul>
-                                    </section>
-                                    <hr>
-                                    <section class="currentaddres_same_per">
-                                        <h3>Permanent Address</h3>
-                                        <div class="form-inline">
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">District:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">City:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                        </div> 
-                                        <div class="form-inline">
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Address Line 1:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Address Line 2:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                            <div class="form-group">
-                                            <label for="first_name" class="control-label">Address Line 3:</label><br>
-                                            <input type="text" id="first_name" class="form-control" required>
-                                            </div>
-                                        </div>
-                                    </section>
-                                    <section class="clearfix">
-                                    <button type="submit" class="btn btn-save pull-right">Save</button >
-                                    </section>
-                                    <form>                                                
-                                </div>
-                                <div role="tabpanel" class="tab-pane active" id="sponsor_list">
                                     <form>
-                                    <button class="btn pmd-btn-fab btn-add pmd-tooltip pmd-alert-toggle" data-toggle="tooltip" data-placement="left" title="Click to Add Sponsors" type="button" data-positionX="right" data-positionY="bottom" data-duration="1500" data-effect="fadeInUp" data-message="Sponsor Added" data-type="information"  data-revert="fadeOutUp">Add<i class="material-icons pmd-sm">add</i></button>
-                                    <div id=sponsors>
-                                    <div class="sponsors" id="sponsor1">
-                                        <button class="btn pmd-btn-fab btn-remove pmd-alert-toggle" type="button" data-positionX="right" data-positionY="bottom" data-duration="1500" data-effect="fadeInUp" data-message="Sponsor Removed" data-type="information"  data-revert="fadeOutUp" style="display:none;">Remove<i class="material-icons pmd-sm">clear</i></button>
                                         <section>
                                             <div class="form-inline">
                                                 <div class="form-group">
-                                                    <label for="first_name" class="control-label">First Name:</label><br>
+                                                    <label for="first_name" class="control-label">First
+                                                        Name:</label><br>
                                                     <input type="text" id="first_name" class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="middle_name" class="control-label">Middle Name:</label><br>
+                                                    <label for="middle_name" class="control-label">Middle
+                                                        Name:</label><br>
                                                     <input type="text" id="middle_name" class="form-control">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="last_name" class="control-label">Last Name:</label><br>
                                                     <input type="text" id="last_name" class="form-control" required>
                                                 </div>
-                                            </div> 
-                                            <div class="form-group">
-                                                <label>Relationship:</label>
-                                                <select class="form-control" id="relationship">
-                                                    <option value="father">Father</option>
-                                                    <option value="mother">Mother</option>
-                                                    <option value="other">Other</option>
-                                                </select>
                                             </div>
-                                            <div class="form-group mention_relationship" style="display:none;">
-                                                <label for="last_name" class="control-label">Mention Your Relationship:</label><br>
-                                                <input type="text" id="last_name" class="form-control" required>
-                                            </div>
+                                            <!--Simple select -->
                                             <div class="form-group gender">
-                                                <label>Identification:</label>
-                                                <select class="form-control">
-                                                    <option>Passport</option>
-                                                    <option>Citizenship</option>
+                                                <label>Gender:</label>
+                                                <select class="select-simple form-control pmd-select2">
+                                                    <option>Male</option>
+                                                    <option>Female</option>
                                                 </select>
                                             </div>
-                                        </section>
-                                        <section>
-                                            <ol class="docs clearfix">
-                                                <li>Passport <div class="pull-right"><span class="docs_name pull-left"></span>
-                                                    <div class="pull-left upload-btn-container">
-                                                        <label for="upload-file-selector">
-                                                        <input id="upload-file-selector" type="file">
-                                                        <span type="button" class="btn btn-upload pull-right">Upload</span>
-                                                        </label>
-                                                    </div></div>
-                                                </li>
-                                                <!-- add class "btn-uploaded" to span and attribute "disabled" to input for upload not allowed -->
-                                                <li>Passport <div class="pull-right"><span class="docs_name pull-left">passport.pdf</span>
-                                                    <div class="pull-left upload-btn-container">
-                                                        <!-- <label for="upload-file-selector"> -->
-                                                        <input disabled id="upload-file-selector" type="file">
-                                                        <span type="button" class="btn btn-upload pull-right btn-uploaded">Upload</span>
-                                                        </label>
-                                                    </div></div>
-                                                </li>
-                                            </ol>
+                                            <div class="form-inline">
+                                                <label>Date of Birth:</label><br>
+                                                <div class="form-group datepicker-dob-bs date">
+                                                    <input type="text" name="dob" class="form-control" required><span
+                                                        class="input-group-addon"><i
+                                                        class="material-icons">date_range</i></span>
+                                                </div>
+                                                <ins>(A.D.)</ins>
+                                                <span>and</span>
+                                                <div class="form-group datepicker-dob-ad date">
+                                                    <input type="text" name="dob" class="form-control" required><span
+                                                        class="input-group-addon"><i
+                                                        class="material-icons">date_range</i></span>
+                                                </div>
+                                                <ins>(B.S.)</ins>
+                                            </div>
                                         </section>
                                         <hr>
                                         <section>
@@ -276,39 +127,239 @@
                                             </div>
                                             <div class="form-inline">
                                                 <div class="form-group">
-                                                <label for="first_name" class="control-label">Phone 1:</label><br>
-                                                <input type="text" id="first_name" class="form-control" required>
+                                                    <label for="first_name" class="control-label">Phone 1:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
-                                                <label for="first_name" class="control-label">Phone 2: (Optional)</label><br>
-                                                <input type="text" id="first_name" class="form-control">
+                                                    <label for="first_name" class="control-label">Phone 2:
+                                                        (Optional)</label><br>
+                                                    <input type="text" id="first_name" class="form-control">
                                                 </div>
                                                 <div class="form-group">
-                                                <label for="first_name" class="control-label">Phone 3: (Optional)</label><br>
-                                                <input type="text" id="first_name" class="form-control">
+                                                    <label for="first_name" class="control-label">Phone 3:
+                                                        (Optional)</label><br>
+                                                    <input type="text" id="first_name" class="form-control">
                                                 </div>
-                                            </div>     
+                                            </div>
+
                                         </section>
                                         <hr>
-                                    </div>
-                                    </div>
-                                    <section class="clearfix">
-                                    <button type="submit" class="btn btn-save pull-right">Save</button>
-                                    </section>
+                                        <section>
+                                            <h3 class="text-center">Address</h3>
+                                            <div class="form-inline">
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">District:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">City:</label><br>
+                                                    <input type="text" id="first_name" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-inline">
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">Address Line
+                                                        1:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">Address Line
+                                                        2:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">Address Line
+                                                        3:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <ul>
+                                                <li>Is Current Address same as permanent Address:
+                                                    <span>
+                                                    <label class="radio-inline pmd-radio">
+                                                        <input type="radio" name="currentaddres_same_per" checked
+                                                               id="no" value="no">
+                                                        <span for="currentaddres_same_per">No</span>
+                                                    </label>
+                                                    <label class="radio-inline pmd-radio">
+                                                        <input type="radio" name="currentaddres_same_per" id="yes"
+                                                               value="yes">
+                                                        <span for="currentaddres_same_per">Yes</span>
+                                                    </label>
+                                                </span>
+                                                </li>
+                                            </ul>
+                                        </section>
+                                        <hr>
+                                        <section class="currentaddres_same_per">
+                                            <h3>Permanent Address</h3>
+                                            <div class="form-inline">
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">District:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">City:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-inline">
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">Address Line
+                                                        1:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">Address Line
+                                                        2:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="first_name" class="control-label">Address Line
+                                                        3:</label><br>
+                                                    <input type="text" id="first_name" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <section class="clearfix">
+                                            <button type="submit" class="btn btn-save pull-right">Save</button>
+                                        </section>
+                                        <form>
+                                </div>
+                                <div role="tabpanel" class="tab-pane active" id="sponsor_list">
+                                    <form>
+                                        <button class="btn pmd-btn-fab btn-add pmd-tooltip pmd-alert-toggle"
+                                                data-toggle="tooltip" data-placement="left"
+                                                title="Click to Add Sponsors" type="button" data-positionX="right"
+                                                data-positionY="bottom" data-duration="1500" data-effect="fadeInUp"
+                                                data-message="Sponsor Added" data-type="information"
+                                                data-revert="fadeOutUp">Add<i class="material-icons pmd-sm">add</i>
+                                        </button>
+                                        <div id=sponsors>
+                                            <div class="sponsors" id="sponsor1">
+                                                <button class="btn pmd-btn-fab btn-remove pmd-alert-toggle"
+                                                        type="button" data-positionX="right" data-positionY="bottom"
+                                                        data-duration="1500" data-effect="fadeInUp"
+                                                        data-message="Sponsor Removed" data-type="information"
+                                                        data-revert="fadeOutUp" style="display:none;">Remove<i
+                                                        class="material-icons pmd-sm">clear</i></button>
+                                                <section>
+                                                    <div class="form-inline">
+                                                        <div class="form-group">
+                                                            <label for="first_name" class="control-label">First
+                                                                Name:</label><br>
+                                                            <input type="text" id="first_name" class="form-control"
+                                                                   required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="middle_name" class="control-label">Middle
+                                                                Name:</label><br>
+                                                            <input type="text" id="middle_name" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="last_name" class="control-label">Last
+                                                                Name:</label><br>
+                                                            <input type="text" id="last_name" class="form-control"
+                                                                   required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Relationship:</label>
+                                                        <select class="form-control" id="relationship">
+                                                            <option value="father">Father</option>
+                                                            <option value="mother">Mother</option>
+                                                            <option value="other">Other</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group mention_relationship" style="display:none;">
+                                                        <label for="last_name" class="control-label">Mention Your
+                                                            Relationship:</label><br>
+                                                        <input type="text" id="last_name" class="form-control" required>
+                                                    </div>
+                                                    <div class="form-group gender">
+                                                        <label>Identification:</label>
+                                                        <select class="form-control">
+                                                            <option>Passport</option>
+                                                            <option>Citizenship</option>
+                                                        </select>
+                                                    </div>
+                                                </section>
+                                                <section>
+                                                    <ol class="docs clearfix">
+                                                        <li>Passport
+                                                            <div class="pull-right"><span
+                                                                    class="docs_name pull-left"></span>
+                                                                <div class="pull-left upload-btn-container">
+                                                                    <label for="upload-file-selector">
+                                                                        <input id="upload-file-selector" type="file">
+                                                                        <span type="button"
+                                                                              class="btn btn-upload pull-right">Upload</span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <!-- add class "btn-uploaded" to span and attribute "disabled" to input for upload not allowed -->
+                                                        <li>Passport
+                                                            <div class="pull-right"><span class="docs_name pull-left">passport.pdf</span>
+                                                                <div class="pull-left upload-btn-container">
+                                                                    <!-- <label for="upload-file-selector"> -->
+                                                                    <input disabled id="upload-file-selector"
+                                                                           type="file">
+                                                                    <span type="button"
+                                                                          class="btn btn-upload pull-right btn-uploaded">Upload</span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ol>
+                                                </section>
+                                                <hr>
+                                                <section>
+                                                    <h3 class="text-center">Contacts</h3>
+                                                    <div class="form-group">
+                                                        <label for="first_name" class="control-label">Email:</label><br>
+                                                        <input type="email" id="first_name" class="form-control"
+                                                               required>
+                                                    </div>
+                                                    <div class="form-inline">
+                                                        <div class="form-group">
+                                                            <label for="first_name" class="control-label">Phone
+                                                                1:</label><br>
+                                                            <input type="text" id="first_name" class="form-control"
+                                                                   required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="first_name" class="control-label">Phone 2:
+                                                                (Optional)</label><br>
+                                                            <input type="text" id="first_name" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="first_name" class="control-label">Phone 3:
+                                                                (Optional)</label><br>
+                                                            <input type="text" id="first_name" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                                <hr>
+                                            </div>
+                                        </div>
+                                        <section class="clearfix">
+                                            <button type="submit" class="btn btn-save pull-right">Save</button>
+                                        </section>
                                     </form>
                                 </div>
                             </div>
-                            </div>
                         </div>
                     </div>
-                    <!-- / Overview Details --> 
                 </div>
+                <!-- / Overview Details -->
             </div>
-        </div>  
-                      
+        </div>
     </div>
-  
-</div> 
+
+</div>
+
+</div>
 
 <!-- Scripts Starts -->
 <script src="assets/js/jquery-1.12.2.min.js"></script>
@@ -332,6 +383,7 @@
         minimumResultsForSearch: Infinity,
     });	
     });
+
 </script>
 <script type="text/javascript">
 	$(document).ready( function() {
@@ -429,6 +481,7 @@ function remove(){
 
     $(".btn-add").on("click", add);
     $(".btn-remove").on("click", remove);
+
 </script>
 
 </body>

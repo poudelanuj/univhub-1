@@ -1,5 +1,6 @@
 import datetime
 import json
+from datetime import datetime
 
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
@@ -19,14 +20,13 @@ from json_requests import handler
 from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm
 from .models import *
 from .tokens import account_activation_token
+from django.views.decorators.csrf import csrf_exempt
 
 
 # from fcm_django.models import FCMDevice
 
 def informationCenter():
     # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
-    today_min = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
-    today_max = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
@@ -196,6 +196,37 @@ def getPickupPage(request):
 
 
 
+
+def getClassesPage(request):
+    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    all_classtypes = ClassType.objects.all()
+    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.datetime.now().day)
+    offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
+    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.datetime.now().month)
+    json = {'all_classtypes': all_classtypes,
+            'offeredclass_today': offeredclass_today,
+            'offeredclass_week': offeredclass_week,
+            'offeredclass_month': offeredclass_month}
+    return render(request, 'classes.html', json)
+
+
+def getOffersPage(request):
+    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    all_offertypes = OfferType.objects.all()
+    print(datetime.date.today().day)
+    print(datetime.date.today().month)
+    print(datetime.date.today())
+    print(sunday)
+    offer_today = Offer.objects.filter(created__day=datetime.date.today().day)
+    offer_week = Offer.objects.filter(created__gte=sunday)
+    offer_month = Offer.objects.filter(created__month=datetime.date.today().month)
+    json = {'all_offertypes': all_offertypes,
+            'offer_today': offer_today,
+            'offer_week': offer_week,
+            'offer_month': offer_month}
+    return render(request, 'offers.html', json)
+
+
 def StudentDetail(request, pk):
     students = get_object_or_404(User, pk=pk)
     documents = uploadeddocuments.objects.filter(student=students)
@@ -205,20 +236,35 @@ def StudentDetail(request, pk):
 
 # ajax calls handling part
 
-
-
 def addcounselor(request):
     errors={}
     user = request.user
     form = AddCounselorForm(request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            print("form1 valid")
+            newuser = form.save()
             errors = form.errorlist
+            errors.update(dict(form.errors.items()))
             print(errors)
+
+            current_site = get_current_site(request)
+            subject = 'Activate your UnivHub Account.'
+            message = render_to_string('password_change_email.html', {
+                'user': user, 'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
+                'token': account_activation_token.make_token(newuser),
+            })
+            # user.email_user(subject, message)
+            toemail = form.cleaned_data.get('email')
+            email = EmailMessage(subject, message, to=[toemail])
+            email.send()
             return JsonResponse(errors)
         else:
+            print("form1 invalid")
             errors = form.errorlist
+            print(errors)
+            errors.update(dict(form.errors.items()))
             print(errors)
             return JsonResponse(errors)
 
@@ -245,23 +291,6 @@ def ajaxCallForActivationRole(request):
     reloadPortion = render_to_string('ad-adminsInformation.html', data)
     return HttpResponse(reloadPortion)
 
-
-def jsonHandler(request: wsgi.WSGIRequest):
-    print("Json Request")
-    # devices = FCMDevice.objects.all()
-    #
-    # print(devices.send_message(title="Title", body="Message"))
-    # print(devices.send_message(title="Title", body="Message", data={"test": "test"}))
-    # print(devices.send_message(data={"test": "Why not working?"}))
-
-    if request.is_ajax():
-        json_data = json.loads(request.body.decode(encoding='UTF-8'))
-        response = handler.handle_request(json_data)
-        print("Raw json data :", request.body)
-        # safe=False means array also can be returned as response
-        return response
-
-
 def ajaxRemovePickupDocument(request):
     docId = request.GET.get('documentID')
     print("document to delete : "+ docId)
@@ -270,19 +299,64 @@ def ajaxRemovePickupDocument(request):
     return 1
 
 
-def addmoderator(request):
-    errors = {}
-    form = AddModeratorForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            errors = form.errorlist
-            print(errors)
-            return JsonResponse(errors)
-        else:
-            errors = form.errorlist
-            print(errors)
-            return JsonResponse(errors)
-    return JsonResponse(errors)
+@csrf_exempt
+def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
+    type = request.META.get('CONTENT_TYPE')
+
+    try:
+        # print the details
+        print("Request on jsonHandler")
+        print("Raw json data     :", request.body)
+        print("Request parameters:", request.content_params)
+        try:
+            # try to convert body into json object
+            json_data = json.loads(request.body.decode(encoding='UTF-8'))
+
+            # if the request is from direct url
+            if action is not None and operation is not None:
+                json_data['action'] = {'data': action, 'operation': operation}
+            return handler.handle_request(json_data)
+
+        except Exception as e:
+            # maybe the data is not json.
+            # try other methodse
+            return JsonResponse({'status': "Error", "Reason": "Not a json data"})
 
 
+    except Exception:
+        # some other error in non json handling
+        return JsonResponse({'status': "Error", "Reason": "Unknown error"})
+
+
+
+
+def passwordchangeform(request, uidb64, token):
+    try:
+        uid1 = uidb64
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None:
+
+        return render(request, 'passwordchangeform.html', context={'uid': uid1, 'token': token})
+    else:
+        return HttpResponse('Activation link is invalid!')
+
+
+def passwordchange(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        print(uid)
+
+        user = User.objects.get(pk=uid)
+        password = request.POST.get("password", "")
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if account_activation_token.check_token(user, token) and user is not None:
+        user.password = password
+        user.save()
+        login(request, user)
+        return HttpResponse('Password is changed')
+    else:
+        return HttpResponse('Activation link is invalid!')

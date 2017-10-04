@@ -13,7 +13,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-FCM_APIKEY="AIzaSyBH-HlJabtrthLccXJqqa2vi8krqPNrpL4 "
+FCM_APIKEY = "AIzaSyBH-HlJabtrthLccXJqqa2vi8krqPNrpL4 "
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -46,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'sadmin.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'univhub.urls'
@@ -70,9 +71,9 @@ WSGI_APPLICATION = 'univhub.wsgi.application'
 LOGIN_REDIRECT_URL = '/'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com' # mail service smtp
-EMAIL_HOST_USER = 'enishpaneru2017@gmail.com' # email id
-EMAIL_HOST_PASSWORD = 'newpw2017' #password
+EMAIL_HOST = 'smtp.gmail.com'  # mail service smtp
+EMAIL_HOST_USER = 'enishpaneru2017@gmail.com'  # email id
+EMAIL_HOST_PASSWORD = 'newpw2017'  # password
 EMAIL_PORT = 587
 
 # Database
@@ -89,6 +90,13 @@ DATABASES = {
     }
 }
 DATABASES['default'] = DATABASES['mysql']
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -118,13 +126,13 @@ FCM_DJANGO_SETTINGS = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kathmandu'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

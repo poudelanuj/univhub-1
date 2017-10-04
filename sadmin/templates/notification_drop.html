@@ -1,33 +1,32 @@
-
 <div class="pmd-card-title">
-  <div class="media-body media-middle">
-    <a href="javascript:void(0)" class="pull-right"> <span id="notifycount"></span> new notifications</a>
-    <h3 class="pmd-card-title-text">Notifications</h3>
-  </div>
+    <div class="media-body media-middle">
+        <a href="javascript:void(0)" class="pull-right"> <span id="notifycount"></span> new notifications</a>
+        <h3 class="pmd-card-title-text">Notifications</h3>
+    </div>
 </div>
 
 <!-- Notifications list -->
 <ul class="list-group pmd-list-avatar pmd-card-list">
-  <li class="list-group-item" style="display:none">
-    <p class="notification-blank">
-      <span class="dic dic-notifications-none"></span>
-      <span>You don´t have any notifications</span>
-    </p>
-  </li>
-{% for notification in notifications %}
-  <li class="list-group-item unread">
-    <a href="javascript:void(0)">
-      <div class="media-left">
+    <li class="list-group-item" style="display:none">
+        <p class="notification-blank">
+            <span class="dic dic-notifications-none"></span>
+            <span>You don´t have any notifications</span>
+        </p>
+    </li>
+    {% for notification in notifications %}
+    <li class="list-group-item unread">
+        <a href="javascript:void(0)">
+            <div class="media-left">
         <span class="avatar-list-img40x40">
           <img alt="40x40" class="img-responsive" src="" data-holder-rendered="true">
         </span>
-      </div>
-      <div class="media-body">
-        <span class="list-group-item-heading"><span>{{notification.receiver}}</span> {{notification.message}}</span>
-        <span class="list-group-item-text">{{notification.created|timesince}} ago</span>
-      </div>
-    </a>
-  </li>
-{% endfor %}
+            </div>
+            <div class="media-body">
+                <span class="list-group-item-heading"><span>{{notification.receiver}}</span> {{notification.message}}</span>
+                <span class="list-group-item-text">{{notification.created|timesince}} ago</span>
+            </div>
+        </a>
+    </li>
+    {% endfor %}
 
 </ul><!-- End notifications list -->

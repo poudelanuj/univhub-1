@@ -1,6 +1,6 @@
 import datetime
 import json
-from datetime import datetime
+
 
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
@@ -31,7 +31,7 @@ def informationCenter():
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__range=(today_min, today_max), groups__name='studentGroup').count()
+              'todayjoined': User.objects.filter(date_joined__day=datetime.date.today().day, groups__name='studentGroup').count()
               }
     return parcel
 

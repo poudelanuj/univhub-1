@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
-import datetime
+from django.utils import timezone
 
 # (what to be entered, what to be shown)
 statusTypes = {
@@ -345,7 +345,7 @@ class OfferedClass(models.Model):
     location = models.CharField(max_length=100)
     starttime = models.TimeField()
     endtime = models.TimeField()
-    created = models.DateTimeField(default= datetime.datetime.now())
+    created = models.DateTimeField(default= timezone.now)
 
     class Meta:
         db_table='offeredclass'
@@ -381,7 +381,7 @@ class Offer(models.Model):
     university = models.ForeignKey(Universities, on_delete=models.CASCADE, blank=True, null=True)
     scholarshippercent = models.IntegerField(null=True, blank=True)
     validity = models.DateField()
-    created = models.DateTimeField(default=datetime.datetime.now())
+    created = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = 'offer'

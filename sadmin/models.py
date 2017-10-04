@@ -105,6 +105,9 @@ class Universities(models.Model):
     class Meta:
         db_table = 'universities'
 
+    def __str__(self):
+        return self.name
+
 
 class UniversityContent(models.Model):
     u = models.ForeignKey(Universities, models.DO_NOTHING)
@@ -298,6 +301,7 @@ class OfferedClass(models.Model):
     classtype = models.ForeignKey(ClassType, on_delete=models.CASCADE)
     startdate = models.DateField()
     enddate = models.DateField()
+    price = models.IntegerField()
     discountpercent = models.IntegerField()
     tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
     scholarshippercent = models.IntegerField()

@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.handlers import wsgi
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
@@ -12,7 +13,7 @@ from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.core.handlers import wsgi
+
 from json_requests import handler
 # Create your views here.
 from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm
@@ -306,9 +307,10 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 # try other methodse
                 print(request.POST)
                 print(request.GET)
+
                 return JsonResponse({'status': "Error", "Reason": "Not a json data"})
         elif action is not None and operation is not None:
-            return handler.handle_request(request)
+            return handler.handle_request_direct(action,operation,request)
 
     except Exception:
         # some other error in non json handling

@@ -302,7 +302,8 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 print(request.GET)
                 return JsonResponse({'status': "Error", "Reason": "Not a json data"})
         elif action is not None and operation is not None:
-            return handler.handle_request(request)
+            print("default handle")
+            return handler.handle_request_direct(action,operation,request)
 
     except Exception:
         # some other error in non json handling

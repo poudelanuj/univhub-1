@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^addcounselor/$', views.addcounselor, name='addcounselor'),
 
     url(r'^jsonhandler.django', views.jsonHandler),
+    url(r'^requesthandler/(?P<action>\w+)/(?P<operation>\w+)', views.jsonHandler),
 
     url(r'^ajax/CallForDeleteRole/$', views.ajaxCallForDeleteRole, name='ajaxCallForDeleteRole'),
     url(r'^ajax/CallForActivationRole/$', views.ajaxCallForActivationRole, name='ajaxCallForActivationRole'),

@@ -24,3 +24,10 @@ admin.site.register(Universities)
 
 # admin.site.register(UserProfile)
 # admin.site.register(UserProfile)
+
+admin.site.register(deliveryMan)
+admin.site.register(documenttype)
+admin.site.register(documentfor)
+admin.site.register(uploadeddocuments)
+admin.site.register(pickupdetails)
+admin.site.register(scheduledpickup)

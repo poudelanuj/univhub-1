@@ -417,10 +417,10 @@
                                                     </span>
                                                 </div>
                                                 <h4> Delivery Man: {{unpick.deliveryman}} </h4>
-                                                <h4>Document For: {{unpick.pickup.doctype}}</h4>
+                                                <h4>Document For: {{unpick.pickup.documentfor}}</h4>
                                                 <div class="included_docs">Included Document:
                                                     {% for document in nonpending_documents %}
-                                                        {% if document.pickupid.id is pickup.id %}
+                                                        {% if document.pickupid.id is unpick.pickup.id %}
                                                                 <span>
                                                                     {{document.documentid.docname}} --
                                                                 <button class="ajaxRemovePickupDocument" value={{document.id}}> <i class="fa fa-times"></i> </button>
@@ -450,10 +450,10 @@
                                                     </span>
                                                 </div>
                                                 <h4> Delivery Man: {{unpick.deliveryman}} </h4>
-                                                <h4>Document For: {{unpick.pickup.doctype}}</h4>
+                                                <h4>Document For: {{unpick.pickup.documentfor}}</h4>
                                                 <div class="included_docs">Included Document:
                                                     {% for document in nonpending_documents %}
-                                                        {% if document.pickupid.id is pickup.id %}
+                                                        {% if document.pickupid.id is unpick.pickup.id %}
                                                                 <span>
                                                                     {{document.documentid.docname}} --
                                                                 <button class="ajaxRemovePickupDocument" value={{document.id}}> <i class="fa fa-times"></i> </button>
@@ -483,10 +483,10 @@
                                                     </span>
                                                 </div>
                                                 <h4> Delivery Man: {{unpick.deliveryman}} </h4>
-                                                <h4>Document For: {{unpick.pickup.doctype}}</h4>
+                                                <h4>Document For: {{unpick.pickup.documentfor}}</h4>
                                                 <div class="included_docs">Included Document:
                                                     {% for document in nonpending_documents %}
-                                                        {% if document.pickupid.id is pickup.id %}
+                                                        {% if document.pickupid.id is unpick.pickup.id %}
                                                                 <span>
                                                                     {{document.documentid.docname}} --
                                                                 <button class="ajaxRemovePickupDocument" value={{document.id}}> <i class="fa fa-times"></i> </button>

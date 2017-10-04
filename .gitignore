@@ -4,6 +4,6 @@
 *.pyc
 db.sqlite3
 /other/
-migrations/
+migrations/*
 json_requests/__pycache__/
 sadmin/__pycache__/

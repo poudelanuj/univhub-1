@@ -239,7 +239,7 @@ class uploadeddocuments(models.Model):
     student_id = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
     doctype = models.ForeignKey(documenttype)
     docname = models.CharField(max_length=30)
-    file = models.FileField(upload_to='documents/%Y/%m/%d/')
+    url = models.TextField()
 
     class Meta:
         db_table = 'uploadeddocuments'

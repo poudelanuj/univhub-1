@@ -198,7 +198,6 @@ def getPickupPage(request):
     month_schedule = scheduled_pickup.filter(deliverydate__month=datetime.date.today().month)
 
     picked = scheduledpickup.objects.filter(is_picked=1)
-    print("picked: " + str(picked))
     today_picked = picked.filter(deliverydate__day=datetime.date.today().day)
     week_picked = picked.filter(deliverydate__gte=sunday)
     month_picked = picked.filter(deliverydate__month=datetime.date.today().month)
@@ -310,6 +309,7 @@ def ajaxCallForActivationRole(request):
     return HttpResponse(reloadPortion)
 
 def ajaxRemovePickupDocument(request):
+    print("check")
     docId = request.GET.get('documentID')
     print("document to delete : "+ docId)
     print(pickupdetails.objects.filter(documentid=docId))
@@ -351,10 +351,8 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
 
 def ajaxRemovePickupDocument(request):
     docId = request.GET.get('documentID')
-    print("document-id:" + docId)
-    print(pickupdetails.objects.filter(documentid=docId))
-    # pickupdetails.objects.filter(documentid=docId).delete()
-    all_pickups = pickup.objects.filter(status="pending")
+    pickupdetails.objects.filter(documentid=docId).delete()
+    all_pickups = pickup.objects.filter(is_pending=1)
     all_documents = pickupdetails.objects.filter(pickupid__in=all_pickups)
     json = {'all_pickups': all_pickups, 'all_documents': all_documents}
     reloadPortion = render_to_string('pickup.html', json)

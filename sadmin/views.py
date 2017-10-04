@@ -41,7 +41,7 @@ def index(request):
 
 
 def getNotificationsPage(request):
-    return render(request, "notifications.html", )
+    return render(request, "notifications.html", context={'types': NotificationType.objects.all()})
 
 
 def StudentDetail(request, pk):
@@ -269,11 +269,13 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
             # if the request is from direct url
             if action is not None and operation is not None:
                 json_data['action'] = {'data': action, 'operation': operation}
-            return handler.handle_json(json_data)
+            return handler.handle_request(json_data)
 
         except Exception as e:
             # maybe the data is not json.
             # try other methodse
+            print(request.POST)
+            print(request.GET)
             return JsonResponse({'status': "Error", "Reason": "Not a json data"})
 
 

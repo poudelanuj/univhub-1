@@ -14,7 +14,7 @@ from django.shortcuts import render,render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.core.handlers import wsgi
+
 from json_requests import handler
 # Create your views here.
 from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm

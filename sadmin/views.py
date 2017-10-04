@@ -293,16 +293,16 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 # if the request is from direct url
                 if action is not None and operation is not None:
                     json_data['action'] = {'data': action, 'operation': operation}
-                return handler.handle_request(json_data)
-
+                response= handler.handle_request(json_data)
+                return response
             except Exception as e:
                 # maybe the data is not json.
                 # try other methodse
                 print(request.POST)
                 print(request.GET)
+
                 return JsonResponse({'status': "Error", "Reason": "Not a json data"})
         elif action is not None and operation is not None:
-            print("default handle")
             return handler.handle_request_direct(action,operation,request)
 
     except Exception:

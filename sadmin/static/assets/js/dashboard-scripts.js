@@ -6,8 +6,6 @@
 	});
 
 	$(document).ready( function() {
-
-
 		// additional scripts for ajax call to update admins information.
 		$('body').on('click','.ajaxCallForDeleteRole', function () {
 			var userId = $(this).val();
@@ -470,7 +468,6 @@ function server_query(data,operation,query,keys){
 		data:data,
 		operation:operation
 	}
-
 	request={ // create an AJAX call...
         data:JSON.stringify(query)  , // get the form data
         type: "post", // GET or POST
@@ -479,7 +476,6 @@ function server_query(data,operation,query,keys){
      }
      request=Object.assign(keys,request)
 	$.ajax(request)
-
 };
 
 function create_notification_upload(){
@@ -493,5 +489,17 @@ function create_notification_upload(){
 			{success:success_function}
 		);
 
-}
+};
+
+function add_registered_class(){
+	server_query(
+			'class',
+			'register',
+			{user_id:1,class_id:1},
+			{success: function(response){
+			        alert(JSON.stringify(response))
+			    }
+			}
+		);
+};
 loaded_filters={}

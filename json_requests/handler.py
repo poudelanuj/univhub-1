@@ -37,7 +37,7 @@ def handle_request(request):
     except KeyError:
         return JsonResponse({'status': 'error', 'cause': 'action field is invalid'})
     del request['action']
-    handle_request_direct(action,operation,request)
+    return handle_request_direct(action,operation,request)
 
 action_map = __initialize__()
 
@@ -49,7 +49,8 @@ def handle_request_direct(action, operation, request):
     if operation not in action_map[action]:
         return JsonResponse({"status": "error", "cause": "" + action + " doesn't have operation " + operation})
     try:
-        return action_map[action][operation](request)
+        response= action_map[action][operation](request)
+        return response
+
     except Exception as e:
-        print(e.args, file=sys.stderr)
         return JsonResponse({"status": "error", "cause": "Internal Server Error while serving request " + operation})

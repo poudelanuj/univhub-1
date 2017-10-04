@@ -7,7 +7,6 @@
 
 	$(document).ready( function() {
 
-
 		// additional scripts for ajax call to update admins information.
 		$('body').on('click','.ajaxCallForDeleteRole', function () {
 			var userId = $(this).val();
@@ -186,6 +185,19 @@
 				})
 				});
 			});
+
+
+
+                    // remove documents from pickup
+                $('#content').on('click', '.ajaxRemovePickupDocument', function() {
+                  var documentID = $(this).val();
+                 $.ajax({
+                        url: "ajax/ajaxRemovePickupDocument/",
+                        data: {'documentID':documentID}
+
+                         });
+                 $(this).parent().remove();
+                });
 		});
 
 		$('.aside_students').click(function(){

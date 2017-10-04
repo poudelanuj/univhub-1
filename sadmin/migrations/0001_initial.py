@@ -78,6 +78,17 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name='deliveryMan',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=30)),
+                ('mobile', models.CharField(max_length=10)),
+            ],
+            options={
+                'db_table': 'deliveryman',
+            },
+        ),
+        migrations.CreateModel(
             name='District',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -85,6 +96,16 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'district',
+            },
+        ),
+        migrations.CreateModel(
+            name='documentfor',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('documentforname', models.CharField(max_length=30)),
+            ],
+            options={
+                'db_table': 'documentfor',
             },
         ),
         migrations.CreateModel(
@@ -193,11 +214,12 @@ class Migration(migrations.Migration):
             name='pickup',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_from', models.DateField()),
-                ('date_to', models.DateField()),
+                ('pickup_date', models.DateField()),
                 ('time', models.TimeField()),
                 ('location', models.CharField(max_length=50)),
-                ('status', models.CharField(choices=[('Unpicked', 'Unpicked'), ('Picked', 'Picked'), ('Scheduled', 'Scheduled'), ('Pending', 'Pending')], default='Pending', max_length=9)),
+                ('is_pending', models.BooleanField(default=1)),
+                ('created_date', models.DateField()),
+                ('documentfor', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='sadmin.documentfor')),
                 ('pickupof', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -265,6 +287,20 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'requirements',
+            },
+        ),
+        migrations.CreateModel(
+            name='scheduledpickup',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('deliverydate', models.DateField()),
+                ('deliverytime', models.TimeField()),
+                ('is_picked', models.NullBooleanField()),
+                ('deliveryman', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='sadmin.deliveryMan')),
+                ('pickup', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='sadmin.pickup')),
+            ],
+            options={
+                'db_table': 'scheduledpickup',
             },
         ),
         migrations.CreateModel(

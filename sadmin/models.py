@@ -245,19 +245,57 @@ class uploadeddocuments(models.Model):
         return str(self.student_id) + " : " + str(self.docname)
 
 
+
+class documentfor(models.Model):
+    documentforname = models.CharField(max_length=30)
+
+    class Meta:
+        db_table = 'documentfor'
+
+    def __str__(self):
+        return str(self.documentforname)
+
+
 class pickup(models.Model):
     pickupof = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
-    date_from = models.DateField()
-    date_to = models.DateField()
+    pickup_date = models.DateField()
     time = models.TimeField()
     location = models.CharField(max_length=50)
-    status = models.CharField(max_length=9, choices=statusTypes, default='Pending')
+    is_pending = models.BooleanField(default=1)
+    created_date = models.DateField()
+    documentfor = models.ForeignKey(documentfor, models.DO_NOTHING)
 
     class Meta:
         db_table = 'pickup'
 
     def __str__(self):
         return str(self.pickupof.username)
+
+
+class deliveryMan (models.Model):
+    name = models.CharField(max_length=30)
+    mobile = models.CharField(max_length=10)
+
+    class Meta:
+        db_table = "deliveryman"
+
+    def __str__(self):
+        return self.name
+
+
+class scheduledpickup (models.Model):
+    deliveryman = models.ForeignKey(deliveryMan, on_delete=models.DO_NOTHING)
+    deliverydate = models.DateField()
+    deliverytime = models.TimeField()
+    pickup = models.ForeignKey(pickup, on_delete=models.CASCADE)
+    is_picked = models.NullBooleanField(blank=True, null=True)
+
+    class Meta:
+        db_table = "scheduledpickup"
+
+    def __str__(self):
+        return str(self.deliverydate)+" : "+ str(self.deliveryman.name)
+
 
 
 class pickupdetails(models.Model):
@@ -271,12 +309,16 @@ class pickupdetails(models.Model):
         return str(self.pickupid) + str(self.documentid)
 
 
+
+
+
+
 class Tutor(models.Model):
     name = models.CharField(max_length=200)
     qualification = models.TextField()
 
     class Meta:
-        db_table = 'tutor'
+        db_table='tutor'
 
     def __str__(self):
         return self.name
@@ -286,7 +328,7 @@ class ClassType(models.Model):
     title = models.CharField(max_length=50)
 
     class Meta:
-        db_table = 'classtype'
+        db_table='classtype'
 
     def __str__(self):
         return self.title
@@ -303,10 +345,10 @@ class OfferedClass(models.Model):
     location = models.CharField(max_length=100)
     starttime = models.TimeField()
     endtime = models.TimeField()
-    created = models.DateTimeField(default=datetime.datetime.now())
+    created = models.DateTimeField(default= datetime.datetime.now())
 
     class Meta:
-        db_table = 'offeredclass'
+        db_table='offeredclass'
 
     def __str__(self):
         return self.name
@@ -317,21 +359,21 @@ class RegisteredClass(models.Model):
     offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'registeredclass'
+        db_table='registeredclass'
 
 
 class OfferType(models.Model):
     title = models.CharField(max_length=50)
 
     class Meta:
-        db_table = 'offertype'
+        db_table='offertype'
 
     def __str__(self):
         return self.title
 
 
 class Offer(models.Model):
-    title = models.CharField(max_length=50)
+    title =  models.CharField(max_length=50)
     description = models.TextField()
     offertype = models.ForeignKey(OfferType, on_delete=models.CASCADE)
     offerinclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE, blank=True, null=True)

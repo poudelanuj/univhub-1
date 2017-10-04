@@ -32,8 +32,6 @@ class AddAdminForm(forms.Form):
         if username in User.objects.all().values_list('username', flat=True):
             self.errorlist['username']='This username already exists'
             raise forms.ValidationError("This username already exists")
-        if email in User.objects.all().values_list('email', flat=True):
-            raise forms.ValidationError("This email already exists")
         if password != password2:
             raise forms.ValidationError("The two password fields must match. Got it!!??")
         return cleaned_data

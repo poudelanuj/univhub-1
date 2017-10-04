@@ -123,6 +123,11 @@
 					}
 					});
 					});
+				  $('#classes_type').change(function(){
+                    $( ".aside_classes").trigger( 'click', [ $(this).val() ] );
+
+
+});
         $(".pmd-sidebar .pmd-sidebar-nav li a").on("click", function(e) {
             // e.preventDefault();
             $(".pmd-sidebar .pmd-sidebar-nav li a").removeClass("active");
@@ -133,15 +138,28 @@
 		});
 
 		$('.aside_notifications').click(function(){
+
+			$("#content").ready(
+				function() {
+                	$('#notifications_type_select').change(
+						function () {
+							alert("Why me?")
+							alert($(this).innerHTML)
+						}
+            	    );
+            	}
+			);
+
 			$("#content").load('notifications.html')
+
 		});
 
 
 
 		$('.aside_pickup').click(function(){
 			$("#content").load('pickup.html',function(){
-				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css/";
-				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css/";
+				var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
+				var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
 				$.get(datetimepickerStyles, function(css){
 				$('<style type="text/css"></style>')
 					.html(css)
@@ -181,7 +199,6 @@
                  $(this).parent().remove();
                 });
 		});
-
 
 		$('.aside_students').click(function(){
 			$("#content").load('students-list.html',function(){
@@ -460,20 +477,33 @@ var check = $.inArray(geo_name,ids);
 
 })(jQuery);
 
-function create_notification_upload(){
-    data=$("#notification_create_form").serializeObject();
+function server_query(data,operation,query,keys){
+	query['action']={
+		data:data,
+		operation:operation
+	}
 
-    data['action']={data:'notification',operation:'create'}
-
-     $.ajax({ // create an AJAX call...
-        data:JSON.stringify(data)  , // get the form data
+	request={ // create an AJAX call...
+        data:JSON.stringify(query)  , // get the form data
         type: "post", // GET or POST
         contentType: "application/json",
         url: 'jsonhandler.django', // the file to call
-        success: function(response) { // on success..
-                alert(JSON.stringify(response))
-        }
-     });
+     }
+     request=Object.assign(keys,request)
+	$.ajax(request)
 
-     alert("Serialized:"+JSON.stringify(data));
+};
+
+function create_notification_upload(){
+	success_function=function(response){
+			alert(JSON.stringify(response));
+	}
+	server_query(
+			'notification',
+			'create',
+			$("#notification_create_form").serializeObject(),
+			{success:success_function}
+		);
+
 }
+loaded_filters={}

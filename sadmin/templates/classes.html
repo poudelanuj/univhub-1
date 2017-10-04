@@ -20,7 +20,7 @@
                                 <label for="classes_type" class="pull-left">Class Type:</label>
                                 <select name="classes_type" id="classes_type" class="pull-left form-control notifications_type">
                                     {% for classtype in all_classtypes %}
-                                        <option>{{ classtype }}</option>
+                                        <option value={{classtype.id}}>{{ classtype }}</option>
                                     {% endfor %}
                                 </select>
                                 <div class="pull-right">
@@ -34,6 +34,7 @@
                                     </div>	
                                 </div>	
                             </div>
+                            <div id="classeslist">
                             <div class="tab-content notifications-tab-content">
                                 <ul role="tabpanel" id="today-noti" class="tab-pane active list-group pmd-list pmd-card-list">
                                     {% for class in offeredclass_today %}
@@ -119,6 +120,7 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
+                            </div>
                             </div>
                         </div>
                 </div>   

@@ -175,16 +175,15 @@ class UserProfile(models.Model):
 
 
 class Notification(models.Model):
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
-    sender = models.ForeignKey(User, related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver',blank=True, null=True)
+    sender = models.ForeignKey(User, related_name='sender',blank=True,null=True)
     read = models.BooleanField(default=False)
     title = models.CharField(blank=True, null=True, max_length=50)
-    Type = models.IntegerField()
+    Type = models.IntegerField(blank=True,null=True)
     message = models.TextField()
     created = models.DateTimeField()
-    map_url= models.TextField(blank=True,null=True,)
-    web_url=models.TextField(blank=True,null=True)
-
+    map_url = models.TextField(blank=True, null=True, )
+    web_url = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'notifications'
@@ -382,13 +381,22 @@ class Offer(models.Model):
     university = models.ForeignKey(Universities, on_delete=models.CASCADE, blank=True, null=True)
     scholarshippercent = models.IntegerField(null=True, blank=True)
     validity = models.DateField()
-    created = models.DateTimeField(default= datetime.datetime.now())
+    created = models.DateTimeField(default=datetime.datetime.now())
 
     class Meta:
-        db_table='offer'
+        db_table = 'offer'
 
     def __str__(self):
         return self.title
 
 
+class NotificationType(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=400)
 
+    class Meta:
+        db_table = 'notification_type'
+
+    def __str__(self):
+        return self.title

@@ -51,7 +51,6 @@ def StudentDetail(request, pk):
 
     return render(request, "student-detail.html", context={'student': student, 'documents': documents})
 
-
 def getNotifications(request):
     user = request.user
     data = {'notifycount': Notification.objects.filter(receiver=user).count()}

@@ -7,12 +7,11 @@
 
 	$(document).ready( function() {
 
-
 		// additional scripts for ajax call to update admins information.
 		$('body').on('click','.ajaxCallForDeleteRole', function () {
 			var userId = $(this).val();
 			$.ajax({
-				url: "/ajax/CallForDeleteRole/",
+				url: "ajax/CallForDeleteRole/",
 				data: {'userId':userId},
 				success:
 					function (data)
@@ -25,9 +24,8 @@
 
 		$('body').on('click','.ajaxCallForActivationRole', function () {
 			var userId = $(this).val();
-			alert(userId);
 			$.ajax({
-				url: "/ajax/CallForActivationRole/",
+				url: "ajax/CallForActivationRole/",
 				data: {'userId':userId},
 				success:
 					function (data)
@@ -39,76 +37,7 @@
 
 
 
-		// remove documents from pickup
-		$('body').on('click', '.ajaxRemovePickupDocument', function() {
-			var documentID = $(this).val();
-			$.ajax({
-				url: "/ajax/ajaxRemovePickupDocument/",
-				data: {'documentID':documentID},
-				success:
-					function(data)
-					{
-						$('#idForPickup').html(data);
-					}
-			});
-		});
-		setInterval(function(){
-			$.ajax({
 
-	 url:"getnotifications/",
-		dataType: 'json',
-	 success: function(data){
-
-		 $("#notifycountbadge").attr("data-badge",data['notifycount'])
-		$("#notifycount").replaceWith('<span id="notifycount">' + data['notifycount'] + '</span >');
-
-	 },
-
-	});
-		},10000);
-		$('#notificationdropshow').click(function(){
-
-			$.ajax({
-
-				url: "getnotificationslist/",
-
-				success : function(data) {
-						 $('#notifylist').html(data);
-				 }
-				});
-				});
-		$('#addmoderatorbutton').click(function(){
-
-
-
-			$.ajax({
-				type: 'POST',
-				url: "addmoderator/",
-				data: $("#addmoderatorform").serialize(),
-				success : function(data) {
-
-						$('#add-moderator').modal('toggle');
-
-
-				 }
-});
-		});
-			$('#addadminbutton').click(function(){
-
-
-
-				$.ajax({
-				type: 'POST',
-				url: "addadmin/",
-				data: $("#addadminform").serialize(),
-				success : function(data) {
-
-				$('#add-admin').modal('toggle');
-
-
-				}
-				});
-				});
 
 
         $(".pmd-sidebar .pmd-sidebar-nav li a").on("click", function(e) {
@@ -143,7 +72,7 @@
 
 				$.getScript("/static/assets/js/propeller.js/");
 				$.getScript("/static/assets/js/moment-with-locales.js/");
-				$.getScript("/static/assets/js/bootstrap-datetimepicker.js'/",function(){
+				$.getScript("/static/assets/js/bootstrap-datetimepicker.js/",function(){
 					$('#datepicker').datetimepicker({
 					format: 'DD/MM/YYYY'
 				});
@@ -155,11 +84,26 @@
 				})
 				});
 			});
+
+
+
+                    // remove documents from pickup
+                $('#content').on('click', '.ajaxRemovePickupDocument', function() {
+                  var documentID = $(this).val();
+                 $.ajax({
+                        url: "ajax/ajaxRemovePickupDocument/",
+                        data: {'documentID':documentID}
+
+                         });
+                 $(this).parent().remove();
+                });
 		});
+
+
 		$('.aside_students').click(function(){
 			$("#content").load('students-list.html',function(){
-				$.getScript("{% static 'assets/js/propeller.js' %}");
-				$.getScript("{% static 'assets/js/circle-progress.min.js '%}",function(){
+				$.getScript("/static/assets/js/propeller.js/" );
+				$.getScript("/static/assets/js/circle-progress.min.js/",function(){
 					$('.student-progress').circleProgress({
 						startAngle: 4.75,
 						size: 80,
@@ -364,3 +308,21 @@ function create_notification_upload(){
 
      alert("Serialized:"+JSON.stringify(data));
 }
+
+
+$('#addadminbutton').click(function(){
+
+
+
+    $.ajax({
+    type: 'POST',
+    url: "addadmin/",
+    data: $("#addadminform").serialize(),
+    success : function(data) {
+
+    $('#add-admin').modal('toggle');
+
+
+    }
+    });
+    });

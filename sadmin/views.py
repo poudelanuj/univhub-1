@@ -1,10 +1,11 @@
 import datetime
 import json
+
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.handlers import wsgi
 from django.core.mail import EmailMessage
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -30,7 +31,7 @@ def informationCenter():
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__range=(today_min, today_max), groups=4).count()
+              'todayjoined': User.objects.filter(date_joined__range=(today_min, today_max), groups__name='studentGroup').count()
               }
     return parcel
 
@@ -150,18 +151,55 @@ def addmoderator(request):
     return JsonResponse(errors)
 
 
+#todo
+#remove change is_pending to False once the pickup is marked as scheduled.
+
 def getPickupPage(request):
-    all_pickups = pickup.objects.filter(status="pending")
-    all_documents = pickupdetails.objects.filter(pickupid__in=all_pickups)
-    json = {'all_pickups': all_pickups, 'all_documents': all_documents}
+    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+
+    pending_pickups = pickup.objects.filter(is_pending=True) #all pending pickups
+    pending_documents = pickupdetails.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
+    nonpending_pickups =  pickup.objects.filter(is_pending=False)
+    nonpending_documents = pickupdetails.objects.filter(pickupid__in=nonpending_pickups)
+
+    today_pickups = pending_pickups.filter(created_date__day=datetime.date.today().day)
+    week_pickups = pending_pickups.filter(created_date__gte=sunday)
+    month_pickups = pending_pickups.filter(created_date__month=datetime.date.today().month)
+
+    scheduled_pickup = scheduledpickup.objects.exclude(is_picked=True).exclude(is_picked=False)
+    today_schedule = scheduled_pickup.filter(deliverydate__day=datetime.date.today().day)
+    week_schedule = scheduled_pickup.filter(deliverydate__gte=sunday)
+    month_schedule = scheduled_pickup.filter(deliverydate__month=datetime.date.today().month)
+
+    picked = scheduledpickup.objects.filter(is_picked=1)
+    print("picked: " + str(picked))
+    today_picked = picked.filter(deliverydate__day=datetime.date.today().day)
+    week_picked = picked.filter(deliverydate__gte=sunday)
+    month_picked = picked.filter(deliverydate__month=datetime.date.today().month)
+
+    unpicked = scheduledpickup.objects.filter(is_picked=0)
+    today_unpicked = unpicked.filter(deliverydate__day=datetime.date.today().day)
+    week_unpicked = unpicked.filter(deliverydate__gte=sunday)
+    month_unpicked = unpicked.filter(deliverydate__month=datetime.date.today().month)
+
+    delivery_man = deliveryMan.objects.all()
+
+    json = {'pending_documents':pending_documents, 'nonpending_documents':nonpending_documents,
+            'today_pickups':today_pickups, 'week_pickups':week_pickups, 'month_pickups':month_pickups,
+            'today_schedule':today_schedule, 'week_schedule':week_schedule, 'month_schedule':month_schedule,
+            'today_picked':today_picked, 'week_picked':week_picked, 'month_picked':month_picked,
+            'today_unpicked':today_unpicked, 'week_unpicked':week_unpicked, 'month_unpicked':month_unpicked,
+            'delivery_man':delivery_man
+            }
+
     return render(request, 'pickup.html', json)
+
 
 
 def StudentDetail(request, pk):
     students = get_object_or_404(User, pk=pk)
-    documents = uploadeddocuments.objects.filter(student=student)
+    documents = uploadeddocuments.objects.filter(student=students)
 
-    print(students)
     return render(request, 'students-list.html', {'students': students})
 
 
@@ -170,6 +208,7 @@ def StudentDetail(request, pk):
 
 
 def addcounselor(request):
+    errors={}
     user = request.user
     form = AddCounselorForm(request.POST, user=user or None)
     if request.method == 'POST':
@@ -225,11 +264,25 @@ def jsonHandler(request: wsgi.WSGIRequest):
 
 def ajaxRemovePickupDocument(request):
     docId = request.GET.get('documentID')
-    print("document-id:" + docId)
+    print("document to delete : "+ docId)
     print(pickupdetails.objects.filter(documentid=docId))
-    # pickupdetails.objects.filter(documentid=docId).delete()
-    all_pickups = pickup.objects.filter(status="pending")
-    all_documents = pickupdetails.objects.filter(pickupid__in=all_pickups)
-    json = {'all_pickups': all_pickups, 'all_documents': all_documents}
-    reloadPortion = render_to_string('pickup.html', json)
-    return HttpResponse(reloadPortion)
+    pickupdetails.objects.filter(id=docId).delete()
+    return 1
+
+
+def addmoderator(request):
+    errors = {}
+    form = AddModeratorForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            errors = form.errorlist
+            print(errors)
+            return JsonResponse(errors)
+        else:
+            errors = form.errorlist
+            print(errors)
+            return JsonResponse(errors)
+    return JsonResponse(errors)
+
+

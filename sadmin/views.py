@@ -256,28 +256,29 @@ def ajaxCallForActivationRole(request):
 @csrf_exempt
 def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
     type = request.META.get('CONTENT_TYPE')
-
     try:
         # print the details
         print("Request on jsonHandler")
         print("Raw json data     :", request.body)
         print("Request parameters:", request.content_params)
-        try:
-            # try to convert body into json object
-            json_data = json.loads(request.body.decode(encoding='UTF-8'))
+        if type == 'application/json':
+            try:
+                # try to convert body into json object
+                json_data = json.loads(request.body.decode(encoding='UTF-8'))
 
-            # if the request is from direct url
-            if action is not None and operation is not None:
-                json_data['action'] = {'data': action, 'operation': operation}
-            return handler.handle_request(json_data)
+                # if the request is from direct url
+                if action is not None and operation is not None:
+                    json_data['action'] = {'data': action, 'operation': operation}
+                return handler.handle_request(json_data)
 
-        except Exception as e:
-            # maybe the data is not json.
-            # try other methodse
-            print(request.POST)
-            print(request.GET)
-            return JsonResponse({'status': "Error", "Reason": "Not a json data"})
-
+            except Exception as e:
+                # maybe the data is not json.
+                # try other methodse
+                print(request.POST)
+                print(request.GET)
+                return JsonResponse({'status': "Error", "Reason": "Not a json data"})
+        elif action is not None and operation is not None:
+            return handler.handle_request(request)
 
     except Exception:
         # some other error in non json handling

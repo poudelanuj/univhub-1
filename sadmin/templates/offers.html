@@ -48,7 +48,6 @@
                                             <div class="media-body">
                                                 <h3 class="list-group-item-heading">{{ offer.title }}</h3>
                                                 <span class="list-group-item-text">Description: {{ offer.description }}</span>
-                                                <span class="list-group-item-text">{{ offer.created }}</span>
 
                                                 {% ifequal offer.offertype.title "Scholarship" %}
                                                 <span class="list-group-item-text">University: {{ offer.university.name }}</span>
@@ -91,7 +90,6 @@
                                             <div class="media-body">
                                                 <h3 class="list-group-item-heading">{{ offer.title }}</h3>
                                                 <span class="list-group-item-text">Description: {{ offer.description }}</span>
-                                                <span class="list-group-item-text">{{ offer.created }}</span>
 
                                                 {% ifequal offer.offertype.title "Scholarship" %}
                                                 <span class="list-group-item-text">University: {{ offer.university.name }}</span>

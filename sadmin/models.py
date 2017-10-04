@@ -175,11 +175,11 @@ class UserProfile(models.Model):
 
 
 class Notification(models.Model):
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver', null=True)
-    sender = models.ForeignKey(User, related_name='sender', null=True)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver',blank=True, null=True)
+    sender = models.ForeignKey(User, related_name='sender',blank=True,null=True)
     read = models.BooleanField(default=False)
     title = models.CharField(blank=True, null=True, max_length=50)
-    Type = models.IntegerField()
+    Type = models.IntegerField(blank=True,null=True)
     message = models.TextField()
     created = models.DateTimeField()
     map_url = models.TextField(blank=True, null=True, )

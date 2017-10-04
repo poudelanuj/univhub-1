@@ -2,9 +2,11 @@
 Handles all the incoming requests and redirects them into corresponding function of handlers.
 
 '''
+import importlib
 import pkgutil
+import sys
+
 from django.http import JsonResponse
-import sys, importlib
 
 
 def __initialize__():
@@ -37,7 +39,8 @@ def handle_request(request):
     except KeyError:
         return JsonResponse({'status': 'error', 'cause': 'action field is invalid'})
     del request['action']
-    handle_request_direct(action,operation,request)
+    handle_request_direct(action, operation, request)
+
 
 action_map = __initialize__()
 

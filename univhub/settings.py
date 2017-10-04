@@ -83,10 +83,10 @@ DATABASES = {
     'mysql': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'univhub',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
-        'USER':'root',
-        'PASSWORD':'',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': '',
     }
 }
 DATABASES['default'] = DATABASES['mysql']
@@ -139,4 +139,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -7,10 +7,10 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
 
-from django.db import models
 from django.contrib.auth.models import User
-import datetime
+from django.db import models
 from django.utils import timezone
+
 # (what to be entered, what to be shown)
 statusTypes = {
     ('Pending', 'Pending'),
@@ -178,11 +178,11 @@ class UserProfile(models.Model):
 
 
 class Notification(models.Model):
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver',blank=True, null=True)
-    sender = models.ForeignKey(User, related_name='sender',blank=True,null=True)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver', blank=True, null=True)
+    sender = models.ForeignKey(User, related_name='sender', blank=True, null=True)
     read = models.BooleanField(default=False)
     title = models.CharField(blank=True, null=True, max_length=50)
-    Type = models.IntegerField(blank=True,null=True)
+    Type = models.IntegerField(blank=True, null=True)
     message = models.TextField()
     created = models.DateTimeField()
     map_url = models.TextField(blank=True, null=True, )
@@ -201,6 +201,7 @@ class AdminProfile(models.Model):
     phone = models.IntegerField()
     description = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    company_logo = models.ImageField(upload_to='images/admincompanylogo/', blank=True, null=True)
 
     class Meta:
         db_table = "adminprofile"
@@ -210,6 +211,7 @@ class ModeratorProfile(models.Model):
     mobile = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=20)
+    profile_image = models.ImageField(upload_to='images/moderatorprofileimage/',blank=True,null=True)
 
     class Meta:
         db_table = "moderatorprofile"
@@ -220,6 +222,7 @@ class CounselorProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userid')
     address = models.CharField(max_length=20)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
+    profile_image = models.ImageField(upload_to='images/counselorprofileimage/',blank=True,null=True)
 
     class Meta:
         db_table = "counselorprofile"
@@ -248,7 +251,6 @@ class uploadeddocuments(models.Model):
         return str(self.student_id) + " : " + str(self.docname)
 
 
-
 class documentfor(models.Model):
     documentforname = models.CharField(max_length=30)
 
@@ -275,7 +277,7 @@ class pickup(models.Model):
         return str(self.pickupof.username)
 
 
-class deliveryMan (models.Model):
+class deliveryMan(models.Model):
     name = models.CharField(max_length=30)
     mobile = models.CharField(max_length=10)
 
@@ -286,7 +288,7 @@ class deliveryMan (models.Model):
         return self.name
 
 
-class scheduledpickup (models.Model):
+class scheduledpickup(models.Model):
     deliveryman = models.ForeignKey(deliveryMan, on_delete=models.DO_NOTHING)
     deliverydate = models.DateField()
     deliverytime = models.TimeField()
@@ -297,8 +299,7 @@ class scheduledpickup (models.Model):
         db_table = "scheduledpickup"
 
     def __str__(self):
-        return str(self.deliverydate)+" : "+ str(self.deliveryman.name)
-
+        return str(self.deliverydate) + " : " + str(self.deliveryman.name)
 
 
 class pickupdetails(models.Model):
@@ -312,16 +313,12 @@ class pickupdetails(models.Model):
         return str(self.pickupid) + str(self.documentid)
 
 
-
-
-
-
 class Tutor(models.Model):
     name = models.CharField(max_length=200)
     qualification = models.TextField()
 
     class Meta:
-        db_table='tutor'
+        db_table = 'tutor'
 
     def __str__(self):
         return self.name
@@ -331,7 +328,7 @@ class ClassType(models.Model):
     title = models.CharField(max_length=50)
 
     class Meta:
-        db_table='classtype'
+        db_table = 'classtype'
 
     def __str__(self):
         return self.title
@@ -349,10 +346,10 @@ class OfferedClass(models.Model):
     location = models.CharField(max_length=100)
     starttime = models.TimeField()
     endtime = models.TimeField()
-    created = models.DateTimeField(default= timezone.now)
+    created = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        db_table='offeredclass'
+        db_table = 'offeredclass'
 
     def __str__(self):
         return self.name
@@ -363,21 +360,21 @@ class RegisteredClass(models.Model):
     offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
 
     class Meta:
-        db_table='registeredclass'
+        db_table = 'registeredclass'
 
 
 class OfferType(models.Model):
     title = models.CharField(max_length=50)
 
     class Meta:
-        db_table='offertype'
+        db_table = 'offertype'
 
     def __str__(self):
         return self.title
 
 
 class Offer(models.Model):
-    title =  models.CharField(max_length=50)
+    title = models.CharField(max_length=50)
     description = models.TextField()
     offertype = models.ForeignKey(OfferType, on_delete=models.CASCADE)
     offerinclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE, blank=True, null=True)

@@ -1,6 +1,5 @@
-import datetime
 import json
-from datetime import datetime
+import datetime
 
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
@@ -10,17 +9,17 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render,render_to_response
+from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views.decorators.csrf import csrf_exempt
 
 from json_requests import handler
 # Create your views here.
 from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm
 from .models import *
 from .tokens import account_activation_token
-from django.views.decorators.csrf import csrf_exempt
 
 
 # from fcm_django.models import FCMDevice
@@ -31,7 +30,8 @@ def informationCenter():
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__day=datetime.date.today().day, groups__name='studentGroup').count()
+              'todayjoined': User.objects.filter(date_joined__day=datetime.date.today().day,
+                                                 groups__name='studentGroup').count()
               }
     return parcel
 
@@ -51,6 +51,7 @@ def StudentDetail(request, pk):
 
     return render(request, "student-detail.html", context={'student': student, 'documents': documents})
 
+
 def getNotifications(request):
     user = request.user
     data = {'notifycount': Notification.objects.filter(receiver=user).count()}
@@ -59,7 +60,8 @@ def getNotifications(request):
 
 def getNotificationslist(request):
     notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
-    return render_to_response('notification_drop.html',{'notifications':notifications})
+    return render_to_response('notification_drop.html', {'notifications': notifications})
+
 
 def signup(request):
     if request.method == 'POST':
@@ -82,6 +84,10 @@ def signup(request):
     else:
         form = SignupForm()
     return render(request, 'signup.html', {'form': form})
+
+
+def showdocumentuploadtest(request):
+    return render(request, 'documentupload.html')
 
 
 def activate(request, uidb64, token):
@@ -119,13 +125,11 @@ def getStudentslistPage(request):
 
 
 def addadmin(request):
-    form = AddAdminForm(request.POST or None)
+    form = AddAdminForm(request.POST,request.FILES)
     if request.method == 'POST':
         if form.is_valid():
-            print("form valid")
             newuser = form.save()
-            print("form valid 2")
-
+            print("add here")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             current_site = get_current_site(request)
@@ -138,19 +142,22 @@ def addadmin(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User,pk=1), sender=newuser, title="New Admin Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Admin Creation",
                                         message="New admin has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
+            print("form invalid")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
+            print(errors)
             return JsonResponse(errors)
 
     return JsonResponse(errors)
 
 
 def addmoderator(request):
-    form = AddModeratorForm(request.POST or None)
+    form = AddModeratorForm(request.POST,request.FILES or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -166,7 +173,8 @@ def addmoderator(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,title="New Moderator Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Moderator Creation",
                                         message="New moderator has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
@@ -176,15 +184,15 @@ def addmoderator(request):
     return JsonResponse(errors)
 
 
-#todo
-#remove change is_pending to False once the pickup is marked as scheduled.
+# todo
+# remove change is_pending to False once the pickup is marked as scheduled.
 
 def getPickupPage(request):
     sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
 
-    pending_pickups = pickup.objects.filter(is_pending=True) #all pending pickups
-    pending_documents = pickupdetails.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
-    nonpending_pickups =  pickup.objects.filter(is_pending=False)
+    pending_pickups = pickup.objects.filter(is_pending=True)  # all pending pickups
+    pending_documents = pickupdetails.objects.filter(pickupid__in=pending_pickups)  # all documents of pending
+    nonpending_pickups = pickup.objects.filter(is_pending=False)
     nonpending_documents = pickupdetails.objects.filter(pickupid__in=nonpending_pickups)
 
     today_pickups = pending_pickups.filter(created_date__day=datetime.date.today().day)
@@ -209,12 +217,12 @@ def getPickupPage(request):
 
     delivery_man = deliveryMan.objects.all()
 
-    json = {'pending_documents':pending_documents, 'nonpending_documents':nonpending_documents,
-            'today_pickups':today_pickups, 'week_pickups':week_pickups, 'month_pickups':month_pickups,
-            'today_schedule':today_schedule, 'week_schedule':week_schedule, 'month_schedule':month_schedule,
-            'today_picked':today_picked, 'week_picked':week_picked, 'month_picked':month_picked,
-            'today_unpicked':today_unpicked, 'week_unpicked':week_unpicked, 'month_unpicked':month_unpicked,
-            'delivery_man':delivery_man
+    json = {'pending_documents': pending_documents, 'nonpending_documents': nonpending_documents,
+            'today_pickups': today_pickups, 'week_pickups': week_pickups, 'month_pickups': month_pickups,
+            'today_schedule': today_schedule, 'week_schedule': week_schedule, 'month_schedule': month_schedule,
+            'today_picked': today_picked, 'week_picked': week_picked, 'month_picked': month_picked,
+            'today_unpicked': today_unpicked, 'week_unpicked': week_unpicked, 'month_unpicked': month_unpicked,
+            'delivery_man': delivery_man
             }
 
     return render(request, 'pickup.html', json)
@@ -231,6 +239,7 @@ def getClassesPage(request):
             'offeredclass_week': offeredclass_week,
             'offeredclass_month': offeredclass_month}
     return render(request, 'classes.html', json)
+
 
 def getOffersPage(request):
     sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
@@ -260,7 +269,7 @@ def StudentDetail(request, pk):
 
 def addcounselor(request):
     user = request.user
-    form = AddCounselorForm(request.POST, user=user or None)
+    form = AddCounselorForm(request.FILES,request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -276,7 +285,8 @@ def addcounselor(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser, title="New Counselor Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Counselor Creation",
                                         message="New Counselor has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
@@ -308,12 +318,14 @@ def ajaxCallForActivationRole(request):
     reloadPortion = render_to_string('ad-adminsInformation.html', data)
     return HttpResponse(reloadPortion)
 
+
 def ajaxRemovePickupDocument(request):
     docId = request.GET.get('documentID')
-    print("document to delete : "+ docId)
+    print("document to delete : " + docId)
     print(pickupdetails.objects.filter(documentid=docId))
     pickupdetails.objects.filter(id=docId).delete()
     return 1
+
 
 @csrf_exempt
 def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
@@ -341,7 +353,7 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 return JsonResponse({'status': "Error", "Reason": "Not a json data"})
         elif action is not None and operation is not None:
             print("default handle")
-            return handler.handle_request_direct(action,operation,request)
+            return handler.handle_request_direct(action, operation, request)
 
     except Exception:
         # some other error in non json handling

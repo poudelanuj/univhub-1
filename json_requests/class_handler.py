@@ -1,11 +1,12 @@
 from django.http import JsonResponse
 from sadmin.models import *
 
+
 def register_class(request):
     try:
         registeredclass = RegisteredClass(
-            user=User.objects.only('id').get(id=request['user_id']),
-            offeredclass=OfferedClass.objects.only('id').get(id=request['user_id'])
+            user=User.objects.get(id=request['user_id']),
+            offeredclass=OfferedClass.objects.get(id=request['class_id'])
         )
         print(registeredclass.user)
         print(registeredclass.offeredclass)
@@ -21,12 +22,14 @@ def list_class(request):
 
     json = []
     for offerclass in offeredclass:
-        json.append({"name": offerclass.name,
+        regclass = RegisteredClass.objects.filter(offeredclass=offerclass)
+        json.append({"classid": offerclass.id,
+                    "name": offerclass.name,
                       "classtype": offerclass.classtype.title,
                        "startdate": offerclass.startdate,
                        "enddate": offerclass.enddate,
-                      "discountpercent" : offerclass.discountpercent,
-                      "scholarshippercent" : offerclass.scholarshippercent,
+                      "discountpercent": offerclass.discountpercent,
+                      "scholarshippercent": offerclass.scholarshippercent,
                         "tutor": offerclass.tutor.name,
                        "starttime": offerclass.starttime,
                        "endtime": offerclass.endtime,

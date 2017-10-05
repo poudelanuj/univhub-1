@@ -352,6 +352,14 @@ class Offer(models.Model):
         return self.title
 
 
+class RegisteredOffer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'registeredoffer'
+
+
 class NotificationType(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=100)

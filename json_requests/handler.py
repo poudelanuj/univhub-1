@@ -50,7 +50,8 @@ def handle_request_direct(action, operation, request):
         return JsonResponse({"status": "error", "cause": "" + action + " doesn't have operation " + operation})
     try:
         response= action_map[action][operation](request)
+        if response is None:
+            return JsonResponse({"status": "error", "cause": action+"'s "+operation+" handler returned nothing"})
         return response
-
     except Exception as e:
         return JsonResponse({"status": "error", "cause": "Internal Server Error while serving request " + operation})

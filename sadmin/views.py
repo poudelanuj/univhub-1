@@ -287,8 +287,6 @@ def ajaxCallForActivationRole(request):
 def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
     type = request.META.get('CONTENT_TYPE')
     try:
-        # print the details
-        print("Request on jsonHandler")
         print("Raw json data     :", request.body)
         print("Request parameters:", request.content_params)
         if type == 'application/json':
@@ -311,7 +309,8 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 return JsonResponse({'status': "Error", "Reason": "Not a json data"})
         elif action is not None and operation is not None:
             return handler.handle_request_direct(action,operation,request)
-
+        else:
+            return JsonResponse({'status': "Error", "Reason": "Invlid content type"})
     except Exception:
         # some other error in non json handling
         return JsonResponse({'status': "Error", "Reason": "Unknown error"})

@@ -163,15 +163,15 @@ class UserProfile(models.Model):
     mobile = models.IntegerField()
     remember_token = models.CharField(max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
-    scholarship = models.BooleanField()  # apply for scholarship or not ?
+    scholarship = models.BooleanField(default=False)  # apply for scholarship or not ?
     citizenship = models.CharField(max_length=15)
     passport = models.CharField(max_length=15, blank=True, null=True)
 
-    district = models.ForeignKey(District, models.DO_NOTHING)
+    district = models.ForeignKey(District, models.DO_NOTHING,blank=True,null=True)
     apply_for = models.ForeignKey(Country, models.DO_NOTHING)
-    sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
-    apply_type = models.ForeignKey(ApplyType, models.DO_NOTHING, )
-    program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
+    sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING,blank=True,null=True)
+    apply_type = models.ForeignKey(ApplyType, models.DO_NOTHING,blank=True,null=True )
+    program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING,blank=True,null=True)
 
     class Meta:
         db_table = 'user_profile'

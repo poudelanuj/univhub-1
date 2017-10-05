@@ -64,25 +64,7 @@ def getNotificationslist(request):
 
 
 def signup(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-
-            current_site = get_current_site(request)
-            subject = 'Activate your UnivHub Account.'
-            message = render_to_string('acc_active_email.html', {
-                'user': user, 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            # user.email_user(subject, message)
-            toemail = form.cleaned_data.get('email')
-            email = EmailMessage(subject, message, to=[toemail])
-            email.send()
-            return render(request, 'checkemail.html', {'form': form})
-    else:
-        form = SignupForm()
+    form = SignupForm()
     return render(request, 'signup.html', {'form': form})
 
 
@@ -99,8 +81,6 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        m = UserProfile(user=user)
-        m1.save()
         login(request, user)
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
@@ -153,7 +133,7 @@ def addadmin(request):
             print(errors)
             return JsonResponse(errors)
 
-    return JsonResponse(errors)
+    return JsonResponse({'success'"False"})
 
 
 def addmoderator(request):
@@ -181,7 +161,7 @@ def addmoderator(request):
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
-    return JsonResponse(errors)
+    return JsonResponse({'success':False})
 
 
 # todo
@@ -295,7 +275,7 @@ def addcounselor(request):
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
-    return JsonResponse(errors)
+    return JsonResponse({'success':False})
 
 
 def ajaxCallForDeleteRole(request):

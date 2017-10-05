@@ -9,8 +9,8 @@
     <div class="modal-body modal-body-sub_agile">
         <div class="col-md-8 modal_body_left modal_body_left1">
             <h3 class="agileinfo_sign">Sign Up <span>Now</span></h3>
-            <form method="POST" action="">
-                {% csrf_token %}
+            <form method="POST" action="/sadmin/requesthandler/student/signup">
+
                 <table>
                     {{ form.as_table }}
                 </table>
@@ -20,7 +20,7 @@
             </form>
 
             <div class="clearfix"></div>
-            <p>By clicking Sign Up, I agree to your terms</a>
+            <p>By clicking Sign Up, I agree to your terms</p>
 
         </div>
 

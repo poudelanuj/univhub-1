@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render,render_to_response
+from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -41,7 +41,9 @@ def index(request):
 
 
 def getNotificationsPage(request):
-    return render(request, "notifications.html", context={'types': NotificationType.objects.all()})
+    print("size of notification",len(Notification.objects.all()))
+    return render(request, "notifications.html",
+                  context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
 
 
 def StudentDetail(request, pk):
@@ -59,7 +61,8 @@ def getNotifications(request):
 
 def getNotificationslist(request):
     notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
-    return render_to_response('notification_drop.html',{'notifications':notifications})
+    return render_to_response('notification_drop.html', {'notifications': notifications})
+
 
 def signup(request):
     if request.method == 'POST':
@@ -138,7 +141,8 @@ def addadmin(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User,pk=1), sender=newuser, title="New Admin Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Admin Creation",
                                         message="New admin has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
@@ -166,7 +170,8 @@ def addmoderator(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,title="New Moderator Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Moderator Creation",
                                         message="New moderator has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
@@ -245,7 +250,8 @@ def addcounselor(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser, title="New Counselor Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Counselor Creation",
                                         message="New Counselor has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
@@ -293,8 +299,9 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 # if the request is from direct url
                 if action is not None and operation is not None:
                     json_data['action'] = {'data': action, 'operation': operation}
-                response= handler.handle_request(json_data)
-                return response
+                json_data['request']=request
+                return handler.handle_request(json_data)
+
             except Exception as e:
                 # maybe the data is not json.
                 # try other methodse

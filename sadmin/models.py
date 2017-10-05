@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+from django.utils import timezone
 
 # (what to be entered, what to be shown)
 statusTypes = {
@@ -177,21 +178,6 @@ class UserProfile(models.Model):
         db_table = 'user_profile'
 
 
-class Notification(models.Model):
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver',blank=True, null=True)
-    sender = models.ForeignKey(User, related_name='sender',blank=True,null=True)
-    read = models.BooleanField(default=False)
-    title = models.CharField(blank=True, null=True, max_length=50)
-    Type = models.IntegerField(blank=True,null=True)
-    message = models.TextField()
-    created = models.DateTimeField()
-    map_url = models.TextField(blank=True, null=True, )
-    web_url = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'notifications'
-
-
 class AdminProfile(models.Model):
     consultancyName = models.CharField(max_length=30)
     pan_vat = models.CharField(max_length=20)
@@ -204,6 +190,21 @@ class AdminProfile(models.Model):
 
     class Meta:
         db_table = "adminprofile"
+
+
+class Notification(models.Model):
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver', blank=True, null=True)
+    sender = models.ForeignKey(AdminProfile, related_name='sender', blank=True, null=True)
+    read = models.BooleanField(default=False)
+    title = models.CharField(blank=True, null=True, max_length=50)
+    Type = models.IntegerField(blank=True, null=True)
+    message = models.TextField()
+    created = models.DateTimeField()
+    map_url = models.TextField(blank=True, null=True, )
+    web_url = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'notifications'
 
 
 class ModeratorProfile(models.Model):
@@ -307,7 +308,7 @@ class OfferedClass(models.Model):
     location = models.CharField(max_length=100)
     starttime = models.TimeField()
     endtime = models.TimeField()
-    created = models.DateTimeField(default=datetime.datetime.now())
+    created = models.DateTimeField(default=timezone.now())
 
     class Meta:
         db_table = 'offeredclass'

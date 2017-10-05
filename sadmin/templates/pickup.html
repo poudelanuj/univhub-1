@@ -518,7 +518,8 @@
             </div>
             <div class="modal-body">
 
-                <form class="form-horizontal" name="ScheduleDateForm" id="scheduleDateForm"  method="post">
+                <form class="form-horizontal" id="scheduleDateForm">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="delivery_man" class="control-label">Delivery Man:</label>
 
@@ -545,10 +546,11 @@
                 </form>
             </div>
             <div class="pmd-modal-action clearfix">
-                <button data-dismiss="modal" class="btn btn-close pull-right" type="button">Close</button>
-                <button class="btn btn-submit pull-right"  id= "scheduleDataFormButton" data-dismiss="modal" type="submit"  >OK</button>
+                <button data-dismiss="modal" type="button">Close</button>
+                <button class="btn btn-submit pull-right"  id= "scheduleDateButton" data-dismiss="modal" type="submit"  >OK</button>
             </div>
         </div>
     </div>
 </div>
 </div>
+<script type="text/javascript" src="/static/assets/js/pickup_scripts.js"></script>

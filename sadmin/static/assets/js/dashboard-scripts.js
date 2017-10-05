@@ -75,22 +75,21 @@
 				 }
 				});
 				});
+
 		$('#addmoderatorbutton').click(function(){
-
-
-
 			$.ajax({
 				type: 'POST',
 				url: "addmoderator/",
 				data: $("#addmoderatorform").serialize(),
 				success : function(data) {
-
 						$('#add-moderator').modal('toggle');
-
-
 				 }
-});
+                });
 		});
+
+
+
+
 			$('#addadminbutton').click(function(){
 
 
@@ -107,6 +106,7 @@
 				}
 				});
 				});
+
 				$('#addcounselorbutton').click(function(){
 
 

@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.conf.urls import include
 from . import views
 
+
 urlpatterns = [
     url(r'pickup.html', views.getPickupPage),
     url(r'classes.html', views.getClassesPage),
@@ -29,6 +30,6 @@ urlpatterns = [
 
     url(r'^ajax/CallForDeleteRole/$', views.ajaxCallForDeleteRole, name='ajaxCallForDeleteRole'),
     url(r'^ajax/CallForActivationRole/$', views.ajaxCallForActivationRole, name='ajaxCallForActivationRole'),
-
     url(r'^ajax/ajaxRemovePickupDocument/$', views.ajaxRemovePickupDocument, name='ajaxRemovePickupDocument'),
+
 ]

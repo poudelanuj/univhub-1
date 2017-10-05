@@ -23,7 +23,7 @@ from .tokens import account_activation_token
 from django.views.decorators.csrf import csrf_exempt
 
 
-# from fcm_django.models import FCMDevice
+# from fcm_django.models import FCgiMDevice
 
 def informationCenter():
     # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
@@ -104,19 +104,22 @@ def activate(request, uidb64, token):
 
 
 def getStudentslistPage(request):
-    all_students = User.objects.filter(groups=4)
-    paginator = Paginator(all_students, 10)
-    page = request.GET.get('page', 1)  # get page or 1
-    try:
-        students = paginator.page(page)
-        print(students)
-    except PageNotAnInteger:  # if page is not an integer
-        students = paginator.page(1)
-        print("page not an integer")
-    except EmptyPage:  # if the page number goes out of bound
-        students = paginator.page(paginator.num_pages)
-    print(students)
-    return render(request, 'students-list.html')
+    students = User.objects.filter(groups__name="studentGroup")
+    return render(request, 'students-list.html',{'students': students})
+
+    # all_students = User.objects.filter(groups=4)
+    # paginator = Paginator(all_students, 10)
+    # page = request.GET.get('page', 1)  # get page or 1
+    # try:
+    #     students = paginator.page(page)
+    #     print(students)
+    # except PageNotAnInteger:  # if page is not an integer
+    #     students = paginator.page(1)
+    #     print("page not an integer")
+    # except EmptyPage:  # if the page number goes out of bound
+    #     students = paginator.page(paginator.num_pages)
+    # print(students)
+    # return render(request, 'students-list.html')
 
 
 def addadmin(request):
@@ -387,3 +390,12 @@ def passwordchange(request, uidb64, token):
         return HttpResponse('Password is changed')
     else:
         return HttpResponse('Activation link is invalid!')
+
+
+def ajaxscheduledate(request):
+    print("POST data: ")
+    print(request.POST)
+    return None
+
+
+

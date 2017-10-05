@@ -60,6 +60,7 @@ class AddAdminForm(forms.Form):
 
 
 
+
 class AddModeratorForm(forms.Form):
     username = forms.CharField(max_length=25)
     email = forms.EmailField(max_length=200, help_text='Required')

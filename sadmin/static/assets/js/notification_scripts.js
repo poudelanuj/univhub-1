@@ -4,18 +4,24 @@
 //     // put your dependent JS here.
 // })
 
-
+alert("Loaded notification display")
 console.log("Loaded notificaiton_scripts");
 
 function create_notification_upload() {
     var success_function = function (response) {
-        alert(JSON.stringify(response));
+
+        $('#send-notice-modal .btn-submit').attr('data-dismiss','modal');
     }
     server_query(
         'notification',
         'create',
         $("#notification_create_form").serializeObject(),
-        {success: success_function}
+        {success: success_function,
+            error: function(){
+                $('#send-notice-modal .btn-submit').attr('data-dismiss','modal');
+
+            }
+        }
     );
 
 };

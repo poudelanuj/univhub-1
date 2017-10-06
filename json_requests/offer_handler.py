@@ -2,15 +2,15 @@ from django.http import JsonResponse
 from sadmin.models import *
 
 
-def register_class(request):
+def register_offer(request):
     try:
-        registeredclass = RegisteredClass(
-            user=User.objects.only('id').get(id=request['user_id']),
-            offeredclass=OfferedClass.objects.only('id').get(id=request['user_id'])
+        registeredoffer = RegisteredOffer(
+            user=User.objects.get(id=request['user_id']),
+            offer=OfferedClass.objects.get(id=request['offer_id'])
         )
-        print(registeredclass.user)
-        print(registeredclass.offeredclass)
-        registeredclass.save()
+        print(registeredoffer.user)
+        print(registeredoffer.offer)
+        registeredoffer.save()
         return JsonResponse({'success': True})
     except Exception as e:
         print("Caught a Exception", *e.args)
@@ -23,7 +23,8 @@ def list_offer(request):
     # json = {"title":"title"}
     json = []
     for offer in offers:
-        json.append({"title": offer.title,
+        json.append({"offer_id": offer.id,
+                    "title": offer.title,
                       "description": offer.description,
                        "offertype": offer.offertype.title,
                        "offerinclass": None if offer.offerinclass is None else offer.offerinclass.name,

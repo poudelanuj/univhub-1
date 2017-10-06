@@ -304,7 +304,6 @@ class OfferedClass(models.Model):
     price = models.IntegerField()
     discountpercent = models.IntegerField()
     tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
-    scholarshippercent = models.IntegerField()
     location = models.CharField(max_length=100)
     starttime = models.TimeField()
     endtime = models.TimeField()

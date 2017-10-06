@@ -449,7 +449,7 @@ function server_query(data, operation, query, keys) {
         operation: operation
     };
     request = { // create an AJAX call...
-        da  ta: JSON.stringify(query), // get the form data
+        data: JSON.stringify(query), // get the form data
         type: "post", // GET or POST
         contentType: "application/json",
         url: 'jsonhandler.django', // the file to call

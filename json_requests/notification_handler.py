@@ -33,7 +33,7 @@ def filter_notification(request):
         if 'type' in filters:
             if 'duration' in filters:
                 pass
-            filtered = Notification.objects.filter(Type=request['type'])
+            filtered = Notification.objects.filter(type=request['type'])
             return render(request['request'], 'notification_list.html', context={'type': NotificationType.objects.all(), 'notifications': filtered})
         else:
             raise Exception("Duration not specified")
@@ -49,5 +49,10 @@ def detail_notification(request):
         Notification.objects.filter(Type=type)
     except Exception as e:
         print("Exception", *e.args)
-        traceback.print_exc(e);
+        traceback.print_exc(e)
         return JsonResponse({'succes': False, 'Reason': "Error processing data on notification filter"})
+
+
+def live_notification(request):
+    notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
+    return render_to_response('notification_drop.html', {'notifications': notifications})

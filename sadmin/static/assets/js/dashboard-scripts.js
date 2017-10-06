@@ -4,20 +4,19 @@ $(document).ready(function () {
     });
 });
 
-	$(document).ready( function() {
-		// additional scripts for ajax call to update admins information.
-		$('body').on('click','.ajaxCallForDeleteRole', function () {
-			var userId = $(this).val();
-			$.ajax({
-				url: "ajax/CallForDeleteRole/",
-				data: {'userId':userId},
-				success:
-					function (data)
-					{
-						$('#admininformations').html(data);
-					}
-				});
-		});
+$(document).ready(function () {
+    // additional scripts for ajax call to update admins information.
+    $('body').on('click', '.ajaxCallForDeleteRole', function () {
+        var userId = $(this).val();
+        $.ajax({
+            url: "ajax/CallForDeleteRole/",
+            data: {'userId': userId},
+            success:
+                function (data) {
+                    $('#admininformations').html(data);
+                }
+        });
+    });
 
 
     $('.ajaxCallForActivationRole').click(function () {
@@ -34,7 +33,7 @@ $(document).ready(function () {
 
 
     // remove documents from pickup
-    $('.ajaxRemovePickupDocument').click( function () {
+    $('.ajaxRemovePickupDocument').click(function () {
         var documentID = $(this).val();
         $.ajax({
             url: "ajax/ajaxRemovePickupDocument/",
@@ -48,7 +47,7 @@ $(document).ready(function () {
     setInterval(function () {
         $.ajax({
 
-            url: "getnotifications/",
+            url: "requesthandler/notification/live/",
             dataType: 'json',
             success: function (data) {
 
@@ -444,33 +443,30 @@ $(document).ready(function () {
 
 })(jQuery);
 
-function server_query(data,operation,query,keys){
-	query['action']={
-		data:data,
-		operation:operation
-	}
-	request={ // create an AJAX call...
-        data:JSON.stringify(query)  , // get the form data
+function server_query(data, operation, query, keys) {
+    query['action'] = {
+        data: data,
+        operation: operation
+    };
+    request = { // create an AJAX call...
+        da  ta: JSON.stringify(query), // get the form data
         type: "post", // GET or POST
         contentType: "application/json",
         url: 'jsonhandler.django', // the file to call
     }
-    request = Object.assign(keys, request)
+    request = Object.assign(keys, request);
     $.ajax(request)
+}
 
-     }
-     request=Object.assign(keys,request)
-	$.ajax(request)
-};
-
-function add_registered_class(){
-	server_query(
-			'class',
-			'register',
-			{user_id:1,class_id:1},
-			{success: function(response){
-			        alert(JSON.stringify(response))
-			    }
-			}
-		);
+function add_registered_class() {
+    server_query(
+        'class',
+        'register',
+        {user_id: 1, class_id: 1},
+        {
+            success: function (response) {
+                alert(JSON.stringify(response))
+            }
+        }
+    );
 };

@@ -19,7 +19,7 @@ class AdminProfile(models.Model):
     website = models.CharField(max_length=50)
     phone = models.IntegerField()
     description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="admin_user_profile")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
 
     class Meta:
         db_table = 'adminprofile'
@@ -43,7 +43,7 @@ class CounselorProfile(models.Model):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="counselor_user_profile")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
 
     class Meta:
         db_table = 'counselor_profile'
@@ -389,8 +389,16 @@ class UserProfile(models.Model):
         db_table = 'user_profile'
 
 
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-# the table references for
+# -----------------------------------------------------------------
+# -----------------------------------------------------------------
+# -----------------------------------------------------------------
+# -----------------------------------------------------------------
+# the table references for the database views
+
+class UniversityBasicInfo(University):
+    title = models.CharField(max_length=250)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed=False
+        db_table = 'university_basic_info'

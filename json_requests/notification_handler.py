@@ -45,7 +45,6 @@ def filter_notification(request):
 
 def detail_notification(request):
     try:
-
         Notification.objects.filter(Type=type)
     except Exception as e:
         print("Exception", *e.args)

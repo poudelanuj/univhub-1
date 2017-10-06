@@ -438,12 +438,9 @@ $(document).ready(function () {
             }
             json = $.extend(true, json, merge);
         });
-
         return json;
     };
-
 })(jQuery);
-
 function server_query(data,operation,query,keys){
 	query['action']={
 		data:data,
@@ -467,7 +464,19 @@ function add_registered_class(){
 	server_query(
 			'class',
 			'register',
-			{user_id:1,class_id:1},
+			{user_id:1,class_id:3},
+			{success: function(response){
+			        alert(JSON.stringify(response))
+			    }
+			}
+		);
+};
+
+function add_registered_offer(){
+	server_query(
+			'offer',
+			'register',
+			{user_id:1, offer_id:1},
 			{success: function(response){
 			        alert(JSON.stringify(response))
 			    }

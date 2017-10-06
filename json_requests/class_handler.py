@@ -18,12 +18,20 @@ def register_class(request):
         return JsonResponse({'success': False, 'Reason': "Error processing data"})
 
 
+def status(offerclass):
+    registeredclass = RegisteredClass.objects.all()
+
+    if registeredclass.filter(offeredclass=offerclass).exists():
+        return "Registered"
+    else:
+        return "Register"
+
+
 def list_class(request):
     offeredclass = OfferedClass.objects.all()
 
     json = []
     for offerclass in offeredclass:
-        regclass = RegisteredClass.objects.filter(offeredclass=offerclass)
         json.append({"class_id": offerclass.id,
                     "name": offerclass.name,
                       "classtype": offerclass.classtype.title,
@@ -34,7 +42,8 @@ def list_class(request):
                        "starttime": offerclass.starttime,
                        "endtime": offerclass.endtime,
                         "location": offerclass.location,
-                     "status": "Register"})
+                     "status": status(offerclass)
+                     })
  
     return JsonResponse(json, safe=False);
 

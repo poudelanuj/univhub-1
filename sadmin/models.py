@@ -38,6 +38,9 @@ class ClassType(models.Model):
     class Meta:
         db_table = 'classtype'
 
+    def __str__(self):
+        return self.title
+
 
 class CounselorProfile(models.Model):
     mobile = models.IntegerField()
@@ -69,6 +72,9 @@ class District(models.Model):
 
     class Meta:
         db_table = 'district'
+
+    def __str__(self):
+        return self.districtname
 
 
 class DocumentFor(models.Model):
@@ -105,6 +111,9 @@ class Major(models.Model):
 
     class Meta:
         db_table = 'major'
+
+    def __str__(self):
+        return self.major_name
 
 
 class ModeratorProfile(models.Model):
@@ -184,6 +193,9 @@ class OfferType(models.Model):
     class Meta:
         db_table = 'offer_type'
 
+    def __str__(self):
+        return self.title
+
 
 class Pickup(models.Model):
     pickup_date = models.DateField()
@@ -226,7 +238,7 @@ class Ranking(models.Model):
 
 
 class RegisteredClass(models.Model):
-    offeredclass_id = models.IntegerField()
+    offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -348,6 +360,9 @@ class University(models.Model):
 
     class Meta:
         db_table = 'universities'
+
+    def __str__(self):
+        return self.name
 
 
 class UniversityContent(models.Model):

@@ -197,32 +197,7 @@ $(document).ready(function () {
 
     $('.aside_offers').click(function () {
         $("#content").load('offers.html', function () {
-            var datetimepickerStyles = "/static/assets/css/bootstrap-datetimepicker.css";
-            var pmddatetimepickerStyles = "/static/assets/css/pmd-datetimepicker.css";
-            $.get(datetimepickerStyles, function (css) {
-                $('<style type="text/css"></style>')
-                    .html(css)
-                    .appendTo("head");
-            });
-            $.get(pmddatetimepickerStyles, function (css) {
-                $('<style type="text/css"></style>')
-                    .html(css)
-                    .appendTo("head");
-            });
 
-            $.getScript('/static/assets/js/propeller.js');
-            $.getScript('/static/assets/js/moment-with-locales.js');
-            $.getScript('/static/assets/js/bootstrap-datetimepicker.js', function () {
-                $('#datepicker').datetimepicker({
-                    format: 'DD/MM/YYYY'
-                });
-                $('#timepicker').datetimepicker({
-                    format: 'LT'
-                });
-                $(".pickup .pick-up-tab-content .included_docs span del").click(function () {
-                    $(this).parent().remove();
-                })
-            });
         });
     });
 
@@ -443,6 +418,7 @@ $(document).ready(function () {
 
 })(jQuery);
 
+
 function server_query(data, operation, query, keys) {
     query['action'] = {
         data: data,
@@ -462,7 +438,7 @@ function add_registered_class(){
 	server_query(
 			'class',
 			'register',
-			{user_id:1,class_id:3},
+			{user_id:1,class_id:1},
 			{success: function(response){
 			        alert(JSON.stringify(response))
 			    }

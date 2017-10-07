@@ -392,10 +392,5 @@ def passwordchange(request, uidb64, token):
         return HttpResponse('Activation link is invalid!')
 
 
-def ajaxscheduledate(request):
-    print("POST data: ")
-    print(request.POST)
-    return None
-
 
 

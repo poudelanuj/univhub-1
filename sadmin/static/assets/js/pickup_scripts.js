@@ -1,22 +1,20 @@
-  console.log("pickup_js loaded");
+
 
 $('#scheduleDateButton').click(function(){
 
-alert("check");
-//    server_query(
-//        'pickup',
-//        'schedule',
-//        $("#scheduleDateForm").serializeObject(),
-//        {success:function(response){
-//            alert(JSON.stringify(response));
-//        }}
-//    )
-    $.ajax({
-        type: 'POST',
-        url: "ajaxscheduledate/",
-        data: $("#scheduleDateForm").serialize(),
-        success : function(data) {
+alert("called here");
+//    $.ajax({
+//        type: 'POST',
+//        url: "/sadmin/requesthandler/pickup/scheduledate/",
+//        data: $("#scheduleDateForm").serialize(),
+//        success :
+//        });
+//});
+server_query('pickup','scheduledate',
+    $("#scheduleDateForm").serializeObject(),
+    {success:
+        function(data) {
                 $('#schedule-date').modal('toggle');
          }
-        });
-});
+     }
+)

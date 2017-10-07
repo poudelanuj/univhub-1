@@ -19,7 +19,7 @@ class AdminProfile(models.Model):
     website = models.CharField(max_length=50)
     phone = models.IntegerField()
     description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="admin_user_profile")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
 
     class Meta:
         db_table = 'adminprofile'
@@ -38,15 +38,12 @@ class ClassType(models.Model):
     class Meta:
         db_table = 'classtype'
 
-    def __str__(self):
-        return self.title
-
 
 class CounselorProfile(models.Model):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="counselor_user_profile")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
 
     class Meta:
         db_table = 'counselor_profile'
@@ -72,9 +69,6 @@ class District(models.Model):
 
     class Meta:
         db_table = 'district'
-
-    def __str__(self):
-        return self.districtname
 
 
 class DocumentFor(models.Model):
@@ -112,9 +106,6 @@ class Major(models.Model):
     class Meta:
         db_table = 'major'
 
-    def __str__(self):
-        return self.major_name
-
 
 class ModeratorProfile(models.Model):
     mobile = models.IntegerField()
@@ -142,8 +133,8 @@ class Notification(models.Model):
     created = models.DateTimeField()
     map_url = models.TextField(blank=True, null=True)
     web_url = models.TextField(blank=True, null=True)
-    receiver_id = models.IntegerField(blank=True, null=True)
-    sender_id = models.IntegerField(blank=True, null=True)
+    receiver = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_receiver')
+    sender = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_sender')
 
     class Meta:
         db_table = 'notification'
@@ -163,9 +154,6 @@ class Offer(models.Model):
     class Meta:
         db_table = 'offer'
 
-    def __str__(self):
-        return self.title
-
 
 class OfferedClass(models.Model):
     name = models.CharField(max_length=100)
@@ -173,6 +161,7 @@ class OfferedClass(models.Model):
     enddate = models.DateField()
     price = models.IntegerField()
     discountpercent = models.IntegerField()
+    scholarshippercent = models.IntegerField()
     location = models.CharField(max_length=100)
     starttime = models.TimeField()
     endtime = models.TimeField()
@@ -181,20 +170,14 @@ class OfferedClass(models.Model):
     tutor = models.ForeignKey('Tutor', models.DO_NOTHING)
 
     class Meta:
-        db_table = 'offered_class'
-
-    def __str__(self):
-        return self.name
+        db_table = 'offeredclass'
 
 
 class OfferType(models.Model):
     title = models.CharField(max_length=50)
 
     class Meta:
-        db_table = 'offer_type'
-
-    def __str__(self):
-        return self.title
+        db_table = 'offertype'
 
 
 class Pickup(models.Model):
@@ -224,7 +207,7 @@ class ProgramsOffered(models.Model):
     programoffered = models.CharField(max_length=20)  # Field name made lowercase.
 
     class Meta:
-        db_table = 'programs_offered'
+        db_table = 'programsoffered'
 
 
 class Ranking(models.Model):
@@ -238,18 +221,11 @@ class Ranking(models.Model):
 
 
 class RegisteredClass(models.Model):
-    offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
+    offeredclass_id = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'registered_class'
-
-class RegisteredOffer(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'registered_offer'
 
 
 class ReqMap(models.Model):
@@ -272,17 +248,6 @@ class Requirements(models.Model):
         db_table = 'requirements'
 
 
-
-class RequirementBySubject(models.Model):
-    u = models.ForeignKey('University', models.DO_NOTHING)
-    r_id = models.IntegerField()
-    sub = models.ForeignKey('Requirements', models.DO_NOTHING)
-    requirement_description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'requirement_by_subject'
-
-
 class Scheduledpickup(models.Model):
     deliverydate = models.DateField()
     deliverytime = models.TimeField()
@@ -291,7 +256,7 @@ class Scheduledpickup(models.Model):
     pickup = models.ForeignKey(Pickup, models.DO_NOTHING)
 
     class Meta:
-        db_table = 'scheduled_pickup'
+        db_table = 'scheduledpickup'
 
 
 class SubHeader(models.Model):
@@ -324,6 +289,17 @@ class Subjects(models.Model):
 
     class Meta:
         db_table = 'subjects'
+
+
+class RequirementBySubject(models.Model):
+    u = models.ForeignKey('University', models.DO_NOTHING)
+    r_id = models.IntegerField()
+    sub = models.ForeignKey('Requirements', models.DO_NOTHING)
+    requirement_description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'requirement_by_subject'
+
 
 class Tutor(models.Model):
     name = models.CharField(max_length=200)
@@ -360,9 +336,6 @@ class University(models.Model):
 
     class Meta:
         db_table = 'universities'
-
-    def __str__(self):
-        return self.name
 
 
 class UniversityContent(models.Model):
@@ -416,8 +389,16 @@ class UserProfile(models.Model):
         db_table = 'user_profile'
 
 
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-# the table references for
+# -----------------------------------------------------------------
+# -----------------------------------------------------------------
+# -----------------------------------------------------------------
+# -----------------------------------------------------------------
+# the table references for the database views
+
+class UniversityBasicInfo(University):
+    title = models.CharField(max_length=250)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'university_basic_info'

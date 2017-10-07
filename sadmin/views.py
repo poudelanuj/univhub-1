@@ -21,6 +21,9 @@ from .models import *
 from .tokens import account_activation_token
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import datetime
+import traceback
+
+
 # from fcm_django.models import FCMDevice
 
 def informationCenter():
@@ -40,7 +43,7 @@ def index(request):
 
 
 def getNotificationsPage(request):
-    print("size of notification",len(Notification.objects.all()))
+    print("size of notification", len(Notification.objects.all()))
     return render(request, "notifications.html",
                   context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
 
@@ -56,6 +59,7 @@ def getNotifications(request):
     user = request.user
     data = {'notifycount': Notification.objects.filter(receiver=user).count()}
     return JsonResponse(data)
+
 
 def signup(request):
     if request.method == 'POST':
@@ -199,7 +203,6 @@ def getClassesPage(request):
 
 
 def getOffersPage(request):
-
     sunday = datetime.now() - datetime.timedelta(days=datetime.now().weekday() + 1)
     all_offertypes = OfferType.objects.all()
     print(datetime.now().day)
@@ -282,9 +285,6 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
     type = request.META.get('CONTENT_TYPE')
     try:
         # print the details
-        print("Request on jsonHandler")
-        print("Raw json data     :", request.body)
-        print("Request parameters:", request.content_params)
         if type == 'application/json':
             try:
                 # try to convert body into json object
@@ -293,7 +293,7 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 # if the request is from direct url
                 if action is not None and operation is not None:
                     json_data['action'] = {'data': action, 'operation': operation}
-                json_data['request']=request
+                json_data['request'] = request
                 return handler.handle_request(json_data)
 
             except Exception as e:
@@ -301,14 +301,22 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 # try other methodse
                 print(request.POST)
                 print(request.GET)
+                response = JsonResponse(
+                    {'status': "Error", "Reason": "Json Encryption on data failed. Invalid data sent"})
+                response.status_code = 300
+                return response
 
-                return JsonResponse({'status': "Error", "Reason": "Not a json data"})
         elif action is not None and operation is not None:
-            return handler.handle_request_direct(action,operation,request)
-
-    except Exception:
-        # some other error in non json handling
-        return JsonResponse({'status': "Error", "Reason": "Unknown error"})
+            return handler.handle_request_direct(action, operation, request)
+        else:
+            response = JsonResponse({'status': "Error", "Reason": "Invalid content type on jsonHandler"})
+            response.status_code = 404
+            return response
+    except Exception as e:
+        print("Unaspected")
+        response = JsonResponse({'status': "Error", "Reason": "Internal Server Error on json/request Handler"})
+        response.status_code = 500
+        return response
 
 
 def ajaxRemovePickupDocument(request):
@@ -317,7 +325,7 @@ def ajaxRemovePickupDocument(request):
     print(PickupDetail.objects.filter(documentid=docId))
     # PickupDetail.objects.filter(documentid=docId).delete()
     all_Pickups = Pickup.objects.filter(status="pending")
-    
+
     all_documents = PickupDetail.objects.filter(Pickupid__in=all_Pickups)
     json = {'all_Pickups': all_Pickups, 'all_documents': all_documents}
     reloadPortion = render_to_string('Pickup.html', json)

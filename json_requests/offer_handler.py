@@ -21,7 +21,7 @@ def status(offer):
     registeredoffer = RegisteredOffer.objects.all()
     offertype = offer.offertype.id
 
-    if offertype is 1:
+    if offertype is 3:
         if registeredoffer.filter(offer=offer).exists():
             return "Registered"
         else:

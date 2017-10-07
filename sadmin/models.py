@@ -83,12 +83,19 @@ class DocumentFor(models.Model):
     class Meta:
         db_table = 'document_for'
 
+    def __str__(self):
+        return self.documentforname
+
 
 class DocumentType(models.Model):
     name = models.CharField(max_length=30)
+    documentfor = models.ForeignKey('DocumentFor', models.DO_NOTHING)
 
     class Meta:
         db_table = 'document_type'
+
+    def __str__(self):
+        return self.name
 
 
 class Header(models.Model):
@@ -324,6 +331,7 @@ class Subjects(models.Model):
 
     class Meta:
         db_table = 'subjects'
+
 
 class Tutor(models.Model):
     name = models.CharField(max_length=200)

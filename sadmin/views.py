@@ -1,5 +1,6 @@
 import json
-from datetime import datetime as dat
+import datetime
+
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.handlers import wsgi
@@ -12,6 +13,7 @@ from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views.decorators.csrf import csrf_exempt
 
 from json_requests import handler
 # Create your views here.
@@ -56,27 +58,18 @@ def getNotifications(request):
     return JsonResponse(data)
 
 
-def signup(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            user = form.save()
+def getNotificationslist(request):
+    notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
+    return render_to_response('notification_drop.html', {'notifications': notifications})
 
-            current_site = get_current_site(request)
-            subject = 'Activate your UnivHub Account.'
-            message = render_to_string('acc_active_email.html', {
-                'user': user, 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            # user.email_user(subject, message)
-            toemail = form.cleaned_data.get('email')
-            email = EmailMessage(subject, message, to=[toemail])
-            email.send()
-            return render(request, 'checkemail.html', {'form': form})
-    else:
-        form = SignupForm()
+
+def signup(request):
+    form = SignupForm()
     return render(request, 'signup.html', {'form': form})
+
+
+def showdocumentuploadtest(request):
+    return render(request, 'documentupload.html')
 
 
 def activate(request, uidb64, token):
@@ -88,8 +81,6 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        m = UserProfile(user=user)
-        m.save()
         login(request, user)
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
@@ -117,14 +108,11 @@ def getStudentslistPage(request):
 
 
 def addadmin(request):
-    errors=[]
-    form = AddAdminForm(request.POST or None)
+    form = AddAdminForm(request.POST,request.FILES)
     if request.method == 'POST':
         if form.is_valid():
-            print("form valid")
             newuser = form.save()
-            print("form valid 2")
-
+            print("add here")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             current_site = get_current_site(request)
@@ -142,16 +130,17 @@ def addadmin(request):
                                         message="New admin has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
+            print("form invalid")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
+            print(errors)
             return JsonResponse(errors)
 
-    return JsonResponse(errors)
+    return JsonResponse({'success'"False"})
 
 
 def addmoderator(request):
-    errors = []
-    form = AddModeratorForm(request.POST or None)
+    form = AddModeratorForm(request.POST,request.FILES or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -175,11 +164,11 @@ def addmoderator(request):
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
-    return JsonResponse(errors)
+    return JsonResponse({'success':False})
 
 
-#todo
-#remove change is_pending to False once the pickup is marked as scheduled.
+# todo
+# remove change is_pending to False once the pickup is marked as scheduled.
 
 def getPickupPage(request):
     sunday = datetime.now() - dat.timedelta(days=datetime.date.today().weekday() + 1)
@@ -233,6 +222,7 @@ def getClassesPage(request):
             'offeredclass_month': offeredclass_month}
     return render(request, 'classes.html', json)
 
+
 def getOffersPage(request):
     sunday = datetime.now() - datetime.timedelta(days=datetime.now().weekday() + 1)
     all_offertypes = OfferType.objects.all()
@@ -262,7 +252,7 @@ def StudentDetail(request, pk):
 
 def addcounselor(request):
     user = request.user
-    form = AddCounselorForm(request.POST, user=user or None)
+    form = AddCounselorForm(request.FILES,request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -288,7 +278,7 @@ def addcounselor(request):
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
-    return JsonResponse(errors)
+    return JsonResponse({'success':False})
 
 
 def ajaxCallForDeleteRole(request):
@@ -311,6 +301,7 @@ def ajaxCallForActivationRole(request):
     reloadPortion = render_to_string('ad-adminsInformation.html', data)
     return HttpResponse(reloadPortion)
 
+
 def ajaxRemovePickupDocument(request):
     print("check")
     docId = request.GET.get('documentID')
@@ -318,6 +309,7 @@ def ajaxRemovePickupDocument(request):
     print(PickupDetail.objects.filter(documentid=docId))
     PickupDetail.objects.filter(id=docId).delete()
     return 1
+
 
 @csrf_exempt
 def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):

@@ -9,18 +9,18 @@
     <div class="modal-body modal-body-sub_agile">
         <div class="col-md-8 modal_body_left modal_body_left1">
             <h3 class="agileinfo_sign">Sign Up <span>Now</span></h3>
-            <form method="POST" action="/sadmin/requesthandler/student/signup">
+            <form method="POST" action="/sadmin/requesthandler/document/upload" enctype="multipart/form-data">
 
-                <table>
-                    {{ form.as_table }}
-                </table>
+                <input type="text" name="doctype"/>.
+                <input type="text" name="docname"/>.
+                <input type="file" name="file"/>.
 
                 <input type="submit" value="Sign Up">
 
             </form>
 
             <div class="clearfix"></div>
-            <p>By clicking Sign Up, I agree to your terms</p>
+            <p>By clicking Sign Up, I agree to your terms</a>
 
         </div>
 

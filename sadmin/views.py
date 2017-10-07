@@ -119,6 +119,7 @@ def getStudentslistPage(request):
 
 
 def addadmin(request):
+    errors=[]
     form = AddAdminForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -151,6 +152,7 @@ def addadmin(request):
 
 
 def addmoderator(request):
+    errors = []
     form = AddModeratorForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -184,31 +186,31 @@ def addmoderator(request):
 def getPickupPage(request):
     sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
 
-    pending_pickups = pickup.objects.filter(is_pending=True) #all pending pickups
-    pending_documents = pickupdetails.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
-    nonpending_pickups =  pickup.objects.filter(is_pending=False)
-    nonpending_documents = pickupdetails.objects.filter(pickupid__in=nonpending_pickups)
+    pending_pickups = Pickup.objects.filter(is_pending=True) #all pending pickups
+    pending_documents = PickupDetail.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
+    nonpending_pickups =  Pickup.objects.filter(is_pending=False)
+    nonpending_documents = PickupDetail.objects.filter(pickupid__in=nonpending_pickups)
 
     today_pickups = pending_pickups.filter(created_date__day=datetime.date.today().day)
     week_pickups = pending_pickups.filter(created_date__gte=sunday)
     month_pickups = pending_pickups.filter(created_date__month=datetime.date.today().month)
 
-    scheduled_pickup = scheduledpickup.objects.exclude(is_picked=True).exclude(is_picked=False)
+    scheduled_pickup = Scheduledpickup.objects.exclude(is_picked=True).exclude(is_picked=False)
     today_schedule = scheduled_pickup.filter(deliverydate__day=datetime.date.today().day)
     week_schedule = scheduled_pickup.filter(deliverydate__gte=sunday)
     month_schedule = scheduled_pickup.filter(deliverydate__month=datetime.date.today().month)
 
-    picked = scheduledpickup.objects.filter(is_picked=1)
+    picked = Scheduledpickup.objects.filter(is_picked=1)
     today_picked = picked.filter(deliverydate__day=datetime.date.today().day)
     week_picked = picked.filter(deliverydate__gte=sunday)
     month_picked = picked.filter(deliverydate__month=datetime.date.today().month)
 
-    unpicked = scheduledpickup.objects.filter(is_picked=0)
+    unpicked = Scheduledpickup.objects.filter(is_picked=0)
     today_unpicked = unpicked.filter(deliverydate__day=datetime.date.today().day)
     week_unpicked = unpicked.filter(deliverydate__gte=sunday)
     month_unpicked = unpicked.filter(deliverydate__month=datetime.date.today().month)
 
-    delivery_man = deliveryMan.objects.all()
+    delivery_man = Deliveryman.objects.all()
 
     json = {'pending_documents':pending_documents, 'nonpending_documents':nonpending_documents,
             'today_pickups':today_pickups, 'week_pickups':week_pickups, 'month_pickups':month_pickups,
@@ -316,8 +318,8 @@ def ajaxRemovePickupDocument(request):
     print("check")
     docId = request.GET.get('documentID')
     print("document to delete : "+ docId)
-    print(pickupdetails.objects.filter(documentid=docId))
-    pickupdetails.objects.filter(id=docId).delete()
+    print(PickupDetail.objects.filter(documentid=docId))
+    PickupDetail.objects.filter(id=docId).delete()
     return 1
 
 @csrf_exempt

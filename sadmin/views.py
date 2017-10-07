@@ -171,7 +171,8 @@ def addmoderator(request):
 # remove change is_pending to False once the pickup is marked as scheduled.
 
 def getPickupPage(request):
-    sunday = datetime.now() - dat.timedelta(days=datetime.date.today().weekday() + 1)
+    now=datetime.now()
+    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
 
     pending_pickups = Pickup.objects.filter(is_pending=True) #all pending pickups
     pending_documents = PickupDetail.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
@@ -211,7 +212,8 @@ def getPickupPage(request):
 
 
 def getClassesPage(request):
-    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    now=datetime.now()
+    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
     all_classtypes = ClassType.objects.all()
     offeredclass_today = OfferedClass.objects.filter(created__day=datetime.datetime.now().day)
     offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
@@ -224,7 +226,8 @@ def getClassesPage(request):
 
 
 def getOffersPage(request):
-    sunday = datetime.now() - datetime.timedelta(days=datetime.now().weekday() + 1)
+    now=datetime.now()
+    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
     all_offertypes = OfferType.objects.all()
     print(datetime.now().day)
     print(datetime.now().month)

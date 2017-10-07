@@ -4,15 +4,10 @@ from django.views import View
 from django.http import JsonResponse, HttpResponseRedirect, QueryDict
 from django.views.generic.edit import FormView
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,login
 from django import forms
 from sadmin.models import AdminProfile
 import json
-
-
-# Create your views here.
-def login(request):
-    pass;
 
 
 class LoginView(FormView):
@@ -29,9 +24,12 @@ class LoginView(FormView):
     template_name = 'auth_login_form.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'auth_login_form.html');
+        if not request.user.is_anonymous():
+            return redirect('/sadmin/admin-dashboard.html')
+        return render(request, 'auth_login_form.html')
 
     def post(self, request, *args, **kwargs):
+
         content_type = request.META.get('CONTENT_TYPE')
         print(content_type)
         if content_type == 'application/json':
@@ -54,7 +52,10 @@ class LoginView(FormView):
             else:
                 return redirect('/login.django')
         else:
+            login(request,user)
+            print("session created")
             print(user, type(user))
+           # print(user.sessions,type(user.sessions))
             if content_type == 'application/json':
                 print("json response")
                 return JsonResponse({'success': True, 'home': '/sadmin/admin-dashboard.html'})

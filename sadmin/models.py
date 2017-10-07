@@ -133,8 +133,8 @@ class Notification(models.Model):
     created = models.DateTimeField()
     map_url = models.TextField(blank=True, null=True)
     web_url = models.TextField(blank=True, null=True)
-    receiver_id = models.IntegerField(blank=True, null=True)
-    sender_id = models.IntegerField(blank=True, null=True)
+    receiver = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_receiver')
+    sender = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_sender')
 
     class Meta:
         db_table = 'notification'
@@ -400,5 +400,5 @@ class UniversityBasicInfo(University):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed=False
+        managed = False
         db_table = 'university_basic_info'

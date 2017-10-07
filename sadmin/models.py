@@ -38,6 +38,9 @@ class ClassType(models.Model):
     class Meta:
         db_table = 'classtype'
 
+    def __str__(self):
+        return self.title
+
 
 class CounselorProfile(models.Model):
     mobile = models.IntegerField()
@@ -69,6 +72,9 @@ class District(models.Model):
 
     class Meta:
         db_table = 'district'
+
+    def __str__(self):
+        return self.districtname
 
 
 class DocumentFor(models.Model):
@@ -105,6 +111,9 @@ class Major(models.Model):
 
     class Meta:
         db_table = 'major'
+
+    def __str__(self):
+        return self.major_name
 
 
 class ModeratorProfile(models.Model):
@@ -154,6 +163,9 @@ class Offer(models.Model):
     class Meta:
         db_table = 'offer'
 
+    def __str__(self):
+        return self.title
+
 
 class OfferedClass(models.Model):
     name = models.CharField(max_length=100)
@@ -161,7 +173,6 @@ class OfferedClass(models.Model):
     enddate = models.DateField()
     price = models.IntegerField()
     discountpercent = models.IntegerField()
-    scholarshippercent = models.IntegerField()
     location = models.CharField(max_length=100)
     starttime = models.TimeField()
     endtime = models.TimeField()
@@ -170,14 +181,20 @@ class OfferedClass(models.Model):
     tutor = models.ForeignKey('Tutor', models.DO_NOTHING)
 
     class Meta:
-        db_table = 'offeredclass'
+        db_table = 'offered_class'
+
+    def __str__(self):
+        return self.name
 
 
 class OfferType(models.Model):
     title = models.CharField(max_length=50)
 
     class Meta:
-        db_table = 'offertype'
+        db_table = 'offer_type'
+
+    def __str__(self):
+        return self.title
 
 
 class Pickup(models.Model):
@@ -207,7 +224,7 @@ class ProgramsOffered(models.Model):
     programoffered = models.CharField(max_length=20)  # Field name made lowercase.
 
     class Meta:
-        db_table = 'programsoffered'
+        db_table = 'programs_offered'
 
 
 class Ranking(models.Model):
@@ -221,11 +238,19 @@ class Ranking(models.Model):
 
 
 class RegisteredClass(models.Model):
-    offeredclass_id = models.IntegerField()
+    offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'registered_class'
+
+
+class RegisteredOffer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'registered_offer'
 
 
 class ReqMap(models.Model):
@@ -248,6 +273,17 @@ class Requirements(models.Model):
         db_table = 'requirements'
 
 
+
+class RequirementBySubject(models.Model):
+    u = models.ForeignKey('University', models.DO_NOTHING)
+    r_id = models.IntegerField()
+    sub = models.ForeignKey('Requirements', models.DO_NOTHING)
+    requirement_description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'requirement_by_subject'
+
+
 class Scheduledpickup(models.Model):
     deliverydate = models.DateField()
     deliverytime = models.TimeField()
@@ -256,7 +292,7 @@ class Scheduledpickup(models.Model):
     pickup = models.ForeignKey(Pickup, models.DO_NOTHING)
 
     class Meta:
-        db_table = 'scheduledpickup'
+        db_table = 'scheduled_pickup'
 
 
 class SubHeader(models.Model):
@@ -289,17 +325,6 @@ class Subjects(models.Model):
 
     class Meta:
         db_table = 'subjects'
-
-
-class RequirementBySubject(models.Model):
-    u = models.ForeignKey('University', models.DO_NOTHING)
-    r_id = models.IntegerField()
-    sub = models.ForeignKey('Requirements', models.DO_NOTHING)
-    requirement_description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'requirement_by_subject'
-
 
 class Tutor(models.Model):
     name = models.CharField(max_length=200)
@@ -336,6 +361,9 @@ class University(models.Model):
 
     class Meta:
         db_table = 'universities'
+
+    def __str__(self):
+        return self.name
 
 
 class UniversityContent(models.Model):
@@ -389,16 +417,8 @@ class UserProfile(models.Model):
         db_table = 'user_profile'
 
 
-# -----------------------------------------------------------------
-# -----------------------------------------------------------------
-# -----------------------------------------------------------------
-# -----------------------------------------------------------------
-# the table references for the database views
-
-class UniversityBasicInfo(University):
-    title = models.CharField(max_length=250)
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'university_basic_info'
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+#-----------------------------------------------------------------
+# the table references for

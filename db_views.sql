@@ -70,3 +70,13 @@ INSERT INTO `univhub`.`req_map` (`hash_id`, `level_id`, `req_id`, `submajor_id`,
 INSERT INTO `univhub`.`req_map` (`hash_id`, `level_id`, `req_id`, `submajor_id`, `u_id`) VALUES ('2', '1', '1', '2', '1');
 INSERT INTO `univhub`.`req_map` (`hash_id`, `level_id`, `req_id`, `submajor_id`, `u_id`) VALUES ('3', '1', '1', '5', '1');
 INSERT INTO `univhub`.`req_map` (`hash_id`, `level_id`, `req_id`, `submajor_id`, `u_id`) VALUES ('4', '1', '1', '5', '2');
+
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('1', 'Class Registration', 'A new student registered for class');
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('2', 'Complete Profile Request', 'Profile completed');
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('3', 'Document Upload Request', '3');
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('4', 'Document Received', '4');
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('5', 'Document Verified', '5');
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('6', 'Document Unverified', '6');
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('7', 'Organizing Event', '7');
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('8', 'Visit Web Site Request', '8');
+INSERT INTO `unihubed_django`.`notification_type` (`id`, `title`, `description`) VALUES ('9', 'Others', '9');

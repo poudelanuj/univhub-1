@@ -203,7 +203,6 @@ class Pickup(models.Model):
     location = models.CharField(max_length=50)
     is_pending = models.IntegerField()
     created_date = models.DateField()
-    # TODO: this field was not in the last commit
     document_for = models.ForeignKey('DocumentType', models.DO_NOTHING)
 
     pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)

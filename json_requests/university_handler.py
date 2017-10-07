@@ -5,7 +5,7 @@ from sadmin.models import UniversityRequirement
 
 from django.db import models
 from sadmin.models import *;
-from sadmin.models import UniversityBasicInfo
+# from sadmin.models import UniversityBasicInfo
 
 from django.http import JsonResponse
 

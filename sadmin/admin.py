@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import *
 
-
 admin.site.register(District)
 admin.site.register(ApplyType)
 admin.site.register(ProgramsOffered)
@@ -24,5 +23,4 @@ admin.site.register(Deliveryman)
 admin.site.register(DocumentType)
 admin.site.register(DocumentFor)
 admin.site.register(UploadedDocument)
-admin.site.register(PickupDetail)
 admin.site.register(Scheduledpickup)

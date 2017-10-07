@@ -1,5 +1,4 @@
 import json
-import datetime
 
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
@@ -236,9 +235,9 @@ def getClassesPage(request):
     now=datetime.now()
     sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
     all_classtypes = ClassType.objects.all()
-    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.datetime.now().day)
+    offeredclass_today = OfferedClass.objects.filter(created__day=datetime.now().day)
     offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
-    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.datetime.now().month)
+    offeredclass_month = OfferedClass.objects.filter(created__month=datetime.now().month)
     json = {'all_classtypes': all_classtypes,
             'offeredclass_today': offeredclass_today,
             'offeredclass_week': offeredclass_week,

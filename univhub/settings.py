@@ -28,6 +28,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'global_auth',
     'sadmin.apps.SadminConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,7 +55,7 @@ ROOT_URLCONF = 'univhub.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'global_auth','static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,22 +81,31 @@ EMAIL_PORT = 587
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'mysql': {
+    'sqlite_local': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'mysql_local': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'univhub',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
-        'USER':'root',
-        'PASSWORD':'',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': '',
+    },
+    'mysql_go_daddy': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'unihubed_django',
+        'HOST': '166.62.102.112',
+        'PORT': '3306',
+        'USER': 'unihubed_django',
+        'PASSWORD': 'UnivhuB#$%@',
     }
 }
-DATABASES['default'] = DATABASES['mysql']
-
+DATABASES['default'] = DATABASES['mysql_go_daddy']
+#DATABASES['default'] = DATABASES['mysql_local']
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
+#
 # }
 
 # Password validation
@@ -138,4 +148,5 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

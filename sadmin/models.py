@@ -19,7 +19,7 @@ class AdminProfile(models.Model):
     website = models.CharField(max_length=50)
     phone = models.IntegerField()
     description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="admin_user_profile")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
 
     class Meta:
         db_table = 'adminprofile'
@@ -46,7 +46,7 @@ class CounselorProfile(models.Model):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
-    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="counselor_user_profile")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
 
     class Meta:
         db_table = 'counselor_profile'
@@ -83,19 +83,12 @@ class DocumentFor(models.Model):
     class Meta:
         db_table = 'document_for'
 
-    def __str__(self):
-        return self.documentforname
-
 
 class DocumentType(models.Model):
     name = models.CharField(max_length=30)
-    documentfor = models.ForeignKey('DocumentFor', models.DO_NOTHING)
 
     class Meta:
         db_table = 'document_type'
-
-    def __str__(self):
-        return self.name
 
 
 class Header(models.Model):
@@ -149,8 +142,8 @@ class Notification(models.Model):
     created = models.DateTimeField()
     map_url = models.TextField(blank=True, null=True)
     web_url = models.TextField(blank=True, null=True)
-    receiver_id = models.IntegerField(blank=True, null=True)
-    sender_id = models.IntegerField(blank=True, null=True)
+    receiver = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_receiver')
+    sender = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_sender')
 
     class Meta:
         db_table = 'notification'
@@ -251,6 +244,7 @@ class RegisteredClass(models.Model):
     class Meta:
         db_table = 'registered_class'
 
+
 class RegisteredOffer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
@@ -331,7 +325,6 @@ class Subjects(models.Model):
 
     class Meta:
         db_table = 'subjects'
-
 
 class Tutor(models.Model):
     name = models.CharField(max_length=200)

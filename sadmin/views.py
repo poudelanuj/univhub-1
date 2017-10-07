@@ -1,6 +1,5 @@
 import json
-from datetime import datetime
-
+from datetime import datetime as dat
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.handlers import wsgi
@@ -23,8 +22,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import datetime
 import traceback
 
+from django.contrib.auth.decorators import login_required
 
 # from fcm_django.models import FCMDevice
+
 
 def informationCenter():
     # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
@@ -32,11 +33,11 @@ def informationCenter():
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__day=datetime.date.today().day, groups__name='studentGroup').count()
+              'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
               }
     return parcel
 
-
+# @login_required
 def index(request):
     parcel = informationCenter()
     return render(request, 'admin-dashboard.html', parcel)
@@ -88,7 +89,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         m = UserProfile(user=user)
-        m1.save()
+        m.save()
         login(request, user)
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
@@ -181,31 +182,31 @@ def addmoderator(request):
 #remove change is_pending to False once the pickup is marked as scheduled.
 
 def getPickupPage(request):
-    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    sunday = datetime.now() - dat.timedelta(days=datetime.date.today().weekday() + 1)
 
     pending_pickups = Pickup.objects.filter(is_pending=True) #all pending pickups
     pending_documents = PickupDetail.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
     nonpending_pickups =  Pickup.objects.filter(is_pending=False)
     nonpending_documents = PickupDetail.objects.filter(pickupid__in=nonpending_pickups)
 
-    today_pickups = pending_pickups.filter(created_date__day=datetime.date.today().day)
+    today_pickups = pending_pickups.filter(created_date__day=datetime.now().day)
     week_pickups = pending_pickups.filter(created_date__gte=sunday)
-    month_pickups = pending_pickups.filter(created_date__month=datetime.date.today().month)
+    month_pickups = pending_pickups.filter(created_date__month=datetime.now().month)
 
     scheduled_pickup = Scheduledpickup.objects.exclude(is_picked=True).exclude(is_picked=False)
-    today_schedule = scheduled_pickup.filter(deliverydate__day=datetime.date.today().day)
+    today_schedule = scheduled_pickup.filter(deliverydate__day=datetime.now().day)
     week_schedule = scheduled_pickup.filter(deliverydate__gte=sunday)
-    month_schedule = scheduled_pickup.filter(deliverydate__month=datetime.date.today().month)
+    month_schedule = scheduled_pickup.filter(deliverydate__month=datetime.now().month)
 
     picked = Scheduledpickup.objects.filter(is_picked=1)
-    today_picked = picked.filter(deliverydate__day=datetime.date.today().day)
+    today_picked = picked.filter(deliverydate__day=datetime.now().day)
     week_picked = picked.filter(deliverydate__gte=sunday)
-    month_picked = picked.filter(deliverydate__month=datetime.date.today().month)
+    month_picked = picked.filter(deliverydate__month=datetime.now().month)
 
     unpicked = Scheduledpickup.objects.filter(is_picked=0)
-    today_unpicked = unpicked.filter(deliverydate__day=datetime.date.today().day)
+    today_unpicked = unpicked.filter(deliverydate__day=datetime.now().day)
     week_unpicked = unpicked.filter(deliverydate__gte=sunday)
-    month_unpicked = unpicked.filter(deliverydate__month=datetime.date.today().month)
+    month_unpicked = unpicked.filter(deliverydate__month=datetime.now().month)
 
     delivery_man = Deliveryman.objects.all()
 

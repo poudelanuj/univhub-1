@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'classes.html', views.getClassesPage),
     url(r'offers.html', views.getOffersPage),
     url(r'students-list.html', views.getStudentslistPage),
-    url(r'notifications.html', views.getNotificationsPage),
     url(r'^admin-dashboard', views.index, name="admin-dashboard"),
     url(r'^studentdetail/(?P<pk>\d+)/', views.StudentDetail),
     url(r'^getnotifications/', views.getNotifications, name="getnotifications"),

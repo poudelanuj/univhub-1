@@ -45,6 +45,12 @@ def index(request):
     return render(request, 'admin-dashboard.html', parcel)
 
 
+def getNotificationsPage(request):
+    print("size of notification", len(Notification.objects.all()))
+    return render(request, "notifications.html",
+                  context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
+
+
 def StudentDetail(request, pk):
     student = get_object_or_404(User, pk=pk)
     documents = UploadedDocument.objects.filter(student=student)
@@ -58,13 +64,26 @@ def getNotifications(request):
     return JsonResponse(data)
 
 
-def getNotificationslist(request):
-    notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
-    return render_to_response('notification_drop.html', {'notifications': notifications})
-
-
 def signup(request):
-    form = SignupForm()
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+
+            current_site = get_current_site(request)
+            subject = 'Activate your UnivHub Account.'
+            message = render_to_string('acc_active_email.html', {
+                'user': user, 'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            # user.email_user(subject, message)
+            toemail = form.cleaned_data.get('email')
+            email = EmailMessage(subject, message, to=[toemail])
+            email.send()
+            return render(request, 'checkemail.html', {'form': form})
+    else:
+        form = SignupForm()
     return render(request, 'signup.html', {'form': form})
 
 
@@ -81,6 +100,8 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+        m = UserProfile(user=user)
+        m1.save()
         login(request, user)
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
@@ -353,6 +374,17 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
         return response
 
 
+def ajaxRemovePickupDocument(request):
+    docId = request.GET.get('documentID')
+    print("document-id:" + docId)
+    print(PickupDetail.objects.filter(documentid=docId))
+    # PickupDetail.objects.filter(documentid=docId).delete()
+    all_Pickups = Pickup.objects.filter(status="pending")
+
+    all_documents = PickupDetail.objects.filter(Pickupid__in=all_Pickups)
+    json = {'all_Pickups': all_Pickups, 'all_documents': all_documents}
+    reloadPortion = render_to_string('Pickup.html', json)
+    return HttpResponse(reloadPortion)
 
 
 def passwordchangeform(request, uidb64, token):

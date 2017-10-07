@@ -206,10 +206,16 @@
                 <h1 class="page-content-title">Dashboard <span>Activity and Statistics</span></h1>
             </div>
             <!-- / Page Content Title -->
-
+            <div>
              <button onclick="add_registered_class()"
                         class="btn btn-submit pull-right" type="submit">Add registered class
                 </button>
+                </div>
+            <div>
+            <button onclick="add_registered_offer()"
+                        class="btn btn-submit pull-right" type="submit">Add registered offer
+                </button>
+                </div>
 
         </div>
         <div class="row counts" id="card-masonry">
@@ -386,7 +392,7 @@
                 <h2 class="text-center">Admin Registration</h2>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="addadminform">
+                <form class="form-horizontal" id="addadminform" enctype="multipart/form-data" >
                     {% csrf_token %}
 
                     <div class="form-group">
@@ -409,7 +415,7 @@
                         <div class="company-logo-name">
                             my_company_logo.png
                             <label for="upload-file-selector" class="pull-right">
-                                <input id="upload-file-selector" type="file">
+                                <input id="upload-file-selector" type="file" name="image">
                                 <span type="button" class="btn btn-upload">Upload</span>
                         </div>
                         </label>
@@ -469,7 +475,7 @@
                 <h2 class="text-center">Moderator Registration</h2>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="addmoderatorform">
+                <form class="form-horizontal" id="addmoderatorform" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="mod_name" class="control-label">Name:</label><br>
@@ -500,7 +506,7 @@
                         <div class="company-logo-name">
                             my_image.png
                             <label for="upload-file-selector" class="pull-right">
-                                <input id="upload-file-selector" type="file">
+                                <input id="upload-file-selector" type="file" name="image">
                                 <span type="button" class="btn btn-upload">Upload</span>
                             </label>
                         </div>
@@ -522,7 +528,7 @@
                 <h2 class="text-center">Counselor Registration</h2>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="addcounselorform">
+                <form class="form-horizontal" id="addcounselorform" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="counselor_name" class="control-label">Name:</label><br>
@@ -553,7 +559,7 @@
                         <div class="company-logo-name">
                             my_image.png
                             <label for="upload-file-selector" class="pull-right">
-                                <input id="upload-file-selector" type="file">
+                                <input id="upload-file-selector" type="file" name="image">
                                 <span type="button" class="btn btn-upload">Upload</span>
                             </label>
                         </div>

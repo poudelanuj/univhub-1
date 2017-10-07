@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+import datetime
 
 from django.contrib.auth import login
 from django.contrib.sites.shortcuts import get_current_site
@@ -13,6 +13,7 @@ from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.views.decorators.csrf import csrf_exempt
 
 from json_requests import handler
 # Create your views here.
@@ -23,8 +24,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import datetime
 import traceback
 
+from django.contrib.auth.decorators import login_required
 
 # from fcm_django.models import FCMDevice
+
 
 def informationCenter():
     # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
@@ -32,20 +35,14 @@ def informationCenter():
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups=4).count()
+              'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
               }
     return parcel
 
-
+# @login_required
 def index(request):
     parcel = informationCenter()
     return render(request, 'admin-dashboard.html', parcel)
-
-
-def getNotificationsPage(request):
-    print("size of notification", len(Notification.objects.all()))
-    return render(request, "notifications.html",
-                  context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
 
 
 def StudentDetail(request, pk):
@@ -61,27 +58,18 @@ def getNotifications(request):
     return JsonResponse(data)
 
 
-def signup(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            user = form.save()
+def getNotificationslist(request):
+    notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
+    return render_to_response('notification_drop.html', {'notifications': notifications})
 
-            current_site = get_current_site(request)
-            subject = 'Activate your UnivHub Account.'
-            message = render_to_string('acc_active_email.html', {
-                'user': user, 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            # user.email_user(subject, message)
-            toemail = form.cleaned_data.get('email')
-            email = EmailMessage(subject, message, to=[toemail])
-            email.send()
-            return render(request, 'checkemail.html', {'form': form})
-    else:
-        form = SignupForm()
+
+def signup(request):
+    form = SignupForm()
     return render(request, 'signup.html', {'form': form})
+
+
+def showdocumentuploadtest(request):
+    return render(request, 'documentupload.html')
 
 
 def activate(request, uidb64, token):
@@ -93,8 +81,6 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        m = UserProfile(user=user)
-        m1.save()
         login(request, user)
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
@@ -103,29 +89,30 @@ def activate(request, uidb64, token):
 
 
 def getStudentslistPage(request):
-    all_students = User.objects.filter(groups=4)
-    paginator = Paginator(all_students, 10)
-    page = request.GET.get('page', 1)  # get page or 1
-    try:
-        students = paginator.page(page)
-        print(students)
-    except PageNotAnInteger:  # if page is not an integer
-        students = paginator.page(1)
-        print("page not an integer")
-    except EmptyPage:  # if the page number goes out of bound
-        students = paginator.page(paginator.num_pages)
-    print(students)
-    return render(request, 'students-list.html')
+    students = User.objects.filter(groups__name="studentGroup")
+    return render(request, 'students-list.html',{'students': students})
+
+    # all_students = User.objects.filter(groups=4)
+    # paginator = Paginator(all_students, 10)
+    # page = request.GET.get('page', 1)  # get page or 1
+    # try:
+    #     students = paginator.page(page)
+    #     print(students)
+    # except PageNotAnInteger:  # if page is not an integer
+    #     students = paginator.page(1)
+    #     print("page not an integer")
+    # except EmptyPage:  # if the page number goes out of bound
+    #     students = paginator.page(paginator.num_pages)
+    # print(students)
+    # return render(request, 'students-list.html')
 
 
 def addadmin(request):
-    form = AddAdminForm(request.POST or None)
+    form = AddAdminForm(request.POST,request.FILES)
     if request.method == 'POST':
         if form.is_valid():
-            print("form valid")
             newuser = form.save()
-            print("form valid 2")
-
+            print("add here")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             current_site = get_current_site(request)
@@ -143,15 +130,17 @@ def addadmin(request):
                                         message="New admin has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
+            print("form invalid")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
+            print(errors)
             return JsonResponse(errors)
 
-    return JsonResponse(errors)
+    return JsonResponse({'success'"False"})
 
 
 def addmoderator(request):
-    form = AddModeratorForm(request.POST or None)
+    form = AddModeratorForm(request.POST,request.FILES or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -175,22 +164,56 @@ def addmoderator(request):
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
-    return JsonResponse(errors)
+    return JsonResponse({'success':False})
 
+
+# todo
+# remove change is_pending to False once the pickup is marked as scheduled.
 
 def getPickupPage(request):
-    print("init")
-    all_Pickups = Pickup.objects.filter(status="pending")
-    print("2nd print")
-    print(all_Pickups)
-    all_documents = PickupDetail.objects.filter(Pickupid__in=all_Pickups)
-    print(all_documents)
-    json = {'all_Pickups': all_Pickups, 'all_documents': all_documents}
-    return render(request, 'Pickup.html', json)
+    now=datetime.now()
+    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
+
+    pending_pickups = Pickup.objects.filter(is_pending=True) #all pending pickups
+    pending_documents = PickupDetail.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
+    nonpending_pickups =  Pickup.objects.filter(is_pending=False)
+    nonpending_documents = PickupDetail.objects.filter(pickupid__in=nonpending_pickups)
+
+    today_pickups = pending_pickups.filter(created_date__day=datetime.now().day)
+    week_pickups = pending_pickups.filter(created_date__gte=sunday)
+    month_pickups = pending_pickups.filter(created_date__month=datetime.now().month)
+
+    scheduled_pickup = Scheduledpickup.objects.exclude(is_picked=True).exclude(is_picked=False)
+    today_schedule = scheduled_pickup.filter(deliverydate__day=datetime.now().day)
+    week_schedule = scheduled_pickup.filter(deliverydate__gte=sunday)
+    month_schedule = scheduled_pickup.filter(deliverydate__month=datetime.now().month)
+
+    picked = Scheduledpickup.objects.filter(is_picked=1)
+    today_picked = picked.filter(deliverydate__day=datetime.now().day)
+    week_picked = picked.filter(deliverydate__gte=sunday)
+    month_picked = picked.filter(deliverydate__month=datetime.now().month)
+
+    unpicked = Scheduledpickup.objects.filter(is_picked=0)
+    today_unpicked = unpicked.filter(deliverydate__day=datetime.now().day)
+    week_unpicked = unpicked.filter(deliverydate__gte=sunday)
+    month_unpicked = unpicked.filter(deliverydate__month=datetime.now().month)
+
+    delivery_man = Deliveryman.objects.all()
+
+    json = {'pending_documents':pending_documents, 'nonpending_documents':nonpending_documents,
+            'today_pickups':today_pickups, 'week_pickups':week_pickups, 'month_pickups':month_pickups,
+            'today_schedule':today_schedule, 'week_schedule':week_schedule, 'month_schedule':month_schedule,
+            'today_picked':today_picked, 'week_picked':week_picked, 'month_picked':month_picked,
+            'today_unpicked':today_unpicked, 'week_unpicked':week_unpicked, 'month_unpicked':month_unpicked,
+            'delivery_man':delivery_man
+            }
+
+    return render(request, 'pickup.html', json)
 
 
 def getClassesPage(request):
-    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+    now=datetime.now()
+    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
     all_classtypes = ClassType.objects.all()
     offeredclass_today = OfferedClass.objects.filter(created__day=datetime.datetime.now().day)
     offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
@@ -203,7 +226,8 @@ def getClassesPage(request):
 
 
 def getOffersPage(request):
-    sunday = datetime.now() - datetime.timedelta(days=datetime.now().weekday() + 1)
+    now=datetime.now()
+    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
     all_offertypes = OfferType.objects.all()
     print(datetime.now().day)
     print(datetime.now().month)
@@ -231,7 +255,7 @@ def StudentDetail(request, pk):
 
 def addcounselor(request):
     user = request.user
-    form = AddCounselorForm(request.POST, user=user or None)
+    form = AddCounselorForm(request.FILES,request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -252,11 +276,12 @@ def addcounselor(request):
                                         message="New Counselor has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
+            print("form1 invalid")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
-    return JsonResponse(errors)
+    return JsonResponse({'success':False})
 
 
 def ajaxCallForDeleteRole(request):
@@ -278,6 +303,15 @@ def ajaxCallForActivationRole(request):
     data = informationCenter()
     reloadPortion = render_to_string('ad-adminsInformation.html', data)
     return HttpResponse(reloadPortion)
+
+
+def ajaxRemovePickupDocument(request):
+    print("check")
+    docId = request.GET.get('documentID')
+    print("document to delete : "+ docId)
+    print(PickupDetail.objects.filter(documentid=docId))
+    PickupDetail.objects.filter(id=docId).delete()
+    return 1
 
 
 @csrf_exempt
@@ -319,17 +353,6 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
         return response
 
 
-def ajaxRemovePickupDocument(request):
-    docId = request.GET.get('documentID')
-    print("document-id:" + docId)
-    print(PickupDetail.objects.filter(documentid=docId))
-    # PickupDetail.objects.filter(documentid=docId).delete()
-    all_Pickups = Pickup.objects.filter(status="pending")
-
-    all_documents = PickupDetail.objects.filter(Pickupid__in=all_Pickups)
-    json = {'all_Pickups': all_Pickups, 'all_documents': all_documents}
-    reloadPortion = render_to_string('Pickup.html', json)
-    return HttpResponse(reloadPortion)
 
 
 def passwordchangeform(request, uidb64, token):

@@ -1,0 +1,42 @@
+[
+  {
+    "country": "USA",
+    "logo_url": "http://logo.png",
+    "levels": {
+      "Bachelor": {
+        "Engineering": [
+          "Computer Engineering",
+          "Electronics And Communication Engineering"
+        ],
+        "Mathematics": [
+          "Algebra"
+        ]
+      }
+    },
+    "id": 1,
+    "name": "MIT",
+    "contents": {}
+  },
+  {
+    "country": "Uk",
+    "logo_url": "http://harvard_logo_url.png",
+    "levels": {
+      "Bachelor": {
+        "Mathematics": [
+          "Algebra"
+        ]
+      }
+    },
+    "id": 2,
+    "name": "Harvard",
+    "contents": {}
+  },
+  {
+    "country": "USA",
+    "logo_url": "http://test.goodthing.jpg",
+    "levels": {},
+    "id": 3,
+    "name": "American good University",
+    "contents": {}
+  }
+]

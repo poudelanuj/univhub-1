@@ -26,10 +26,10 @@ class LoginView(FormView):
 
     loginForm = LoginForm
     initial = {'key': 'value'}
-    template_name = 'login_form.html'
+    template_name = 'auth_login_form.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'login_form.html');
+        return render(request, 'auth_login_form.html');
 
     def post(self, request, *args, **kwargs):
         content_type = request.META.get('CONTENT_TYPE')

@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render,render_to_response
+from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -21,9 +21,8 @@ from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm
 from .models import *
 from .tokens import account_activation_token
 from django.views.decorators.csrf import csrf_exempt
-
-
-# from fcm_django.models import FCgiMDevice
+from django.utils.timezone import datetime
+# from fcm_django.models import FCMDevice
 
 def informationCenter():
     # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
@@ -42,12 +41,14 @@ def index(request):
 
 
 def getNotificationsPage(request):
-    return render(request, "notifications.html", context={'types': NotificationType.objects.all()})
+    print("size of notification",len(Notification.objects.all()))
+    return render(request, "notifications.html",
+                  context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
 
 
 def StudentDetail(request, pk):
     student = get_object_or_404(User, pk=pk)
-    documents = uploadeddocuments.objects.filter(student=student)
+    documents = UploadedDocument.objects.filter(student=student)
 
     return render(request, "student-detail.html", context={'student': student, 'documents': documents})
 
@@ -56,11 +57,6 @@ def getNotifications(request):
     user = request.user
     data = {'notifycount': Notification.objects.filter(receiver=user).count()}
     return JsonResponse(data)
-
-
-def getNotificationslist(request):
-    notifications = Notification.objects.filter(receiver=request.user).order_by('-created')
-    return render_to_response('notification_drop.html',{'notifications':notifications})
 
 def signup(request):
     if request.method == 'POST':
@@ -142,7 +138,8 @@ def addadmin(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User,pk=1), sender=newuser, title="New Admin Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Admin Creation",
                                         message="New admin has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
@@ -170,7 +167,8 @@ def addmoderator(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,title="New Moderator Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Moderator Creation",
                                         message="New moderator has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
@@ -236,15 +234,16 @@ def getClassesPage(request):
     return render(request, 'classes.html', json)
 
 def getOffersPage(request):
-    sunday = datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday() + 1)
+
+    sunday = datetime.now() - datetime.timedelta(days=datetime.now().weekday() + 1)
     all_offertypes = OfferType.objects.all()
-    print(datetime.date.today().day)
-    print(datetime.date.today().month)
-    print(datetime.date.today())
+    print(datetime.now().day)
+    print(datetime.now().month)
+    print(datetime.now())
     print(sunday)
-    offer_today = Offer.objects.filter(created__day=datetime.date.today().day)
+    offer_today = Offer.objects.filter(created__day=datetime.now().day)
     offer_week = Offer.objects.filter(created__gte=sunday)
-    offer_month = Offer.objects.filter(created__month=datetime.date.today().month)
+    offer_month = Offer.objects.filter(created__month=datetime.now().month)
     json = {'all_offertypes': all_offertypes,
             'offer_today': offer_today,
             'offer_week': offer_week,
@@ -253,10 +252,11 @@ def getOffersPage(request):
 
 
 def StudentDetail(request, pk):
-    students = get_object_or_404(User, pk=pk)
-    documents = uploadeddocuments.objects.filter(student=students)
+    student = get_object_or_404(User, pk=pk)
+    documents = UploadedDocument.objects.filter(student=student)
 
-    return render(request, 'students-list.html', {'students': students})
+    print(student)
+    return render(request, 'students-list.html', {'students': student})
 
 
 # ajax calls handling part
@@ -279,7 +279,8 @@ def addcounselor(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser, title="New Counselor Creation",
+            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+                                        title="New Counselor Creation",
                                         message="New Counselor has been created", created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
@@ -323,18 +324,17 @@ def ajaxRemovePickupDocument(request):
 def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
     type = request.META.get('CONTENT_TYPE')
     try:
-        # print the details
-        print("Request on jsonHandler")
         print("Raw json data     :", request.body)
         print("Request parameters:", request.content_params)
         if type == 'application/json':
             try:
-                # try to convert body into json object
+                 # try to convert body into json object
                 json_data = json.loads(request.body.decode(encoding='UTF-8'))
 
                 # if the request is from direct url
                 if action is not None and operation is not None:
                     json_data['action'] = {'data': action, 'operation': operation}
+                json_data['request']=request
                 return handler.handle_request(json_data)
 
             except Exception as e:
@@ -342,24 +342,17 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
                 # try other methodse
                 print(request.POST)
                 print(request.GET)
+
                 return JsonResponse({'status': "Error", "Reason": "Not a json data"})
         elif action is not None and operation is not None:
-            print("default handle")
             return handler.handle_request_direct(action,operation,request)
-
+        else:
+            return JsonResponse({'status': "Error", "Reason": "Invlid content type"})
     except Exception:
         # some other error in non json handling
         return JsonResponse({'status': "Error", "Reason": "Unknown error"})
 
 
-def ajaxRemovePickupDocument(request):
-    docId = request.GET.get('documentID')
-    pickupdetails.objects.filter(documentid=docId).delete()
-    all_pickups = pickup.objects.filter(is_pending=1)
-    all_documents = pickupdetails.objects.filter(pickupid__in=all_pickups)
-    json = {'all_pickups': all_pickups, 'all_documents': all_documents}
-    reloadPortion = render_to_string('pickup.html', json)
-    return HttpResponse(reloadPortion)
 
 
 def passwordchangeform(request, uidb64, token):
@@ -390,7 +383,3 @@ def passwordchange(request, uidb64, token):
         return HttpResponse('Password is changed')
     else:
         return HttpResponse('Activation link is invalid!')
-
-
-
-

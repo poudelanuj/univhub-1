@@ -1,0 +1,28 @@
+{%load static%}
+
+<ul role="tabpanel" class="tab-pane active list-group pmd-list pmd-card-list">
+
+    {% for notification in notifications %}
+        <li class="list-group-item">
+            <a href="javascript:void(0);">
+                <div class="media-left">
+                    <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
+                </div>
+                <div class="media-body">
+                    <h3 class="list-group-item-heading">{{notification.title}}</h3>
+                    <span class="list-group-item-text">{{notification.message}}<span
+                            class="see_more">see more...</span></span>
+                    <span class="list-group-item-sub-text">
+                        Sent by:
+                        {{notification.sender.consultancyName}}
+                    </span>
+                    <span class="list-group-item-sub-text">
+                        To: {{notification.receiver.first_name}}
+                        {{notification.receiver.last_name}}
+                    </span>
+                </div>
+                <div class="noti-time">{{notification.created}}</div>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

@@ -87,6 +87,8 @@
                 UNIVHUB
             </a>
         </div>
+
+
     </div>
 
 </nav><!--End Nav bar -->
@@ -204,6 +206,17 @@
                 <h1 class="page-content-title">Dashboard <span>Activity and Statistics</span></h1>
             </div>
             <!-- / Page Content Title -->
+            <div>
+             <button onclick="add_registered_class()"
+                        class="btn btn-submit pull-right" type="submit">Add registered class
+                </button>
+                </div>
+            <div>
+            <button onclick="add_registered_offer()"
+                        class="btn btn-submit pull-right" type="submit">Add registered offer
+                </button>
+                </div>
+
         </div>
         <div class="row counts" id="card-masonry">
             <!-- Dashboard Count -->
@@ -575,7 +588,7 @@
 <script type="text/javascript" src="{% static 'assets/js/select2.full.js' %}"></script>
 <script type="text/javascript" src="{% static 'assets/js/pmd-select2.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'assets/js/dashboard-scripts.js' %}" data-regions=></script>
+<script type="text/javascript" src="{% static 'assets/js/dashboard-scripts.js' %}?version={{ '123456789'|random}}" data-regions=></script>
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.css">
 

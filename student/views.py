@@ -36,7 +36,7 @@ class ProfileSetupSubMajor(FormView):
                 majors[major].sub_majors = [self.Void()]
             majors[major].sub_majors[-1].name = sub.sub_major_name
             majors[major].sub_majors[-1].uni_count = uni_count
-
+            majors[major].sub_majors[-1].id = sub.id
         for major in majors.values():
             major.sub_major_count = len(major.sub_majors)
 

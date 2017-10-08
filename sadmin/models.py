@@ -198,8 +198,8 @@ class OfferType(models.Model):
 
 
 class Pickup(models.Model):
-    pickup_date = models.DateField()
-    time = models.TimeField()
+    pickup_date = models.DateField(blank=True, null=True)
+    time = models.TimeField(blank=True, null=True)
     location = models.CharField(max_length=50)
     is_pending = models.IntegerField()
     created_date = models.DateField()

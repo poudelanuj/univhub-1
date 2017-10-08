@@ -43,13 +43,12 @@ def login_student(request):
     if request.POST:
         un = request.POST['username']
         pw = request.POST['password']
-
+    
         user = authenticate(username=un, password=pw)
         if user is not None:
             print("User found")
             if user.is_active:
                 login(request, user)
-                request.session.set_expiry(86400)
                 return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'error': "Username and Password does not match."})

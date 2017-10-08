@@ -56,12 +56,6 @@ def login_student(request):
         return render(request, 'login.html')
 
 
-def logout_student(request):
-    #todo
-    #logout operation
-    return None
-
-
 def edit_profile(request):
     # todo
     # editprofile

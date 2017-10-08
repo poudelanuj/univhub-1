@@ -203,7 +203,6 @@ class Pickup(models.Model):
     location = models.CharField(max_length=50)
     is_pending = models.IntegerField()
     created_date = models.DateField()
-    # TODO: this field was not in the last commit
     document_for = models.ForeignKey('DocumentType', models.DO_NOTHING)
 
     pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
@@ -273,7 +272,6 @@ class Requirements(models.Model):
         db_table = 'requirements'
 
 
-
 class RequirementBySubject(models.Model):
     u = models.ForeignKey('University', models.DO_NOTHING)
     r_id = models.IntegerField()
@@ -309,6 +307,9 @@ class SubMajor(models.Model):
     class Meta:
         db_table = 'sub_major'
 
+    def __str__(self):
+        return self.sub_major_name
+
 
 class SubReqByUniversity(models.Model):
     r_id = models.IntegerField(primary_key=True)
@@ -325,6 +326,7 @@ class Subjects(models.Model):
 
     class Meta:
         db_table = 'subjects'
+
 
 class Tutor(models.Model):
     name = models.CharField(max_length=200)
@@ -417,8 +419,8 @@ class UserProfile(models.Model):
         db_table = 'user_profile'
 
 
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-#-----------------------------------------------------------------
-# the table references for
+        # -----------------------------------------------------------------
+        # -----------------------------------------------------------------
+        # -----------------------------------------------------------------
+        # -----------------------------------------------------------------
+        # the table references for

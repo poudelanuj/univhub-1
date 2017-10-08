@@ -83,7 +83,7 @@
 
                     <i class="fa fa-cogs" aria-hidden="true" style="margin-right: 30px;"></i>
                     {{major.name}}
-                    <span class="fa arrow" style="color: #DE585D;"></span>
+                    <span class="fa arr ow" style="color: #DE585D;"></span>
                     <!--TODO: Add number of major-->
                     <font class="courses">{{major.sub_major_count}}</font>
                 </a>
@@ -92,7 +92,7 @@
                     <li class="list-group-item">
 
                         <a href="#" class="show-tick">
-                            1. <font style="margin-left: 20px;">{{sub_major.name}}</font><br>
+                             {{ forloop.counter }} <font style="margin-left: 20px;">{{sub_major.name}}</font><br>
                             <font style="font-size: 12px; margin-left: 37px;">
                                 <!--TODO: Add number of sub_major-->
                                 {% if sub_major.uni_count %}
@@ -101,8 +101,6 @@
                                     No
                                 {% endif%}
                                     Universities
-
-
                                 offering {{sub_major.name}}
                             </font>
                             <i class="fa fa-check" aria-hidden="true"></i>
@@ -113,7 +111,6 @@
             </li>
             {% endfor %}
         </ul>
-
         <!-- end of menu -->
 
     </div>

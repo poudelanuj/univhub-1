@@ -414,7 +414,7 @@ class UserProfile(models.Model):
     sub_major = models.ForeignKey('SubMajor', models.DO_NOTHING)
     apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
     program = models.ForeignKey('ProgramsOffered', models.DO_NOTHING)
-
+    isblocked = models.BooleanField(default=False)
     class Meta:
         db_table = 'user_profile'
 

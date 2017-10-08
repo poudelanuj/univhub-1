@@ -94,6 +94,14 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '',
     },
+    'mysql_local_migrated': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'unihubed_django',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': '',
+    },
     'mysql_go_daddy': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'unihubed_django',
@@ -103,7 +111,7 @@ DATABASES = {
         'PASSWORD': 'UnivhuB#$%@',
     }
 }
-DATABASES['default'] = DATABASES['mysql_go_daddy']
+DATABASES['default'] = DATABASES['mysql_local_migrated']
 
 #DATABASES['default'] = DATABASES['mysql_local']
 # DATABASES = {

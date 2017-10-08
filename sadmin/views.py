@@ -21,6 +21,7 @@ from .models import *
 from .tokens import account_activation_token
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import datetime
+from django.contrib.auth.models import User,Group
 import traceback
 
 from django.contrib.auth.decorators import login_required
@@ -28,8 +29,13 @@ from django.contrib.auth.decorators import login_required
 # from fcm_django.models import FCMDevice
 
 
-def informationCenter():
-    # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
+def informationCenter(user:User):
+    group=user.groups.all()[0]
+    if group=='super_admin':
+        pass
+
+    print(group.name)
+        # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
@@ -38,9 +44,9 @@ def informationCenter():
               }
     return parcel
 
-# @login_required
+@login_required
 def index(request):
-    parcel = informationCenter()
+    parcel = informationCenter(request.user)
     return render(request, 'admin-dashboard.html', parcel)
 
 
@@ -308,7 +314,7 @@ def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
     User.objects.filter(id=userId).delete()
     data = informationCenter()
-    reloadPortion = render_to_string('ad-adminsInformation.html', data)
+    reloadPortion = render_to_string('dashboard_admins_Info.html', data)
     return HttpResponse(reloadPortion)
 
 
@@ -321,7 +327,7 @@ def ajaxCallForActivationRole(request):
         usr.is_active = True
     usr.save()
     data = informationCenter()
-    reloadPortion = render_to_string('ad-adminsInformation.html', data)
+    reloadPortion = render_to_string('dashboard_admins_Info.html', data)
     return HttpResponse(reloadPortion)
 
 

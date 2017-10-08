@@ -11,7 +11,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class AdminProfile(models.Model):
+class Consultancy(models.Model):
     consultancyname = models.CharField(db_column='consultancyName', max_length=30)  # Field name made lowercase.
     pan_vat = models.CharField(max_length=20)
     reg_no = models.CharField(max_length=20)
@@ -22,7 +22,7 @@ class AdminProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
 
     class Meta:
-        db_table = 'adminprofile'
+        db_table = 'consultancy'
 
 
 class ApplyType(models.Model):
@@ -42,7 +42,7 @@ class ClassType(models.Model):
         return self.title
 
 
-class CounselorProfile(models.Model):
+class Counselor(models.Model):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
@@ -243,6 +243,7 @@ class RegisteredClass(models.Model):
 
     class Meta:
         db_table = 'registered_class'
+
 
 
 class RegisteredOffer(models.Model):

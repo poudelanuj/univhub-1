@@ -20,6 +20,8 @@ class AdminProfile(models.Model):
     phone = models.IntegerField()
     description = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
+    is_blocked = models.BooleanField(default=False)
+
 
     class Meta:
         db_table = 'adminprofile'
@@ -47,6 +49,8 @@ class CounselorProfile(models.Model):
     address = models.CharField(max_length=20)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
+    is_blocked = models.BooleanField(default=False)
+
 
     class Meta:
         db_table = 'counselor_profile'
@@ -121,6 +125,7 @@ class ModeratorProfile(models.Model):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_blocked = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'moderator_profile'

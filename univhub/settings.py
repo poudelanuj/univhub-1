@@ -88,7 +88,7 @@ DATABASES = {
     },
     'mysql_local': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'univhub',
+        'NAME': 'unihubed_django',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
@@ -103,9 +103,9 @@ DATABASES = {
         'PASSWORD': 'UnivhuB#$%@',
     }
 }
-DATABASES['default'] = DATABASES['mysql_go_daddy']
+# DATABASES['default'] = DATABASES['mysql_go_daddy']
 
-#DATABASES['default'] = DATABASES['mysql_local']
+DATABASES['default'] = DATABASES['mysql_local']
 # DATABASES = {
 #
 # }

@@ -167,6 +167,7 @@ def addmoderator(request):
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             current_site = get_current_site(request)
+            # newuser.groups.add(Group.objects.get(name='employer'))
             subject = 'Activate your UnivHub Account.'
             message = render_to_string('password_change_email.html', {
                 'user': newuser, 'domain': current_site.domain,
@@ -304,9 +305,15 @@ def addcounselor(request):
     return JsonResponse({'success':False})
 
 
+#delete role will cause the name not to appear in the list
 def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
-    User.objects.filter(id=userId).delete()
+    usr = User.objects.get(id=userId)
+    if (usr.is_active):
+        usr.is_active = False
+    else:
+        usr.is_active = True
+    usr.save()
     data = informationCenter()
     reloadPortion = render_to_string('ad-adminsInformation.html', data)
     return HttpResponse(reloadPortion)

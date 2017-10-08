@@ -104,6 +104,7 @@ DATABASES = {
     }
 }
 DATABASES['default'] = DATABASES['mysql_go_daddy']
+
 #DATABASES['default'] = DATABASES['mysql_local']
 # DATABASES = {
 #

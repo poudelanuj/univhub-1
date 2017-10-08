@@ -4,7 +4,5 @@ from django.conf.urls import include
 from . import views
 
 urlpatterns = [
-    url(r'login.django', views.LoginView.as_view()),
-    url(r'.*', views.LoginView.as_view()),
-
+    url(r'profile/create/submajor.html', views.ProfileSetupSubMajor.as_view()),
 ]

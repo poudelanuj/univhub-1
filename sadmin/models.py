@@ -409,7 +409,7 @@ class UploadedDocument(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="studentprofile")
 
     dob = models.DateField()
     mobile = models.IntegerField()
@@ -427,6 +427,9 @@ class UserProfile(models.Model):
     isblocked = models.BooleanField(default=False)
     class Meta:
         db_table = 'user_profile'
+
+    def __str__(self):
+        return ("profile of " + str(user))
 
 
         # -----------------------------------------------------------------

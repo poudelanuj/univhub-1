@@ -75,7 +75,10 @@
                                                                data-target="#schedule-date" data-toggle="modal">Assign to An Agent</a></li>
                                     <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Chat</a></li>
                                     <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Send Notification</a></li>
-                                    <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Block</a></li>
+                                    <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">
+                                        {% if student.studentprofile.isblocked}}
+                                        UnBlock {% else %} Block {% endif %}
+                                    </a></li>
                                     <li role="presentation"><a href="javascript:void(0);" tabindex="-1" role="menuitem">Delete</a></li>
                                 </ul>
                             </span>

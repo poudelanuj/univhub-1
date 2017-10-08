@@ -86,7 +86,7 @@ class DocumentFor(models.Model):
 
 class DocumentType(models.Model):
     name = models.CharField(max_length=30)
-    # documentfor = models.ForeignKey('DocumentFor', on_delete= None)
+    documentfor = models.ForeignKey('DocumentFor', on_delete= None)
 
     class Meta:
         db_table = 'document_type'

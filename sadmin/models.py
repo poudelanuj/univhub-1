@@ -11,7 +11,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class AdminProfile(models.Model):
+class Consultancy(models.Model):
     consultancyname = models.CharField(db_column='consultancyName', max_length=30)  # Field name made lowercase.
     pan_vat = models.CharField(max_length=20)
     reg_no = models.CharField(max_length=20)
@@ -24,7 +24,10 @@ class AdminProfile(models.Model):
 
 
     class Meta:
-        db_table = 'adminprofile'
+        db_table = 'consultancy'
+
+    def __str__(self):
+        return (self.consultancyname)
 
 
 class ApplyType(models.Model):
@@ -44,7 +47,7 @@ class ClassType(models.Model):
         return self.title
 
 
-class CounselorProfile(models.Model):
+class Counselor(models.Model):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
     admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
@@ -124,7 +127,7 @@ class Major(models.Model):
 class ModeratorProfile(models.Model):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="moderator_user_profile")
     is_blocked = models.BooleanField(default=False)
 
     class Meta:
@@ -248,6 +251,7 @@ class RegisteredClass(models.Model):
 
     class Meta:
         db_table = 'registered_class'
+
 
 
 class RegisteredOffer(models.Model):

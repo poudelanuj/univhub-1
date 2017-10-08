@@ -6,7 +6,7 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login
 from django import forms
-from sadmin.models import AdminProfile
+from sadmin.models import Consultancy
 import json
 
 

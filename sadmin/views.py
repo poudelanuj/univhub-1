@@ -21,24 +21,25 @@ from .models import *
 from .tokens import account_activation_token
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import datetime
+from django.contrib.auth.models import User,Group
 import traceback
 
 from django.contrib.auth.decorators import login_required
 
 # from fcm_django.models import FCMDevice
 
-
+# any user must have profile form to check if it is blocked or not
 def informationCenter():
-    # id of adminGroup is 1, moderator is 2 and counselor is 3 and student is 4
-    parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
-              'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
-              'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
+    parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup', admin_user_profile__is_blocked=False),
+              'moderatorGroup': User.objects.filter(groups__name='moderatorGroup', moderator_user_profile__is_blocked=False),
+              'counsellorGroup': User.objects.filter(groups__name='counsellorGroup', counselor_user_profile__is_blocked=False),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
               'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
               }
     return parcel
 
-# @login_required
+
+@login_required
 def index(request):
     parcel = informationCenter()
     return render(request, 'admin-dashboard.html', parcel)
@@ -309,14 +310,28 @@ def addcounselor(request):
 def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
     usr = User.objects.get(id=userId)
-    if (usr.is_active):
-        usr.is_active = False
-    else:
-        usr.is_active = True
-    usr.save()
+    usr.is_active = False
+
+
+    mygroup = Consultancy.objects.filter(user=userId)
+    if(len(mygroup)):
+        mygroup[0].is_blocked = True
+        mygroup[0].save()
+
+    mygroup = Counselor.objects.filter(user=userId)
+    if (len(mygroup)):
+        mygroup[0].is_blocked = True
+        mygroup[0].save()
+
+    mygroup = ModeratorProfile.objects.filter(user=userId)
+    if (len(mygroup)):
+        mygroup[0].is_blocked = True
+        mygroup[0].save()
+
     data = informationCenter()
-    reloadPortion = render_to_string('ad-adminsInformation.html', data)
+    reloadPortion = render_to_string('dashboard_admins_Info.html', data)
     return HttpResponse(reloadPortion)
+
 
 
 def ajaxCallForActivationRole(request):
@@ -328,7 +343,7 @@ def ajaxCallForActivationRole(request):
         usr.is_active = True
     usr.save()
     data = informationCenter()
-    reloadPortion = render_to_string('ad-adminsInformation.html', data)
+    reloadPortion = render_to_string('dashboard_admins_Info.html', data)
     return HttpResponse(reloadPortion)
 
 

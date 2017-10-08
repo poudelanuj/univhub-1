@@ -460,12 +460,16 @@ function add_registered_offer(){
 
 function schedule_pickup(){
 	server_query(
-			'pickup',
-			'schedule',
-			{user_id:1, pickup_id:1},
-			{success: function(response){
-			        alert(JSON.stringify(response))
-			    }
-			}
-		);
+        'pickup',
+        'create',
+        $("#notification_create_form").serializeObject(),
+        {
+            success: function (response) {
+                $('#send-notice-modal .btn-submit').attr('data-dismiss', 'modal');
+            },
+            error: function () {
+                alert("Error Hit send again")
+            }
+        }
+    );
 };

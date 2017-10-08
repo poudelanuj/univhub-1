@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import  datetime
 
 
 class AdminProfile(models.Model):
@@ -199,11 +200,12 @@ class OfferType(models.Model):
 
 
 class Pickup(models.Model):
-    pickup_date = models.DateField()
-    time = models.TimeField()
+    pickup_date = models.DateField(blank=True, null=True)
+    time = models.TimeField(blank=True, null=True)
     location = models.CharField(max_length=50)
-    is_pending = models.IntegerField()
-    created_date = models.DateField()
+    map_url = models.CharField(max_length=150)
+    is_pending = models.IntegerField(default=1)
+    created_date = models.DateField(default=datetime.now)
     document_for = models.ForeignKey('DocumentType', models.DO_NOTHING)
 
     pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
@@ -213,8 +215,8 @@ class Pickup(models.Model):
 
 
 class PickupDetail(models.Model):
-    documentid = models.ForeignKey('UploadedDocument', models.DO_NOTHING)
-    pickupid = models.ForeignKey(Pickup, models.DO_NOTHING)
+    document = models.ForeignKey('UploadedDocument', models.DO_NOTHING)
+    pickup = models.ForeignKey(Pickup, models.DO_NOTHING)
 
     class Meta:
         db_table = 'pickup_detail'

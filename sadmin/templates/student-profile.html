@@ -9,7 +9,7 @@
     <meta name="description" content="Student Profile">
     <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
 
-    <title>{{ student.first_name }} {{ student.last_name }}</title>
+    <title>{{ user.first_name }} {{ user.last_name }}</title>
 
     <!-- Google icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -36,8 +36,8 @@
         <!-- header -->
         <div class="profile-sidenav-header text-center">
             <img class="user_profile_pic" src="assets/images/user.png" alt="90*90">
-            <h4 class="user_name"> (UserName : {{student.username}})</h4>
-            <h5 class="user_type">Apply Type: {{student.studentprofile.apply_type}}</h5>
+            <h4 class="user_name"> (UserName : {{user.username}})</h4>
+            <h5 class="user_type">Apply Type: {{user.student.apply_type}}</h5>
             <div class="social-connect">
                 <button type="button" class="btn btn-facebook">facebook</button>
                 <button type="button" class="btn btn-message">Message</button>
@@ -78,9 +78,10 @@
                                        type="button"><i class="material-icons pmd-sm">edit</i></a>
                                     <section>
                                         <ul>
-                                            <li>Name: <span>{{ student.first_name }} {{ student.last_name }}</span></li>
-                                            <li>Gender: <span>{{student.studentprofile.gender}}</span></li>
-                                            <li>DOB: <span class="bob-ad">{{student.studentprofile.dob}}</span>(B.S)
+                                            <li>Name: <span>{{ user.first_name }} {{ user.last_name }}</span></li>
+                                            <li>Gender: <span>{{user.student.gender}}</span></li>
+                                            <li>DOB: <span class="bob-ad">{{user.student.dob_np}}</span>(B.S)&nbsp;&nbsp;&nbsp;
+                                                <span class="bob-ad">{{user.student.dob_en}}</span>(A.D)&nbsp;&nbsp;
                                             </li>
                                         </ul>
                                     </section>
@@ -88,44 +89,32 @@
                                     <section>
                                         <h3 class="text-center">Contacts</h3>
                                         <ul>
-                                            <li>Email: <span>{{student.email}}</span></li>
-                                            <li>Phone No: <span>{{student.studentprofile.mobile}}</span></li>
+                                            <li>Email: <span>{{user.student.email}}</span></li>
+                                            <li>Phone No: <span>{{user.student.phone1}}</span> ,&nbsp;
+                                                <span>{{user.student.phone2}}</span> ,&nbsp;
+                                            <span>{{user.student.phone3}}</span> &nbsp; </li>
                                         </ul>
                                     </section>
                                     <hr>
                                     <section>
                                         <h3 class="text-center"> Temporary Address</h3>
                                         <ul>
-                                            <li>District: <span>{{student.studentprofile.temp_address.district}}</span></li>
-                                            <li>City: <span>{{student.studentprofile.temp_address.city}}</span></li>
-                                            <li>Address Line 1: <span>{{student.studentprofile.temp_address.AddressLine1}}</span></li>
-                                            <li>Address Line 2: <span>{{student.studentprofile.temp_address.AddressLine2}}</span></li>
-                                            <li>Address Line 3: <span>{{student.studentprofile.temp_address.AddressLine3}}</span></li>
-                                            <!--<li>Is Current Address same as permanent Address:-->
-                                                <!--<span>-->
-                                                    <!--<label class="radio-inline pmd-radio">-->
-                                                        <!--<input type="radio" name="currentaddres_same_per" checked-->
-                                                               <!--id="no" value="no">-->
-                                                        <!--<span for="currentaddres_same_per">No</span>-->
-                                                    <!--</label>-->
-                                                    <!--<label class="radio-inline pmd-radio">-->
-                                                        <!--<input type="radio" name="currentaddres_same_per" id="yes"-->
-                                                               <!--value="yes">-->
-                                                        <!--<span for="currentaddres_same_per">Yes</span>-->
-                                                    <!--</label>-->
-                                                <!--</span>-->
-                                            <!--</li>-->
+                                            <li>District: <span>{{user.student.temp_address.district}}</span></li>
+                                            <li>City: <span>{{user.student.temp_address.city}}</span></li>
+                                            <li>Address Line 1: <span>{{user.student.temp_address.AddressLine1}}</span></li>
+                                            <li>Address Line 2: <span>{{user.student.temp_address.AddressLine2}}</span></li>
+                                            <li>Address Line 3: <span>{{user.student.temp_address.AddressLine3}}</span></li>
                                         </ul>
                                     </section>
                                     <hr>
                                     <section>
                                         <h3 class="text-center"> Permanent Address </h3>
                                         <ul>
-                                            <li>District: <span>{{student.studentprofile.perm_address.district}}</span></li>
-                                            <li>City: <span>{{student.studentprofile.perm_address.city}}</span></li>
-                                            <li>Address Line 1: <span>{{student.studentprofile.perm_address.AddressLine1}}</span></li>
-                                            <li>Address Line 2: <span>{{student.studentprofile.perm_address.AddressLine2}}</span></li>
-                                            <li>Address Line 3: <span>{{student.studentprofile.perm_address.AddressLine3}}</span></li>
+                                            <li>District: <span>{{user.student.perm_address.district}}</span></li>
+                                            <li>City: <span>{{user.student.perm_address.city}}</span></li>
+                                            <li>Address Line 1: <span>{{user.student.perm_address.AddressLine1}}</span></li>
+                                            <li>Address Line 2: <span>{{user.student.perm_address.AddressLine2}}</span></li>
+                                            <li>Address Line 3: <span>{{user.student.perm_address.AddressLine3}}</span></li>
                                         </ul>
                                     </section>
                                 </div>
@@ -135,7 +124,7 @@
                                        type="button"><i class="material-icons pmd-sm">edit</i></a>
                                     <section>
                                         <ul>
-                                            <li>Name: <span>Mithai Lal Jadav</span></li>
+                                            <li>Name: <span>{{spnsr.first_name}}</span></li>
                                             <li>Relationship: <span>Father</span></li>
                                         </ul>
                                     </section>

@@ -285,9 +285,10 @@ def getOffersPage(request):
 
 
 def StudentDetail(request, pk):
-    student = get_object_or_404(User, pk=pk)
-    documents = UploadedDocument.objects.filter(student=student)
-    return render(request, 'student-profile.html', {'student': student})
+    usr = get_object_or_404(User, pk=pk)
+    spnsr = Sponsor.objects.get(sponsorof = pk )
+    # documents = UploadedDocument.objects.filter(student=student)
+    return render(request, 'student-profile.html', {'user': usr, 'sponsor':spnsr})
 
 
 # ajax calls handling part

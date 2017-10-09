@@ -1,0 +1,103 @@
+{%load static%}
+<div class="container-fluid notifications">
+    <div class="row">
+        <!-- Page Content Title -->
+        <div class="col-md-12">
+            <h1 class="page-content-title">Notifications</h1>
+        </div>
+        <!-- / Page Content Title -->
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="clearfix">
+                    <button type="button" class="btn btn-notice pull-right" title="Click to Send Notice"
+                            data-target="#send-notice-modal" data-toggle="modal">Send Notice
+                    </button>
+                </div>
+                <div class="clearfix">
+                    <label for="notifications_type_select" class="pull-left">Notification Type:</label>
+                    <select name="notifications_type" id="notifications_type_select"
+                            class="pull-left form-control notifications_type">
+
+                        {% for type in documents.doctype %}
+                                <option id="not_type_select_{{type.id}}" value="{{type.id}}">{{type.title}}</option>
+                        {% endfor %}
+
+                    </select>
+                    <div class="pull-right">
+                        <div class="pmd-tabs activities-tab">
+                            <div class="pmd-tab-active-bar"></div>
+                            <ul id="notification_time_select" role="tablist" class="nav nav-tabs">
+                                <li class="active" role="presentation" value="1"> <a data-toggle="tab" role="tab" aria-controls="today" href=""> Today </a> </li>
+                                <li role="presentation" value="7"><a data-toggle="tab" role="tab" aria-controls="week"
+                                                           href="">Week</a></li>
+                                <li role="presentation" value="30" ><a data-toggle="tab" role="tab" aria-controls="month"
+                                                           href="">Month</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div id="notification_list_view" class="tab-content notifications-tab-content">
+                    {% include 'notification_list.html'%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Send Notice Modal -->
+<div tabindex="-1" class="modal fade" id="send-notice-modal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header pmd-modal-bordered">
+                <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                <h2 class="pmd-card-title-text text-center">Sending Notification To all Users</h2>
+            </div>
+            <div class="modal-body">
+                <form enctype='application/json' name="notification_create_form" id="notification_create_form"
+                      class="form-horizontal" action="create.django" method="post">
+                    <div class="form-group">
+                        <label for="notifications_type2" class="control-label">Notification Type:</label>
+                        <select name="notification_type" id="notifications_type2"
+                                class="form-control notifications_type">
+
+                            {% for type in types %}
+                                <option id="notification_type_{{type.id}}" value="{{type.id}}">{{type.title}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="control-label">Title:</label><br>
+                        <input name="title" id="title" class="form-control" required
+                               placeholder="Title of the Notifications">
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="control-label">Description:</label><br>
+                        <textarea name="details" required class="form-control" id="description"
+                                  placeholder="Details about the Notifications"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="url" class="control-label">URL:</label><br>
+                        <input name="web_url" id="url" class="form-control" required
+                               placeholder="Paste the redirect web URL here">
+                    </div>
+                    <div class="form-group">
+                        <label for="map" class="control-label">Map:</label><br>
+                        <input name="map_url" id="map" class="form-control" required
+                               placeholder="Paste the Google Map URL here">
+                    </div>
+                    <input style="display:none;" type="submit" id="create_notification  _submit"
+                           name="create_notification_submit"/>
+
+                </form>
+            </div>
+            <div class="pmd-modal-action clearfix">
+                <button onclick="create_notification_upload()" id="upload_notification"
+                        class="btn btn-submit pull-right" type="submit">Send
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

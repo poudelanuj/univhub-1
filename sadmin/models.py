@@ -409,7 +409,7 @@ class UniversityRequirement(models.Model):
 class UploadedDocument(models.Model):
     student = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
     docname = models.CharField(max_length=30)
-    url = models.TextField()
+    file = models.FileField(upload_to='documents/%Y/%m/%d/')
     doctype = models.ForeignKey('DocumentType', models.DO_NOTHING)
 
     class Meta:
@@ -435,7 +435,7 @@ class UserProfile(models.Model):
     sub_major = models.ForeignKey('SubMajor', models.DO_NOTHING)
     apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
     program = models.ForeignKey('ProgramsOffered', models.DO_NOTHING)
-    isblocked = models.BooleanField(default=False)
+    is_blocked = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'user_profile'

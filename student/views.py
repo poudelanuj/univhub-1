@@ -1,15 +1,8 @@
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from django.shortcuts import redirect
-from django.views import View
-from django.http import JsonResponse, HttpResponseRedirect, QueryDict
 from django.views.generic.edit import FormView
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django import forms
-from sadmin.models import Consultancy
-import json
 
-from sadmin.models import SubMajor, Major, ReqMap
+from sadmin.models import *
 
 
 # Create your views here.
@@ -43,3 +36,25 @@ class ProfileSetupSubMajor(FormView):
         # get all the list of major and submajor
 
         return render(request, self.template_name, context={'majors': majors.values()})
+
+
+def StudentDetail(request, pk):
+    student = get_object_or_404(User, pk=pk)
+    documents = UploadedDocument.objects.filter(student=student)
+    return render(request, 'student-profile.html', {'student': student})
+
+
+def getStudentUploadedDocuments(request, student_id):
+    student = get_object_or_404(User, pk=student_id)
+    documents = UploadedDocument.objects.filter(student=student)
+    return render(request, 'studentuploadeddocuments.html', {'documents': documents})
+
+
+def getStudentAppliedUniversities(request, student_id):
+    student = get_object_or_404(User, pk=student_id)
+
+
+def getStudentRegisteredClasses(request, student_id):
+    student = get_object_or_404(User, pk=student_id)
+    classes = RegisteredClass.objects.filter(user=student)
+    return render(request, 'studentuploadeddocuments.html', {'classes': classes})

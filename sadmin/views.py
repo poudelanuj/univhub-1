@@ -1,17 +1,19 @@
 import json
 
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.handlers import wsgi
 from django.core.mail import EmailMessage
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.timezone import datetime
 from django.views.decorators.csrf import csrf_exempt
 
 from json_requests import handler
@@ -19,22 +21,20 @@ from json_requests import handler
 from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm
 from .models import *
 from .tokens import account_activation_token
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.timezone import datetime
-from django.contrib.auth.models import User,Group
-import traceback
 
-from django.contrib.auth.decorators import login_required
 
 # from fcm_django.models import FCMDevice
 
 # any user must have profile form to check if it is blocked or not
 def informationCenter():
     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup', admin_user_profile__is_blocked=False),
-              'moderatorGroup': User.objects.filter(groups__name='moderatorGroup', moderator_user_profile__is_blocked=False),
-              'counsellorGroup': User.objects.filter(groups__name='counsellorGroup', counselor_user_profile__is_blocked=False),
+              'moderatorGroup': User.objects.filter(groups__name='moderatorGroup',
+                                                    moderator_user_profile__is_blocked=False),
+              'counsellorGroup': User.objects.filter(groups__name='counsellorGroup',
+                                                     counselor_user_profile__is_blocked=False),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
+              'todayjoined': User.objects.filter(date_joined__day=datetime.now().day,
+                                                 groups__name='studentGroup').count()
               }
     return parcel
 
@@ -50,12 +50,6 @@ def getNotificationsPage(request):
     return render(request, "notifications.html",
                   context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
 
-
-def StudentDetail(request, pk):
-    student = get_object_or_404(User, pk=pk)
-    documents = UploadedDocument.objects.filter(student=student)
-
-    return render(request, "student-detail.html", context={'student': student, 'documents': documents})
 
 
 def getNotifications(request):
@@ -112,7 +106,7 @@ def activate(request, uidb64, token):
 def getStudentslistPage(request):
     # students = User.objects.filter(groups__name="studentGroup", studentprofile__isblocked=False)
     students = User.objects.filter(groups__name="studentGroup")
-    return render(request, 'students-list.html',{'students': students})
+    return render(request, 'students-list.html', {'students': students})
 
     # all_students = User.objects.filter(groups=4)
     # paginator = Paginator(all_students, 10)
@@ -130,7 +124,7 @@ def getStudentslistPage(request):
 
 
 def addadmin(request):
-    form = AddAdminForm(request.POST,request.FILES)
+    form = AddAdminForm(request.POST, request.FILES)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -162,7 +156,7 @@ def addadmin(request):
 
 
 def addmoderator(request):
-    form = AddModeratorForm(request.POST,request.FILES or None)
+    form = AddModeratorForm(request.POST, request.FILES or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -187,19 +181,19 @@ def addmoderator(request):
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
-    return JsonResponse({'success':False})
+    return JsonResponse({'success': False})
 
 
 # todo
 # remove change is_pending to False once the pickup is marked as scheduled.
 
 def getPickupPage(request):
-    now=datetime.now()
-    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
+    now = datetime.now()
+    sunday = datetime(now.year, now.month, now.day - now.weekday() - 1)
 
-    pending_pickups = Pickup.objects.filter(is_pending=True) #all pending pickups
-    pending_documents = PickupDetail.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
-    nonpending_pickups =  Pickup.objects.filter(is_pending=False)
+    pending_pickups = Pickup.objects.filter(is_pending=True)  # all pending pickups
+    pending_documents = PickupDetail.objects.filter(pickupid__in=pending_pickups)  # all documents of pending
+    nonpending_pickups = Pickup.objects.filter(is_pending=False)
     nonpending_documents = PickupDetail.objects.filter(pickupid__in=nonpending_pickups)
 
     today_pickups = pending_pickups.filter(created_date__day=datetime.now().day)
@@ -223,20 +217,20 @@ def getPickupPage(request):
 
     delivery_man = Deliveryman.objects.all()
 
-    json = {'pending_documents':pending_documents, 'nonpending_documents':nonpending_documents,
-            'today_pickups':today_pickups, 'week_pickups':week_pickups, 'month_pickups':month_pickups,
-            'today_schedule':today_schedule, 'week_schedule':week_schedule, 'month_schedule':month_schedule,
-            'today_picked':today_picked, 'week_picked':week_picked, 'month_picked':month_picked,
-            'today_unpicked':today_unpicked, 'week_unpicked':week_unpicked, 'month_unpicked':month_unpicked,
-            'delivery_man':delivery_man
+    json = {'pending_documents': pending_documents, 'nonpending_documents': nonpending_documents,
+            'today_pickups': today_pickups, 'week_pickups': week_pickups, 'month_pickups': month_pickups,
+            'today_schedule': today_schedule, 'week_schedule': week_schedule, 'month_schedule': month_schedule,
+            'today_picked': today_picked, 'week_picked': week_picked, 'month_picked': month_picked,
+            'today_unpicked': today_unpicked, 'week_unpicked': week_unpicked, 'month_unpicked': month_unpicked,
+            'delivery_man': delivery_man
             }
 
     return render(request, 'pickup.html', json)
 
 
 def getClassesPage(request):
-    now=datetime.now()
-    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
+    now = datetime.now()
+    sunday = datetime(now.year, now.month, now.day - now.weekday() - 1)
     all_classtypes = ClassType.objects.all()
     offeredclass_today = OfferedClass.objects.filter(created__day=datetime.now().day)
     offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
@@ -249,8 +243,8 @@ def getClassesPage(request):
 
 
 def getOffersPage(request):
-    now=datetime.now()
-    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
+    now = datetime.now()
+    sunday = datetime(now.year, now.month, now.day - now.weekday() - 1)
     all_offertypes = OfferType.objects.all()
     print(datetime.now().day)
     print(datetime.now().month)
@@ -266,17 +260,11 @@ def getOffersPage(request):
     return render(request, 'offers.html', json)
 
 
-def StudentDetail(request, pk):
-    student = get_object_or_404(User, pk=pk)
-    documents = UploadedDocument.objects.filter(student=student)
-    return render(request, 'student-profile.html', {'student': student})
-
-
 # ajax calls handling part
 
 def addcounselor(request):
     user = request.user
-    form = AddCounselorForm(request.FILES,request.POST, user=user or None)
+    form = AddCounselorForm(request.FILES, request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -302,18 +290,17 @@ def addcounselor(request):
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
-    return JsonResponse({'success':False})
+    return JsonResponse({'success': False})
 
 
-#delete role will cause the name not to appear in the list
+# delete role will cause the name not to appear in the list
 def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
     usr = User.objects.get(id=userId)
     usr.is_active = False
 
-
     mygroup = Consultancy.objects.filter(user=userId)
-    if(len(mygroup)):
+    if (len(mygroup)):
         mygroup[0].is_blocked = True
         mygroup[0].save()
 
@@ -332,7 +319,6 @@ def ajaxCallForDeleteRole(request):
     return HttpResponse(reloadPortion)
 
 
-
 def ajaxCallForActivationRole(request):
     userId = request.GET.get('userId')
     usr = User.objects.get(id=userId)
@@ -349,7 +335,7 @@ def ajaxCallForActivationRole(request):
 def ajaxRemovePickupDocument(request):
     print("check")
     docId = request.GET.get('documentID')
-    print("document to delete : "+ docId)
+    print("document to delete : " + docId)
     print(PickupDetail.objects.filter(documentid=docId))
     PickupDetail.objects.filter(id=docId).delete()
     return 1
@@ -435,3 +421,5 @@ def passwordchange(request, uidb64, token):
         return HttpResponse('Password is changed')
     else:
         return HttpResponse('Activation link is invalid!')
+
+

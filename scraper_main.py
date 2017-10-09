@@ -1,0 +1,1 @@
+from scraper import db_inserter_university

@@ -434,6 +434,7 @@ function server_query(data, operation, query, keys) {
     $.ajax(request)
 }
 
+
 function add_registered_class(){
 	server_query(
 			'class',
@@ -451,21 +452,77 @@ function add_registered_offer(){
 			'offer',
 			'register',
 			{user_id:1, offer_id:1},
-			{success: function(response){
+			{
+			    success: function(response){
 			        alert(JSON.stringify(response))
-			    }
-			}
+			    },
+			    error: function () {
+                    alert("Error Hit send again")
+                }
+            }
 		);
 };
 
 function schedule_pickup(){
 	server_query(
-			'pickup',
-			'schedule',
-			{user_id:1, pickup_id:1},
-			{success: function(response){
+        'pickup',
+        'create',
+        {document_included:["SLC certificate", "plus 2 certificate", "Passport"], location:"Chabahil", map_url:null, user_id:1},
+        {
+            success: function(response) {
 			        alert(JSON.stringify(response))
-			    }
-			}
-		);
+            },
+            error: function () {
+                alert("Error Hit send again")
+            }
+        }
+    );
+};
+
+function list_pickup(){
+	server_query(
+        'pickup',
+        'list',
+        {user_id:1},
+        {
+            success: function(response) {
+			        alert(JSON.stringify(response))
+            },
+            error: function () {
+                alert("Error Hit send again")
+            }
+        }
+    );
+};
+
+function list_offer(){
+	server_query(
+        'offer',
+        'list',
+        {user_id:1},
+        {
+            success: function(response) {
+			        alert(JSON.stringify(response))
+            },
+            error: function () {
+                alert("Error Hit send again")
+            }
+        }
+    );
+};
+
+function list_class(){
+	server_query(
+        'class',
+        'list',
+        {user_id:1},
+        {
+            success: function(response) {
+			        alert(JSON.stringify(response))
+            },
+            error: function () {
+                alert("Error Hit send again")
+            }
+        }
+    );
 };

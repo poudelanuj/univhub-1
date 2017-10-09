@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import  datetime
 
 
 class Consultancy(models.Model):
@@ -90,6 +91,9 @@ class DocumentFor(models.Model):
     class Meta:
         db_table = 'document_for'
 
+    def __str__(self):
+        return self.documentforname
+
 
 class DocumentType(models.Model):
     name = models.CharField(max_length=30)
@@ -97,6 +101,9 @@ class DocumentType(models.Model):
 
     class Meta:
         db_table = 'document_type'
+
+    def __str__(self):
+        return self.name
 
 
 class Header(models.Model):
@@ -209,20 +216,24 @@ class OfferType(models.Model):
 class Pickup(models.Model):
     pickup_date = models.DateField(blank=True, null=True)
     time = models.TimeField(blank=True, null=True)
-    location = models.CharField(max_length=50)
-    is_pending = models.IntegerField()
-    created_date = models.DateField()
-    document_for = models.ForeignKey('DocumentType', models.DO_NOTHING)
+    location = models.CharField(max_length=50, blank=True, null=True)
+    map_url = models.CharField(max_length=150, blank=True, null=True)
+    is_pending = models.IntegerField(default=1)
+    created = models.DateTimeField(default=datetime.now)
+    document_for = models.ForeignKey('DocumentFor', models.DO_NOTHING)
 
     pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'pickup'
 
+    def __str__(self):
+        return str(self.pk)
+
 
 class PickupDetail(models.Model):
-    documentid = models.ForeignKey('UploadedDocument', models.DO_NOTHING)
-    pickupid = models.ForeignKey(Pickup, models.DO_NOTHING)
+    document = models.ForeignKey('UploadedDocument', models.DO_NOTHING)
+    pickup = models.ForeignKey(Pickup, models.DO_NOTHING)
 
     class Meta:
         db_table = 'pickup_detail'
@@ -399,13 +410,15 @@ class UniversityRequirement(models.Model):
 
 class UploadedDocument(models.Model):
     student = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
-
     docname = models.CharField(max_length=30)
     url = models.TextField()
-    doctype = models.ForeignKey('DocumentType')
+    doctype = models.ForeignKey('DocumentType', models.DO_NOTHING)
 
     class Meta:
         db_table = 'uploaded_document'
+
+    def __str__(self):
+        return self.docname
 
 
 class UserProfile(models.Model):

@@ -11,7 +11,6 @@ urlpatterns = [
     url(r'students-list.html', views.getStudentslistPage),
     url(r'notifications.html', views.getNotificationsPage),
     url(r'^admin-dashboard', views.index, name="admin-dashboard"),
-    url(r'^studentdetail/(?P<pk>\d+)/', views.StudentDetail),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^documentupload/$', views.showdocumentuploadtest, name='documentuploadtest'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',

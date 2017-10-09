@@ -18,9 +18,7 @@ def register_class(request):
         return JsonResponse({'success': False, 'Reason': "Error processing data"})
 
 
-def status(offerclass):
-    registeredclass = RegisteredClass.objects.all()
-
+def status(offerclass, registeredclass):
     if registeredclass.filter(offeredclass=offerclass).exists():
         return "Registered"
     else:
@@ -29,6 +27,7 @@ def status(offerclass):
 
 def list_class(request):
     offeredclass = OfferedClass.objects.all()
+    registeredclass = RegisteredClass.objects.filter(user=request['user_id'])
 
     json = []
     for offerclass in offeredclass:
@@ -42,7 +41,7 @@ def list_class(request):
                        "starttime": offerclass.starttime,
                        "endtime": offerclass.endtime,
                         "location": offerclass.location,
-                     "status": status(offerclass)
+                     "status": status(offerclass, registeredclass)
                      })
  
     return JsonResponse(json, safe=False);

@@ -56,9 +56,13 @@ def handle_request_direct(action, operation, request):
 
     if operation not in action_map[action]:
         error_response(action + " doesn't have operation " + operation)
+    print("direct")
     try:
         response = action_map[action][operation](request)
-        return response
+        if response is None:
+            return error_response("Internal Server error while serving request '" + operation + "' on '" + action + "' data", 500)
+        else:
+            return response
     except:
         return error_response("Internal Server error while serving request '" + operation + "' on '" + action + "' data", 500)
 

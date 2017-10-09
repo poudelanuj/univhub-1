@@ -17,8 +17,7 @@ def register_offer(request):
         return JsonResponse({'success': False, 'Reason': "Error processing data"})
 
 
-def status(offer):
-    registeredoffer = RegisteredOffer.objects.all()
+def status(offer, registeredoffer):
     offertype = offer.offertype.id
 
     if offertype is 1:
@@ -26,19 +25,18 @@ def status(offer):
             return "Registered"
         else:
             return "Register"
-
     elif offertype is 2:
         if registeredoffer.filter(offer=offer).exists():
             return "Applied"
         else:
             return "Apply"
-
     else:
         pass
 
 
 def list_offer(request):
     offers = Offer.objects.all()
+    registeredoffer = RegisteredOffer.objects.filter(user=request['user_id'])
 
     json = []
     for offer in offers:
@@ -52,8 +50,8 @@ def list_offer(request):
                       "scholarshippercent": offer.scholarshippercent,
                         "university": None if offer.university is None else offer.university.name,
                        "validity": offer.validity,
-                     "status": status(offer)
+                     "status": status(offer, registeredoffer)
                      })
 
-    return JsonResponse(json, safe=False);
+    return JsonResponse(json, safe=False)
 

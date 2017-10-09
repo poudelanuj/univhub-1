@@ -1,6 +1,8 @@
-from django.http import JsonResponse
-from django.shortcuts import render, render_to_response
 import traceback
+
+from django.http import JsonResponse
+from django.shortcuts import render
+
 from sadmin.models import Notification, NotificationType
 
 
@@ -47,4 +49,12 @@ def detail_notification(request):
 def live_notification(request):
     print(request.user)
     notifications = Notification.objects.filter(receiver=request.user.pk).order_by('-created')
+    print(notifications)
     return render(request, 'notification_drop.html', {'notifications': notifications})
+
+
+def live_count_notification(request):
+    print(request.user)
+    user = request.user
+    data = {'notifycount': Notification.objects.filter(receiver=user).count()}
+    return JsonResponse(data)

@@ -7,7 +7,7 @@ from sadmin.models import UploadedDocument, DocumentType
 def upload_document(request):
     try:
         doctype = get_object_or_404(DocumentType, name=request.POST.get('doctype'))
-        new = UploadedDocument.objects.create(student_id=request.user, doctype=doctype,
+        new = UploadedDocument.objects.create(student=request.user, doctype=doctype,
                                                docname=request.POST.get('docname'), file=request.FILES['file'])
         return JsonResponse({'succes': True, 'url': new.file.url})
     except Exception as e:

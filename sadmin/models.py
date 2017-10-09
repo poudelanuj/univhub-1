@@ -36,6 +36,9 @@ class ApplyType(models.Model):
     class Meta:
         db_table = 'applytype'
 
+    def __str__(self):
+        return self.applytype
+
 
 class ClassType(models.Model):
     title = models.CharField(max_length=50)
@@ -408,9 +411,14 @@ class UploadedDocument(models.Model):
         db_table = 'uploaded_document'
 
 
+gender = (
+    ('Male','Male'),
+    ('Female','Female')
+)
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="studentprofile")
-
+    gender = models.CharField(choices=gender, max_length=6)
     dob = models.DateField()
     mobile = models.IntegerField()
     remember_token = models.CharField(max_length=100, blank=True, null=True)
@@ -419,7 +427,6 @@ class UserProfile(models.Model):
     citizenship = models.CharField(max_length=15)
     passport = models.CharField(max_length=15, blank=True, null=True)
 
-    district = models.ForeignKey('District', models.DO_NOTHING)
     applied_country = models.ForeignKey('Country', models.DO_NOTHING)
     sub_major = models.ForeignKey('SubMajor', models.DO_NOTHING)
     apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
@@ -430,6 +437,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return ("profile of " + str(user))
+
+class Address(models.Model):
+    district = models.ForeignKey('District', models.DO_NOTHING)
+    city = models.CharField(max_length=20)
+    Locality = models.CharField(max_length=20)
 
 
         # -----------------------------------------------------------------

@@ -9,20 +9,20 @@
     <meta name="description" content="Student Profile">
     <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
 
-    <title>{{ student.email }}</title>
+    <title>{{ student.first_name }} {{ student.last_name }}</title>
 
     <!-- Google icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css' %}">
 
     <!-- propeller css -->
-    <link rel="stylesheet" type="text/css" href="assets/css/propeller.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/propeller.css' %}">
 
     <!-- Univhub super admin theme css-->
-    <link rel="stylesheet" type="text/css" href="assets/css/student-profile.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/student-profile.css' %}">
 
 </head>
 
@@ -36,8 +36,8 @@
         <!-- header -->
         <div class="profile-sidenav-header text-center">
             <img class="user_profile_pic" src="assets/images/user.png" alt="90*90">
-            <h4 class="user_name"> UserName --  {{student.username}}</h4>
-            <h5 class="user_type">Dependent</h5>
+            <h4 class="user_name"> (UserName : {{student.username}})</h4>
+            <h5 class="user_type">{{student.studentprofile.apply_type}}</h5>
             <div class="social-connect">
                 <button type="button" class="btn btn-facebook">facebook</button>
                 <button type="button" class="btn btn-message">Message</button>
@@ -78,10 +78,9 @@
                                        type="button"><i class="material-icons pmd-sm">edit</i></a>
                                     <section>
                                         <ul>
-                                            <li>Name: <span>Mithai Lal Jadav</span></li>
-                                            <li>Gender: <span>Male</span></li>
-                                            <li>DOB: <span class="bob-ad">25/01/1998</span>(A.D)&nbsp;&nbsp;&nbsp;and
-                                                &nbsp;<span class="dob-bs">15/10/2054</span>(B.S)
+                                            <li>Name: <span>{{ student.first_name }} {{ student.last_name }}</span></li>
+                                            <li>Gender: <span>{{student.studentprofile.gender}}</span></li>
+                                            <li>DOB: <span class="bob-ad">{{student.studentprofile.dob}}</span>(B.S)
                                             </li>
                                         </ul>
                                     </section>
@@ -89,8 +88,8 @@
                                     <section>
                                         <h3 class="text-center">Contacts</h3>
                                         <ul>
-                                            <li>Email: <span>MithaiLalJadav@gmail.com</span></li>
-                                            <li>Phone No: <span>9811230984</span>,<span>9845066825</span></li>
+                                            <li>Email: <span>{{student.email}}</span></li>
+                                            <li>Phone No: <span>{{student.studentprofile.mobile}}</span></li>
                                         </ul>
                                     </section>
                                     <hr>

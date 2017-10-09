@@ -21,28 +21,52 @@ from .models import *
 from .tokens import account_activation_token
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import datetime
-from django.contrib.auth.models import User,Group
+from django.contrib.auth.models import User, Group
 import traceback
 
 from django.contrib.auth.decorators import login_required
 
-# from fcm_django.models import FCMDevice
 
 # any user must have profile form to check if it is blocked or not
-def informationCenter():
-    parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup', admin_user_profile__is_blocked=False),
-              'moderatorGroup': User.objects.filter(groups__name='moderatorGroup', moderator_user_profile__is_blocked=False),
-              'counsellorGroup': User.objects.filter(groups__name='counsellorGroup', counselor_user_profile__is_blocked=False),
+def informationCenter(user:User):
+    group=user.groups.all()[0]
+    if group=='super_admin':
+        pass
+
+    print(group.name)
+    parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
+              'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
+              'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
               'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
               }
     return parcel
 
 
+
 @login_required
 def index(request):
-    parcel = informationCenter()
-    return render(request, 'admin-dashboard.html', parcel)
+    user = request.user
+    group = user.groups.all()[0]
+    if group.name == 'univhub_super_admin' or group.name == 'univhub_moderator':
+        return render(request, 'admin-dashboard.html',
+                      {'adminGroup': User.objects.filter(groups__name='consultancy_admin'),
+                       'moderatorGroup': User.objects.filter(groups__name='univhub_moderator'),
+                       'counsellorGroup': User.objects.filter(groups__name='consultancy_moderator'),
+                       'studentCount': User.objects.filter(groups__name='student').count(),
+                       'todayjoined': User.objects.filter(date_joined__day=datetime.now().day,
+                                                          groups__name='studentGroup').count()
+                       })
+    elif group == 'student':
+        pass
+    else:
+        return render(request, 'consultancy_dashboard.html',
+                      {
+                          'counsellorGroup': Counselor.objects.filter(consultancy__pk=user.pk),
+                          'studentCount': Student.objects.filter(consultancy=user.pk).count(),
+                          'todayjoined': Student.objects.filter(user__date_joined__day=datetime.now().day,
+                                                                consultancy=user.pk).count()
+                      })
 
 
 def getNotificationsPage(request):
@@ -100,7 +124,7 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        m = UserProfile(user=user)
+        m = Student(user=user)
         m1.save()
         login(request, user)
         # return redirect('home')
@@ -112,7 +136,7 @@ def activate(request, uidb64, token):
 def getStudentslistPage(request):
     # students = User.objects.filter(groups__name="studentGroup", studentprofile__isblocked=False)
     students = User.objects.filter(groups__name="studentGroup")
-    return render(request, 'students-list.html',{'students': students})
+    return render(request, 'students-list.html', {'students': students})
 
     # all_students = User.objects.filter(groups=4)
     # paginator = Paginator(all_students, 10)
@@ -130,7 +154,7 @@ def getStudentslistPage(request):
 
 
 def addadmin(request):
-    form = AddAdminForm(request.POST,request.FILES)
+    form = AddAdminForm(request.POST, request.FILES)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -162,7 +186,7 @@ def addadmin(request):
 
 
 def addmoderator(request):
-    form = AddModeratorForm(request.POST,request.FILES or None)
+    form = AddModeratorForm(request.POST, request.FILES or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -187,19 +211,19 @@ def addmoderator(request):
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
-    return JsonResponse({'success':False})
+    return JsonResponse({'success': False})
 
 
 # todo
 # remove change is_pending to False once the pickup is marked as scheduled.
 
 def getPickupPage(request):
-    now=datetime.now()
-    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
+    now = datetime.now()
+    sunday = datetime(now.year, now.month, now.day - now.weekday() - 1)
 
-    pending_pickups = Pickup.objects.filter(is_pending=True) #all pending pickups
-    pending_documents = PickupDetail.objects.filter(pickupid__in=pending_pickups)   #all documents of pending
-    nonpending_pickups =  Pickup.objects.filter(is_pending=False)
+    pending_pickups = Pickup.objects.filter(is_pending=True)  # all pending pickups
+    pending_documents = PickupDetail.objects.filter(pickupid__in=pending_pickups)  # all documents of pending
+    nonpending_pickups = Pickup.objects.filter(is_pending=False)
     nonpending_documents = PickupDetail.objects.filter(pickupid__in=nonpending_pickups)
 
     today_pickups = pending_pickups.filter(created_date__day=datetime.now().day)
@@ -223,20 +247,20 @@ def getPickupPage(request):
 
     delivery_man = Deliveryman.objects.all()
 
-    json = {'pending_documents':pending_documents, 'nonpending_documents':nonpending_documents,
-            'today_pickups':today_pickups, 'week_pickups':week_pickups, 'month_pickups':month_pickups,
-            'today_schedule':today_schedule, 'week_schedule':week_schedule, 'month_schedule':month_schedule,
-            'today_picked':today_picked, 'week_picked':week_picked, 'month_picked':month_picked,
-            'today_unpicked':today_unpicked, 'week_unpicked':week_unpicked, 'month_unpicked':month_unpicked,
-            'delivery_man':delivery_man
+    json = {'pending_documents': pending_documents, 'nonpending_documents': nonpending_documents,
+            'today_pickups': today_pickups, 'week_pickups': week_pickups, 'month_pickups': month_pickups,
+            'today_schedule': today_schedule, 'week_schedule': week_schedule, 'month_schedule': month_schedule,
+            'today_picked': today_picked, 'week_picked': week_picked, 'month_picked': month_picked,
+            'today_unpicked': today_unpicked, 'week_unpicked': week_unpicked, 'month_unpicked': month_unpicked,
+            'delivery_man': delivery_man
             }
 
     return render(request, 'pickup.html', json)
 
 
 def getClassesPage(request):
-    now=datetime.now()
-    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
+    now = datetime.now()
+    sunday = datetime(now.year, now.month, now.day - now.weekday() - 1)
     all_classtypes = ClassType.objects.all()
     offeredclass_today = OfferedClass.objects.filter(created__day=datetime.now().day)
     offeredclass_week = OfferedClass.objects.filter(created__gte=sunday)
@@ -249,8 +273,8 @@ def getClassesPage(request):
 
 
 def getOffersPage(request):
-    now=datetime.now()
-    sunday = datetime(now.year,now.month,now.day-now.weekday()-1)
+    now = datetime.now()
+    sunday = datetime(now.year, now.month, now.day - now.weekday() - 1)
     all_offertypes = OfferType.objects.all()
     print(datetime.now().day)
     print(datetime.now().month)
@@ -276,7 +300,7 @@ def StudentDetail(request, pk):
 
 def addcounselor(request):
     user = request.user
-    form = AddCounselorForm(request.FILES,request.POST, user=user or None)
+    form = AddCounselorForm(request.FILES, request.POST, user=user or None)
     if request.method == 'POST':
         if form.is_valid():
             newuser = form.save()
@@ -302,9 +326,11 @@ def addcounselor(request):
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
-    return JsonResponse({'success':False})
+    return JsonResponse({'success': False})
 
 
+#todo
+#redo this function
 #delete role will cause the name not to appear in the list
 def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
@@ -349,7 +375,7 @@ def ajaxCallForActivationRole(request):
 def ajaxRemovePickupDocument(request):
     print("check")
     docId = request.GET.get('documentID')
-    print("document to delete : "+ docId)
+    print("document to delete : " + docId)
     print(PickupDetail.objects.filter(documentid=docId))
     PickupDetail.objects.filter(id=docId).delete()
     return 1

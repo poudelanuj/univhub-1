@@ -6,12 +6,14 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
+from django.contrib import admin
 
 from django.db import models
 from django.contrib.auth.models import User
+from university.models import *
+from student.models import *
 
-
-class Consultancy(models.Model):
+class Consultancy(User):
     consultancyname = models.CharField(db_column='consultancyName', max_length=30)  # Field name made lowercase.
     pan_vat = models.CharField(max_length=20)
     reg_no = models.CharField(max_length=20)
@@ -19,7 +21,6 @@ class Consultancy(models.Model):
     website = models.CharField(max_length=50)
     phone = models.IntegerField()
     description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
     is_blocked = models.BooleanField(default=False)
 
 
@@ -50,14 +51,11 @@ class ClassType(models.Model):
         return self.title
 
 
-class Counselor(models.Model):
+class Counselor(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
-    admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
+    counselor_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, default=None, blank=True,related_name="counselor_counsultancy")
     is_blocked = models.BooleanField(default=False)
-
-
     class Meta:
         db_table = 'counselor_profile'
 
@@ -67,6 +65,9 @@ class Country(models.Model):
 
     class Meta:
         db_table = 'country'
+
+    def __str__(self):
+        return self.countryname
 
 
 class Deliveryman(models.Model):
@@ -96,41 +97,15 @@ class DocumentFor(models.Model):
 
 class DocumentType(models.Model):
     name = models.CharField(max_length=30)
-    documentfor = models.ForeignKey('DocumentFor', on_delete= None)
+    documentfor = models.ForeignKey('DocumentFor', on_delete=None)
 
     class Meta:
         db_table = 'document_type'
 
 
-class Header(models.Model):
-    title = models.CharField(max_length=100)
-
-    class Meta:
-        db_table = 'header'
-
-
-class Levels(models.Model):
-    level_id = models.IntegerField(primary_key=True)
-    level_name = models.CharField(max_length=45, blank=True, null=True)
-
-    class Meta:
-        db_table = 'levels'
-
-
-class Major(models.Model):
-    major_name = models.CharField(max_length=250)
-
-    class Meta:
-        db_table = 'major'
-
-    def __str__(self):
-        return self.major_name
-
-
-class ModeratorProfile(models.Model):
+class ModeratorProfile(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="moderator_user_profile")
     is_blocked = models.BooleanField(default=False)
 
     class Meta:
@@ -170,7 +145,7 @@ class Offer(models.Model):
     created = models.DateTimeField()
     offerinclass = models.ForeignKey('OfferedClass', models.DO_NOTHING, blank=True, null=True)
     offertype = models.ForeignKey('OfferType', models.DO_NOTHING)
-    university = models.ForeignKey('University', models.DO_NOTHING, blank=True, null=True)
+    university = models.ForeignKey(University, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         db_table = 'offer'
@@ -217,7 +192,7 @@ class Pickup(models.Model):
     created_date = models.DateField()
     document_for = models.ForeignKey('DocumentType', models.DO_NOTHING)
 
-    pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
+    pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "student"}, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'pickup'
@@ -231,23 +206,6 @@ class PickupDetail(models.Model):
         db_table = 'pickup_detail'
 
 
-class ProgramsOffered(models.Model):
-    programoffered = models.CharField(max_length=20)  # Field name made lowercase.
-
-    class Meta:
-        db_table = 'programs_offered'
-
-
-class Ranking(models.Model):
-    university = models.ForeignKey('University', models.DO_NOTHING, blank=True, null=True)
-    ranking = models.IntegerField(blank=True, null=True)
-    ranking_type = models.CharField(max_length=7, blank=True, null=True)
-    type_reference_table = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'ranking'
-
-
 class RegisteredClass(models.Model):
     offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -256,43 +214,12 @@ class RegisteredClass(models.Model):
         db_table = 'registered_class'
 
 
-
 class RegisteredOffer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'registered_offer'
-
-
-class ReqMap(models.Model):
-    hash_id = models.IntegerField(primary_key=True)
-    u = models.ForeignKey('University', models.DO_NOTHING)
-    level = models.ForeignKey(Levels, models.DO_NOTHING)
-    submajor = models.ForeignKey('SubMajor', models.DO_NOTHING, blank=True, null=True)
-    req = models.ForeignKey('SubReqByUniversity', models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'req_map'
-
-
-class Requirements(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=250, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'requirements'
-
-
-class RequirementBySubject(models.Model):
-    u = models.ForeignKey('University', models.DO_NOTHING)
-    r_id = models.IntegerField()
-    sub = models.ForeignKey('Requirements', models.DO_NOTHING)
-    requirement_description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'requirement_by_subject'
 
 
 class Scheduledpickup(models.Model):
@@ -306,39 +233,7 @@ class Scheduledpickup(models.Model):
         db_table = 'scheduled_pickup'
 
 
-class SubHeader(models.Model):
-    title = models.CharField(max_length=250)
 
-    class Meta:
-        db_table = 'sub_header'
-
-
-class SubMajor(models.Model):
-    major = models.ForeignKey('Major', models.DO_NOTHING)
-    sub_major_name = models.CharField(max_length=250, blank=True, null=True)
-
-    class Meta:
-        db_table = 'sub_major'
-
-    def __str__(self):
-        return self.sub_major_name
-
-
-class SubReqByUniversity(models.Model):
-    r_id = models.IntegerField(primary_key=True)
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'sub_req_by_uni'
-
-
-class Subjects(models.Model):
-    sub_id = models.IntegerField(primary_key=True)
-    name = models.TextField(blank=True, null=True)
-    belongs_to = models.ForeignKey(SubMajor, models.DO_NOTHING, db_column='belongs_to')
-
-    class Meta:
-        db_table = 'subjects'
 
 
 class Tutor(models.Model):
@@ -349,59 +244,8 @@ class Tutor(models.Model):
         db_table = 'tutor'
 
 
-class UniAddress(models.Model):
-    country = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    city = models.CharField(max_length=250)
-    street = models.CharField(max_length=250, blank=True, null=True)
-    zip_code = models.SmallIntegerField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'uni_address'
-
-
-class UniAddressMapping(models.Model):
-    u = models.ForeignKey('University', models.DO_NOTHING)
-    a = models.ForeignKey(UniAddress, models.DO_NOTHING, blank=True, null=True)
-    is_main = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'uni_address_mapping'
-
-
-class University(models.Model):
-    name = models.CharField(max_length=250, blank=True, null=True)
-    country = models.CharField(max_length=100, blank=True, null=True)
-    logo_url = models.CharField(max_length=1000, blank=True, null=True)
-
-    class Meta:
-        db_table = 'universities'
-
-    def __str__(self):
-        return self.name
-
-
-class UniversityContent(models.Model):
-    u = models.ForeignKey(University, models.DO_NOTHING)
-    h = models.ForeignKey(Header, models.DO_NOTHING)
-    sh = models.ForeignKey(SubHeader, models.DO_NOTHING, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'university_content'
-
-
-class UniversityRequirement(models.Model):
-    u = models.ForeignKey(University, models.DO_NOTHING)
-    r = models.ForeignKey(Requirements, models.DO_NOTHING)
-    base_score = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'university_requirement'
-
-
 class UploadedDocument(models.Model):
-    student = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, limit_choices_to={'groups__name': "student"}, on_delete=models.CASCADE)
 
     docname = models.CharField(max_length=30)
     url = models.TextField()
@@ -416,8 +260,7 @@ gender = (
     ('Female','Female')
 )
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="studentprofile")
+class Student(User):
     gender = models.CharField(choices=gender, max_length=6)
     dob = models.DateField()
     mobile = models.IntegerField()
@@ -426,12 +269,14 @@ class UserProfile(models.Model):
     scholarship = models.IntegerField()
     citizenship = models.CharField(max_length=15)
     passport = models.CharField(max_length=15, blank=True, null=True)
+    applied_country = models.ForeignKey(Country, models.DO_NOTHING)
+    sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
 
-    applied_country = models.ForeignKey('Country', models.DO_NOTHING)
-    sub_major = models.ForeignKey('SubMajor', models.DO_NOTHING)
     apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
-    program = models.ForeignKey('ProgramsOffered', models.DO_NOTHING)
+    program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
     isblocked = models.BooleanField(default=False)
+    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True, related_name="consultancy_student")
+
     class Meta:
         db_table = 'user_profile'
 
@@ -444,8 +289,6 @@ class Address(models.Model):
     Locality = models.CharField(max_length=20)
 
 
-        # -----------------------------------------------------------------
-        # -----------------------------------------------------------------
-        # -----------------------------------------------------------------
-        # -----------------------------------------------------------------
-        # the table references for
+    class Admin(admin.ModelAdmin):
+        list_display = ('applied_country', 'sub_major', 'program', 'isblocked', 'consultancy')
+

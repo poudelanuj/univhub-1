@@ -9,20 +9,20 @@
     <meta name="description" content="Student Profile">
     <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
 
-    <title>{{ student.email }}</title>
+    <title>{{ student.first_name }} {{ student.last_name }}</title>
 
     <!-- Google icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Bootstrap css -->
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.min.css' %}">
 
     <!-- propeller css -->
-    <link rel="stylesheet" type="text/css" href="assets/css/propeller.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/propeller.css' %}">
 
     <!-- Univhub super admin theme css-->
-    <link rel="stylesheet" type="text/css" href="assets/css/student-profile.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/student-profile.css' %}">
 
 </head>
 
@@ -36,8 +36,8 @@
         <!-- header -->
         <div class="profile-sidenav-header text-center">
             <img class="user_profile_pic" src="assets/images/user.png" alt="90*90">
-            <h4 class="user_name"> UserName --  {{student.username}}</h4>
-            <h5 class="user_type">Dependent</h5>
+            <h4 class="user_name"> (UserName : {{student.username}})</h4>
+            <h5 class="user_type">Apply Type: {{student.studentprofile.apply_type}}</h5>
             <div class="social-connect">
                 <button type="button" class="btn btn-facebook">facebook</button>
                 <button type="button" class="btn btn-message">Message</button>
@@ -78,10 +78,9 @@
                                        type="button"><i class="material-icons pmd-sm">edit</i></a>
                                     <section>
                                         <ul>
-                                            <li>Name: <span>Mithai Lal Jadav</span></li>
-                                            <li>Gender: <span>Male</span></li>
-                                            <li>DOB: <span class="bob-ad">25/01/1998</span>(A.D)&nbsp;&nbsp;&nbsp;and
-                                                &nbsp;<span class="dob-bs">15/10/2054</span>(B.S)
+                                            <li>Name: <span>{{ student.first_name }} {{ student.last_name }}</span></li>
+                                            <li>Gender: <span>{{student.studentprofile.gender}}</span></li>
+                                            <li>DOB: <span class="bob-ad">{{student.studentprofile.dob}}</span>(B.S)
                                             </li>
                                         </ul>
                                     </section>
@@ -89,44 +88,44 @@
                                     <section>
                                         <h3 class="text-center">Contacts</h3>
                                         <ul>
-                                            <li>Email: <span>MithaiLalJadav@gmail.com</span></li>
-                                            <li>Phone No: <span>9811230984</span>,<span>9845066825</span></li>
+                                            <li>Email: <span>{{student.email}}</span></li>
+                                            <li>Phone No: <span>{{student.studentprofile.mobile}}</span></li>
                                         </ul>
                                     </section>
                                     <hr>
                                     <section>
-                                        <h3 class="text-center">Address</h3>
+                                        <h3 class="text-center"> Temporary Address</h3>
                                         <ul>
-                                            <li>District: <span>Kathmandu</span></li>
-                                            <li>City: <span>Chabahil</span></li>
-                                            <li>Address Line 1: <span>Gopi Krishna</span></li>
-                                            <li>Address Line 2: <span></span></li>
-                                            <li>Address Line 3: <span></span></li>
-                                            <li>Is Current Address same as permanent Address:
-                                                <span>
-                                                    <label class="radio-inline pmd-radio">
-                                                        <input type="radio" name="currentaddres_same_per" checked
-                                                               id="no" value="no">
-                                                        <span for="currentaddres_same_per">No</span>
-                                                    </label>
-                                                    <label class="radio-inline pmd-radio">
-                                                        <input type="radio" name="currentaddres_same_per" id="yes"
-                                                               value="yes">
-                                                        <span for="currentaddres_same_per">Yes</span>
-                                                    </label>
-                                                </span>
-                                            </li>
+                                            <li>District: <span>{{student.studentprofile.temp_address.district}}</span></li>
+                                            <li>City: <span>{{student.studentprofile.temp_address.city}}</span></li>
+                                            <li>Address Line 1: <span>{{student.studentprofile.temp_address.AddressLine1}}</span></li>
+                                            <li>Address Line 2: <span>{{student.studentprofile.temp_address.AddressLine2}}</span></li>
+                                            <li>Address Line 3: <span>{{student.studentprofile.temp_address.AddressLine3}}</span></li>
+                                            <!--<li>Is Current Address same as permanent Address:-->
+                                                <!--<span>-->
+                                                    <!--<label class="radio-inline pmd-radio">-->
+                                                        <!--<input type="radio" name="currentaddres_same_per" checked-->
+                                                               <!--id="no" value="no">-->
+                                                        <!--<span for="currentaddres_same_per">No</span>-->
+                                                    <!--</label>-->
+                                                    <!--<label class="radio-inline pmd-radio">-->
+                                                        <!--<input type="radio" name="currentaddres_same_per" id="yes"-->
+                                                               <!--value="yes">-->
+                                                        <!--<span for="currentaddres_same_per">Yes</span>-->
+                                                    <!--</label>-->
+                                                <!--</span>-->
+                                            <!--</li>-->
                                         </ul>
                                     </section>
                                     <hr>
-                                    <section class="currentaddres_same_per">
-                                        <h3>Permanent Address</h3>
+                                    <section>
+                                        <h3 class="text-center"> Permanent Address </h3>
                                         <ul>
-                                            <li>District: <span>Kathmandu</span></li>
-                                            <li>City: <span>Chabahil</span></li>
-                                            <li>Address Line 1: <span>Gopi Krishna</span></li>
-                                            <li>Address Line 2: <span></span></li>
-                                            <li>Address Line 3: <span></span></li>
+                                            <li>District: <span>{{student.studentprofile.perm_address.district}}</span></li>
+                                            <li>City: <span>{{student.studentprofile.perm_address.city}}</span></li>
+                                            <li>Address Line 1: <span>{{student.studentprofile.perm_address.AddressLine1}}</span></li>
+                                            <li>Address Line 2: <span>{{student.studentprofile.perm_address.AddressLine2}}</span></li>
+                                            <li>Address Line 3: <span>{{student.studentprofile.perm_address.AddressLine3}}</span></li>
                                         </ul>
                                     </section>
                                 </div>

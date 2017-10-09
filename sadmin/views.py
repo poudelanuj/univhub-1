@@ -27,11 +27,25 @@ import traceback
 from django.contrib.auth.decorators import login_required
 
 
-# from fcm_django.models import FCMDevice
+# any user must have profile form to check if it is blocked or not
+# def informationCenter(user:User):
+#     group=user.groups.all()[0]
+#     if group=='super_admin':
+#         pass
+#
+#     print(group.name)
+#     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
+#               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
+#               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
+#               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
+#               'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
+#               }
+#     return parcel
+
+
 
 @login_required
 def index(request):
-    print(request.user,type(request.user))
     user = request.user
     group = user.groups.all()[0]
     if group.name == 'univhub_super_admin' or group.name == 'univhub_moderator':
@@ -59,13 +73,6 @@ def getNotificationsPage(request):
     print("size of notification", len(Notification.objects.all()))
     return render(request, "notifications.html",
                   context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
-
-
-def StudentDetail(request, pk):
-    student = get_object_or_404(User, pk=pk)
-    documents = UploadedDocument.objects.filter(student=student)
-
-    return render(request, "student-detail.html", context={'student': student, 'documents': documents})
 
 
 def getNotifications(request):
@@ -120,6 +127,7 @@ def activate(request, uidb64, token):
 
 
 def getStudentslistPage(request):
+    # students = User.objects.filter(groups__name="studentGroup", studentprofile__isblocked=False)
     students = User.objects.filter(groups__name="studentGroup")
     return render(request, 'students-list.html', {'students': students})
 
@@ -178,6 +186,7 @@ def addmoderator(request):
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             current_site = get_current_site(request)
+            # newuser.groups.add(Group.objects.get(name='employer'))
             subject = 'Activate your UnivHub Account.'
             message = render_to_string('password_change_email.html', {
                 'user': newuser, 'domain': current_site.domain,
@@ -313,6 +322,8 @@ def addcounselor(request):
     return JsonResponse({'success': False})
 
 
+#todo
+#redo this function
 #delete role will cause the name not to appear in the list
 def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
@@ -338,6 +349,7 @@ def ajaxCallForDeleteRole(request):
     data = informationCenter()
     reloadPortion = render_to_string('dashboard_admins_Info.html', data)
     return HttpResponse(reloadPortion)
+
 
 
 def ajaxCallForActivationRole(request):

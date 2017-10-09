@@ -22,6 +22,8 @@ class Consultancy(User):
     website = models.CharField(max_length=50)
     phone = models.IntegerField()
     description = models.TextField()
+    is_blocked = models.BooleanField(default=False)
+
     def __str__(self):
         return self.consultancyname
 
@@ -42,8 +44,8 @@ class ClassType(models.Model):
 class Counselor(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
-    counselor_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, default=None, blank=True,
-                                              related_name="counselor_counsultancy")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
+    is_blocked = models.BooleanField(default=False)
 
 
 class Country(models.Model):
@@ -77,7 +79,7 @@ class DocumentType(models.Model):
 class ModeratorProfile(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
-
+    is_blocked = models.BooleanField(default=False)
 
 class NotificationType(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -182,31 +184,63 @@ class UploadedDocument(models.Model):
     url = models.TextField()
     doctype = models.ForeignKey('DocumentType')
 
+class Sponsor(User):
+    middle_name = models.CharField(max_length=20, blank=True, null=True)
+    relationship = models.CharField(max_length=20)
+    identification = models.CharField(choices=identification, max_length=15)
+    fileurl = models.TextField()
+    phone1 = models.CharField(max_length=15, blank=True, null=True)
+    phone2 = models.CharField(max_length=15, blank=True, null=True)
+    phone3 = models.CharField(max_length=15, blank=True, null=True)
+
+
+
+
+class Address(models.Model):
+    district = models.ForeignKey('District', models.DO_NOTHING)
+    city = models.CharField(max_length=20)
+    AddressLine1 = models.CharField(max_length=20)
+    AddressLine2 = models.CharField(max_length=20)
+    AddressLine3 = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.district + " : " + self.city
+
+
+gender = (
+    ('Male','Male'),
+    ('Female','Female')
+)
 
 class Student(User):
-    dob = models.DateField()
-    mobile = models.IntegerField()
+    middle_name = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(choices=gender, max_length=6)
+    dob_np = models.DateField()
+    dob_en = models.DateField()
+    phone1 = models.CharField(max_length=15, blank=True, null=True)
+    phone2 = models.CharField(max_length=15, blank=True, null=True)
+    phone3 = models.CharField(max_length=15, blank=True, null=True)
     remember_token = models.CharField(max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     scholarship = models.IntegerField()
     citizenship = models.CharField(max_length=15)
     passport = models.CharField(max_length=15, blank=True, null=True)
-
-    district = models.ForeignKey('District', models.DO_NOTHING)
     applied_country = models.ForeignKey(Country, models.DO_NOTHING)
     sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
     apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
     program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
     isblocked = models.BooleanField(default=False)
-    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True,
-                                            related_name="consultancy_student")
-
-    class Admin(admin.ModelAdmin):
-        list_display = ('applied_country', 'sub_major', 'program', 'isblocked', 'consultancy')
+    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True, related_name="consultancy_student")
+    temp_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, related_name="temp_address")
+    perm_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING,blank=True, null=True, related_name="perm_address")
 
 
+    def __str__(self):
+        return ("profile of " + str(user))
+
+
         # -----------------------------------------------------------------
         # -----------------------------------------------------------------
         # -----------------------------------------------------------------
-        # -----------------------------------------------------------------
+        # ------------------------  -----------------------------------------
         # the table references for

@@ -27,6 +27,7 @@ class Consultancy(User):
     def __str__(self):
         return self.consultancyname
 
+
 class ApplyType(models.Model):
     applytype = models.CharField(max_length=15)
 
@@ -80,6 +81,7 @@ class ModeratorProfile(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
     is_blocked = models.BooleanField(default=False)
+
 
 class NotificationType(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -185,10 +187,11 @@ class UploadedDocument(models.Model):
     doctype = models.ForeignKey('DocumentType')
 
 
-identification=(
+identification = (
     ('Passport', 'Passport'),
     ('Citizenship', 'Citizenship')
 )
+
 
 class Sponsor(User):
     middle_name = models.CharField(max_length=20, blank=True, null=True)
@@ -202,11 +205,6 @@ class Sponsor(User):
     def __str__(self):
         return self.middle_name + " : " + self.relationship
 
-    class Meta:
-        db_table = 'sponsor'
-
-
-
 
 class Address(models.Model):
     district = models.ForeignKey('District', models.DO_NOTHING)
@@ -218,14 +216,12 @@ class Address(models.Model):
     def __str__(self):
         return self.district + " : " + self.city
 
-    class Meta:
-        db_table = 'address'
-
 
 gender = (
-    ('Male','Male'),
-    ('Female','Female')
+    ('Male', 'Male'),
+    ('Female', 'Female')
 )
+
 
 class Student(User):
     middle_name = models.CharField(max_length=20, blank=True, null=True)
@@ -245,10 +241,11 @@ class Student(User):
     apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
     program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
     isblocked = models.BooleanField(default=False)
-    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True, related_name="consultancy_student")
+    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True,
+                                            related_name="consultancy_student")
     temp_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, related_name="temp_address")
-    perm_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING,blank=True, null=True, related_name="perm_address")
-
+    perm_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, blank=True, null=True,
+                                     related_name="perm_address")
 
     def __str__(self):
         return ("profile of " + str(user))

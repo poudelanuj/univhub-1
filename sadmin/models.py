@@ -270,6 +270,12 @@ class Sponsor(User):
     phone2 = models.CharField(max_length=15, blank=True, null=True)
     phone3 = models.CharField(max_length=15, blank=True, null=True)
 
+    def __str__(self):
+        return self.middle_name + " : " + self.relationship
+
+    class Meta:
+        db_table = 'sponsor'
+
 
 
 
@@ -282,6 +288,9 @@ class Address(models.Model):
 
     def __str__(self):
         return self.district + " : " + self.city
+
+    class Meta:
+        db_table = 'address'
 
 
 gender = (

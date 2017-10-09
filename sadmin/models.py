@@ -261,23 +261,6 @@ identification=(
     ('Citizenship', 'Citizenship')
 )
 
-class Sponsor(models.Model):
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    middle_name = models.CharField(max_length=20, blank=True, null=True)
-    relationship = models.CharField(max_length=20)
-    identification = models.CharField(choices=identification, max_length=15)
-    fileurl = models.TextField()
-    phone1 = models.CharField(max_length=15)
-    phone2 = models.CharField(max_length=15, blank=True, null=True)
-    phone3 = models.CharField(max_length=15, blank=True, null=True)
-    sponsorof = models.ForeignKey(Student, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.middle_name + " : " + self.relationship
-
-    class Meta:
-        db_table = 'sponsor'
 
 
 
@@ -331,6 +314,23 @@ class Student(User):
     def __str__(self):
         return ("profile of " + str(user))
 
+class Sponsor(models.Model):
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    middle_name = models.CharField(max_length=20, blank=True, null=True)
+    relationship = models.CharField(max_length=20)
+    identification = models.CharField(choices=identification, max_length=15)
+    fileurl = models.TextField()
+    phone1 = models.CharField(max_length=15)
+    phone2 = models.CharField(max_length=15, blank=True, null=True)
+    phone3 = models.CharField(max_length=15, blank=True, null=True)
+    sponsorof = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.middle_name + " : " + self.relationship
+
+    class Meta:
+        db_table = 'sponsor'
 
 # class Admin(admin.ModelAdmin):
 #     list_display = ('applied_country', 'sub_major', 'program', 'isblocked', 'consultancy')

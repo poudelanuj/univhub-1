@@ -124,8 +124,12 @@
                                        type="button"><i class="material-icons pmd-sm">edit</i></a>
                                     <section>
                                         <ul>
-                                            <li>Name: <span>{{spnsr.first_name}}</span></li>
-                                            <li>Relationship: <span>Father</span></li>
+                                            <li>Name: <span>{{spnsr.first_name}} {{spnsr.middle_name}} {{spnsr.last_name}}</span></li>
+                                            <li>Relationship: <span>{{spnsr.relationship}}</span></li>
+                                            <li>Phone: <span>{{spnsr.phone1}}</span>&nbsp; , &nbsp;
+                                                        <span>{{spnsr.phone2}}</span>&nbsp; , &nbsp;
+                                                        <span>{{spnsr.phone3}}</span>&nbsp; , &nbsp;
+                                            </li>
                                         </ul>
                                     </section>
                                     <hr>
@@ -133,7 +137,8 @@
                                         <h3 class="text-center">Identification</h3>
                                         <div class="col-md-3 col-sm-4 col-xs-6 text-center">
                                             <img src="assets/images/verified-folder.png" alt="">
-                                            <p class="text-muted">Passport</p>
+                                            File Url : {{spnsr.fileurl}} <br>
+                                            <p class="text-muted">{{spnsr.identification}}</p>
                                         </div>
                                     </section>
                                 </div>

@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 from university.models import *
 from student.models import *
 
+
 class Consultancy(User):
     consultancyname = models.CharField(db_column='consultancyName', max_length=30)  # Field name made lowercase.
     pan_vat = models.CharField(max_length=20)
@@ -21,20 +22,11 @@ class Consultancy(User):
     website = models.CharField(max_length=50)
     phone = models.IntegerField()
     description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
-
-    class Meta:
-        db_table = 'consultancy'
-
     def __str__(self):
-        return (self.consultancyname)
-
+        return self.consultancyname
 
 class ApplyType(models.Model):
     applytype = models.CharField(max_length=15)
-
-    class Meta:
-        db_table = 'applytype'
 
     def __str__(self):
         return self.applytype
@@ -43,9 +35,6 @@ class ApplyType(models.Model):
 class ClassType(models.Model):
     title = models.CharField(max_length=50)
 
-    class Meta:
-        db_table = 'classtype'
-
     def __str__(self):
         return self.title
 
@@ -53,17 +42,12 @@ class ClassType(models.Model):
 class Counselor(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
-    counselor_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, default=None, blank=True,related_name="counselor_counsultancy")
-
-    class Meta:
-        db_table = 'counselor_profile'
+    counselor_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, default=None, blank=True,
+                                              related_name="counselor_counsultancy")
 
 
 class Country(models.Model):
     countryname = models.CharField(max_length=15)
-
-    class Meta:
-        db_table = 'country'
 
     def __str__(self):
         return self.countryname
@@ -73,15 +57,9 @@ class Deliveryman(models.Model):
     name = models.CharField(max_length=30)
     mobile = models.CharField(max_length=10)
 
-    class Meta:
-        db_table = 'deliveryman'
-
 
 class District(models.Model):
     districtname = models.CharField(max_length=15)
-
-    class Meta:
-        db_table = 'district'
 
     def __str__(self):
         return self.districtname
@@ -90,33 +68,21 @@ class District(models.Model):
 class DocumentFor(models.Model):
     documentforname = models.CharField(max_length=30)
 
-    class Meta:
-        db_table = 'document_for'
-
 
 class DocumentType(models.Model):
     name = models.CharField(max_length=30)
-    documentfor = models.ForeignKey('DocumentFor', on_delete= None)
-
-    class Meta:
-        db_table = 'document_type'
+    documentfor = models.ForeignKey('DocumentFor', on_delete=None)
 
 
 class ModeratorProfile(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
 
-    class Meta:
-        db_table = 'moderator_profile'
-
 
 class NotificationType(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=400)
-
-    class Meta:
-        db_table = 'notification_type'
 
 
 class Notification(models.Model):
@@ -130,9 +96,6 @@ class Notification(models.Model):
     receiver = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_receiver')
     sender = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_sender')
 
-    class Meta:
-        db_table = 'notification'
-
 
 class Offer(models.Model):
     title = models.CharField(max_length=50)
@@ -144,9 +107,6 @@ class Offer(models.Model):
     offerinclass = models.ForeignKey('OfferedClass', models.DO_NOTHING, blank=True, null=True)
     offertype = models.ForeignKey('OfferType', models.DO_NOTHING)
     university = models.ForeignKey(University, models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        db_table = 'offer'
 
     def __str__(self):
         return self.title
@@ -165,18 +125,12 @@ class OfferedClass(models.Model):
     classtype = models.ForeignKey(ClassType, models.DO_NOTHING)
     tutor = models.ForeignKey('Tutor', models.DO_NOTHING)
 
-    class Meta:
-        db_table = 'offered_class'
-
     def __str__(self):
         return self.name
 
 
 class OfferType(models.Model):
     title = models.CharField(max_length=50)
-
-    class Meta:
-        db_table = 'offer_type'
 
     def __str__(self):
         return self.title
@@ -192,32 +146,20 @@ class Pickup(models.Model):
 
     pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = 'pickup'
-
 
 class PickupDetail(models.Model):
     documentid = models.ForeignKey('UploadedDocument', models.DO_NOTHING)
     pickupid = models.ForeignKey(Pickup, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'pickup_detail'
 
 
 class RegisteredClass(models.Model):
     offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = 'registered_class'
-
 
 class RegisteredOffer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'registered_offer'
 
 
 class Scheduledpickup(models.Model):
@@ -227,16 +169,10 @@ class Scheduledpickup(models.Model):
     deliveryman = models.ForeignKey(Deliveryman, models.DO_NOTHING)
     pickup = models.ForeignKey(Pickup, models.DO_NOTHING)
 
-    class Meta:
-        db_table = 'scheduled_pickup'
-
 
 class Tutor(models.Model):
     name = models.CharField(max_length=200)
     qualification = models.TextField()
-
-    class Meta:
-        db_table = 'tutor'
 
 
 class UploadedDocument(models.Model):
@@ -246,8 +182,6 @@ class UploadedDocument(models.Model):
     url = models.TextField()
     doctype = models.ForeignKey('DocumentType')
 
-    class Meta:
-        db_table = 'uploaded_document'
 
 class Student(User):
     dob = models.DateField()
@@ -264,10 +198,8 @@ class Student(User):
     apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
     program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
     isblocked = models.BooleanField(default=False)
-    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True, related_name="consultancy_student")
-
-    class Meta:
-        db_table = 'user_profile'
+    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True,
+                                            related_name="consultancy_student")
 
     class Admin(admin.ModelAdmin):
         list_display = ('applied_country', 'sub_major', 'program', 'isblocked', 'consultancy')

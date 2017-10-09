@@ -31,6 +31,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def index(request):
+    print(request.user,type(request.user))
     user = request.user
     group = user.groups.all()[0]
     if group.name == 'univhub_super_admin' or group.name == 'univhub_moderator':

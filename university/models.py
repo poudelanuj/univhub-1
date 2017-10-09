@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class UniversityRequirement(models.Model):
     university = models.ForeignKey('University', models.DO_NOTHING)
@@ -16,6 +17,7 @@ class UniAddress(models.Model):
     city = models.CharField(max_length=250)
     street = models.CharField(max_length=250, blank=True, null=True)
     zip_code = models.SmallIntegerField(blank=True, null=True)
+
     class Meta:
         db_table = 'uni_address'
 
@@ -29,10 +31,21 @@ class UniAddressMapping(models.Model):
         db_table = 'uni_address_mapping'
 
 
+class HighlightText(models.Model):
+    content = models.TextField()
+
+class HighlightMap(models.Model):
+    highlight = models.TextField(HighlightText,blank=False,null=False)
+    university = models.ForeignKey('University', blank=False, null=False)
+
+
 class University(models.Model):
+    main_line = models.TextField()
     name = models.CharField(max_length=250, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     logo_url = models.CharField(max_length=1000, blank=True, null=True)
+    web_url=models.TextField()
+
     class Meta:
         db_table = 'universities'
 
@@ -41,17 +54,17 @@ class University(models.Model):
 
 
 class UniversityContent(models.Model):
-    university = models.ForeignKey('University', models.DO_NOTHING)
-    header = models.ForeignKey('Header', models.DO_NOTHING)
+    university = models.ForeignKey('University', models.DO_NOTHING,blank=False,null=False)
+    header = models.ForeignKey('Header', models.DO_NOTHING,blank=False,null=False)
     sub_header = models.ForeignKey('SubHeader', models.DO_NOTHING, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'university_content'
 
-
 class Header(models.Model):
-    title = models.CharField(max_length=100)
+    content = models.CharField(max_length=100)
+
     class Meta:
         db_table = 'header'
 
@@ -65,6 +78,7 @@ class Levels(models.Model):
 
 class Major(models.Model):
     name = models.CharField(max_length=250)
+
     class Meta:
         db_table = 'major'
 
@@ -100,6 +114,7 @@ class RequirementBySubject(models.Model):
 
     class Meta:
         db_table = 'requirement_by_subject'
+
 
 class SubMajor(models.Model):
     major = models.ForeignKey('Major', models.DO_NOTHING)
@@ -137,6 +152,8 @@ class ProgramsOffered(models.Model):
 
     def __str__(self):
         return self.programoffered
+
+
 class Ranking(models.Model):
     university = models.ForeignKey('University', models.DO_NOTHING, blank=True, null=True)
     ranking = models.IntegerField(blank=True, null=True)
@@ -145,6 +162,7 @@ class Ranking(models.Model):
 
     class Meta:
         db_table = 'ranking'
+
 
 class SubHeader(models.Model):
     title = models.CharField(max_length=250)

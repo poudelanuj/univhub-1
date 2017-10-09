@@ -269,7 +269,7 @@ def getOffersPage(request):
 def StudentDetail(request, pk):
     student = get_object_or_404(User, pk=pk)
     documents = UploadedDocument.objects.filter(student=student)
-    return render(request, 'students-list.html', {'students': student})
+    return render(request, 'student-profile.html', {'student': student})
 
 
 # ajax calls handling part

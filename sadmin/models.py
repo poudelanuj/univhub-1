@@ -21,9 +21,13 @@ class Consultancy(User):
     website = models.CharField(max_length=50)
     phone = models.IntegerField()
     description = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
 
     class Meta:
         db_table = 'consultancy'
+
+    def __str__(self):
+        return (self.consultancyname)
 
 
 class ApplyType(models.Model):
@@ -49,7 +53,6 @@ class ClassType(models.Model):
 class Counselor(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
     counselor_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, default=None, blank=True,related_name="counselor_counsultancy")
 
     class Meta:
@@ -93,14 +96,13 @@ class DocumentFor(models.Model):
 
 class DocumentType(models.Model):
     name = models.CharField(max_length=30)
-    documentfor = models.ForeignKey('DocumentFor', on_delete=None)
+    documentfor = models.ForeignKey('DocumentFor', on_delete= None)
 
     class Meta:
         db_table = 'document_type'
 
 
 class ModeratorProfile(User):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
 
@@ -188,7 +190,7 @@ class Pickup(models.Model):
     created_date = models.DateField()
     document_for = models.ForeignKey('DocumentType', models.DO_NOTHING)
 
-    pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "student"}, on_delete=models.CASCADE)
+    pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'pickup'
@@ -229,9 +231,6 @@ class Scheduledpickup(models.Model):
         db_table = 'scheduled_pickup'
 
 
-
-
-
 class Tutor(models.Model):
     name = models.CharField(max_length=200)
     qualification = models.TextField()
@@ -241,7 +240,7 @@ class Tutor(models.Model):
 
 
 class UploadedDocument(models.Model):
-    student = models.ForeignKey(User, limit_choices_to={'groups__name': "student"}, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
 
     docname = models.CharField(max_length=30)
     url = models.TextField()
@@ -255,9 +254,7 @@ class Student(User):
     mobile = models.IntegerField()
     remember_token = models.CharField(max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
-
     scholarship = models.IntegerField()
-
     citizenship = models.CharField(max_length=15)
     passport = models.CharField(max_length=15, blank=True, null=True)
 
@@ -268,7 +265,6 @@ class Student(User):
     program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
     isblocked = models.BooleanField(default=False)
     student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True, related_name="consultancy_student")
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="self_user")
 
     class Meta:
         db_table = 'user_profile'
@@ -280,5 +276,5 @@ class Student(User):
         # -----------------------------------------------------------------
         # -----------------------------------------------------------------
         # -----------------------------------------------------------------
-        # ------------------------  -----------------------------------------
+        # -----------------------------------------------------------------
         # the table references for

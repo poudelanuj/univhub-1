@@ -1,12 +1,15 @@
 <!doctype html>
 <html lang="">
 <head>
+
+    {% load static %}
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Student Profile">
     <meta content="width=device-width, initial-scale=1, user-scalable=no" name="viewport">
 
-    <title>Mithai Lal Jadav</title>
+    <title>{{ student.email }}</title>
 
     <!-- Google icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -33,7 +36,7 @@
         <!-- header -->
         <div class="profile-sidenav-header text-center">
             <img class="user_profile_pic" src="assets/images/user.png" alt="90*90">
-            <h4 class="user_name">Mithai Lal Jadav</h4>
+            <h4 class="user_name"> UserName --  {{student.username}}</h4>
             <h5 class="user_type">Dependent</h5>
             <div class="social-connect">
                 <button type="button" class="btn btn-facebook">facebook</button>
@@ -159,9 +162,13 @@
 </div>
 
 <!-- Scripts Starts -->
-<script src="assets/js/jquery-1.12.2.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/propeller.js"></script>
+<script
+        src="https://code.jquery.com/jquery-1.12.2.min.js"
+        crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- Propeller JS -->
+<script src="{% static 'assets/js/propeller.js' %}"></script>
 
 <script type="text/javascript">
     $(document).ready( function() {

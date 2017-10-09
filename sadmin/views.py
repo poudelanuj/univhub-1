@@ -29,8 +29,6 @@ from django.contrib.auth.decorators import login_required
 
 # from fcm_django.models import FCMDevice
 
-
-
 @login_required
 def index(request):
     user = request.user
@@ -278,9 +276,7 @@ def getOffersPage(request):
 def StudentDetail(request, pk):
     student = get_object_or_404(User, pk=pk)
     documents = UploadedDocument.objects.filter(student=student)
-
-    print(student)
-    return render(request, 'students-list.html', {'students': student})
+    return render(request, 'student-profile.html', {'student': student})
 
 
 # ajax calls handling part
@@ -316,9 +312,28 @@ def addcounselor(request):
     return JsonResponse({'success': False})
 
 
+#delete role will cause the name not to appear in the list
 def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
-    User.objects.filter(id=userId).delete()
+    usr = User.objects.get(id=userId)
+    usr.is_active = False
+
+
+    mygroup = Consultancy.objects.filter(user=userId)
+    if(len(mygroup)):
+        mygroup[0].is_blocked = True
+        mygroup[0].save()
+
+    mygroup = Counselor.objects.filter(user=userId)
+    if (len(mygroup)):
+        mygroup[0].is_blocked = True
+        mygroup[0].save()
+
+    mygroup = ModeratorProfile.objects.filter(user=userId)
+    if (len(mygroup)):
+        mygroup[0].is_blocked = True
+        mygroup[0].save()
+
     data = informationCenter()
     reloadPortion = render_to_string('dashboard_admins_Info.html', data)
     return HttpResponse(reloadPortion)

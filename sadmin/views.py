@@ -118,7 +118,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         m = Student(user=user)
-        m1.save()
+        m.save()
         login(request, user)
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')

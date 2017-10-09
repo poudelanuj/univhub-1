@@ -184,6 +184,12 @@ class UploadedDocument(models.Model):
     url = models.TextField()
     doctype = models.ForeignKey('DocumentType')
 
+
+identification=(
+    ('Passport', 'Passport'),
+    ('Citizenship', 'Citizenship')
+)
+
 class Sponsor(User):
     middle_name = models.CharField(max_length=20, blank=True, null=True)
     relationship = models.CharField(max_length=20)

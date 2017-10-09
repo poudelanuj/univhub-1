@@ -2,11 +2,19 @@
 Handles all the incoming requests and redirects them into corresponding function of handlers.
 
 '''
-import importlib
 import pkgutil
-import sys
-
 from django.http import JsonResponse
+import sys, importlib
+import traceback
+
+
+def error_response(error: str, code=404):
+    if code == 500:
+        traceback.print_exc()
+    response = JsonResponse(
+        {"status": "error", "cause": error})
+    response.status_code = code
+    return response
 
 
 def __initialize__():
@@ -37,22 +45,26 @@ def handle_request(request):
         action = request['action']['data']
         operation = request['action']['operation']
     except KeyError:
-        return JsonResponse({'status': 'error', 'cause': 'action field is invalid'})
+        error_response('JSON action field is not valid ')
     del request['action']
-    handle_request_direct(action, operation, request)
-
-
-action_map = __initialize__()
+    return handle_request_direct(action, operation, request)
 
 
 def handle_request_direct(action, operation, request):
     if action not in action_map:
-        return JsonResponse({"status": "error", "cause": "Unknown action data : " + action})
+        error_response("Unknown action data : " + action)
 
     if operation not in action_map[action]:
-        return JsonResponse({"status": "error", "cause": "" + action + " doesn't have operation " + operation})
+        error_response(action + " doesn't have operation " + operation)
+    print("direct")
     try:
-        return action_map[action][operation](request)
-    except Exception as e:
-        print(e.args, file=sys.stderr)
-        return JsonResponse({"status": "error", "cause": "Internal Server Error while serving request " + operation})
+        response = action_map[action][operation](request)
+        if response is None:
+            return error_response("Internal Server error while serving request '" + operation + "' on '" + action + "' data", 500)
+        else:
+            return response
+    except:
+        return error_response("Internal Server error while serving request '" + operation + "' on '" + action + "' data", 500)
+
+
+action_map = __initialize__()

@@ -457,7 +457,7 @@ h2.typo-fill-secondary{ color:rgba(77, 87, 93, 0.68); font-size:22px;}
 .no-table-found p {margin-bottom: 20px; opacity: 0.75; color:#555;}
 .no-table-found .btn{font-size: 15px; padding: 14px 30px; width: 290px;}
 
-/*==================== todo list css ====================*/
+/*==================== _todo list css ====================*/
 .todos .pmd-card-list{ min-height:312px;}
 .todo-lists .pmd-checkbox{ margin-bottom:0; vertical-align:middle;}
 .todo-lists span{ display:table-cell;}

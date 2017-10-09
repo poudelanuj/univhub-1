@@ -417,10 +417,10 @@
                                                     </span>
                                                 </div>
                                                 <h4> Delivery Man: {{unpick.deliveryman}} </h4>
-                                                <h4>Document For: {{unpick.pickup.doctype}}</h4>
+                                                <h4>Document For: {{unpick.pickup.documentfor}}</h4>
                                                 <div class="included_docs">Included Document:
                                                     {% for document in nonpending_documents %}
-                                                        {% if document.pickupid.id is pickup.id %}
+                                                        {% if document.pickupid.id is unpick.pickup.id %}
                                                                 <span>
                                                                     {{document.documentid.docname}} --
                                                                 <button class="ajaxRemovePickupDocument" value={{document.id}}> <i class="fa fa-times"></i> </button>
@@ -450,10 +450,10 @@
                                                     </span>
                                                 </div>
                                                 <h4> Delivery Man: {{unpick.deliveryman}} </h4>
-                                                <h4>Document For: {{unpick.pickup.doctype}}</h4>
+                                                <h4>Document For: {{unpick.pickup.documentfor}}</h4>
                                                 <div class="included_docs">Included Document:
                                                     {% for document in nonpending_documents %}
-                                                        {% if document.pickupid.id is pickup.id %}
+                                                        {% if document.pickupid.id is unpick.pickup.id %}
                                                                 <span>
                                                                     {{document.documentid.docname}} --
                                                                 <button class="ajaxRemovePickupDocument" value={{document.id}}> <i class="fa fa-times"></i> </button>
@@ -483,10 +483,10 @@
                                                     </span>
                                                 </div>
                                                 <h4> Delivery Man: {{unpick.deliveryman}} </h4>
-                                                <h4>Document For: {{unpick.pickup.doctype}}</h4>
+                                                <h4>Document For: {{unpick.pickup.documentfor}}</h4>
                                                 <div class="included_docs">Included Document:
                                                     {% for document in nonpending_documents %}
-                                                        {% if document.pickupid.id is pickup.id %}
+                                                        {% if document.pickupid.id is unpick.pickup.id %}
                                                                 <span>
                                                                     {{document.documentid.docname}} --
                                                                 <button class="ajaxRemovePickupDocument" value={{document.id}}> <i class="fa fa-times"></i> </button>
@@ -518,7 +518,8 @@
             </div>
             <div class="modal-body">
 
-                <form class="form-horizontal" name="ScheduleDateForm" id="scheduleDateForm"  method="post">
+                <form class="form-horizontal" id="scheduleDateForm">
+                    {% csrf_token %}
                     <div class="form-group">
                         <label for="delivery_man" class="control-label">Delivery Man:</label>
 
@@ -545,10 +546,11 @@
                 </form>
             </div>
             <div class="pmd-modal-action clearfix">
-                <button data-dismiss="modal" class="btn btn-close pull-right" type="button">Close</button>
-                <button class="btn btn-submit pull-right"  id= "scheduleDataFormButton" data-dismiss="modal" type="submit"  >OK</button>
+                <button data-dismiss="modal" type="button">Close</button>
+                <button class="btn btn-submit pull-right"  id= "scheduleDateButton" data-dismiss="modal" type="submit"  >OK</button>
             </div>
         </div>
     </div>
 </div>
 </div>
+<script type="text/javascript" src="/static/assets/js/pickup_scripts.js"></script>

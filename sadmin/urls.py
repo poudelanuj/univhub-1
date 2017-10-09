@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.conf.urls import include
 from . import views
 
+
 urlpatterns = [
     url(r'pickup.html', views.getPickupPage),
     url(r'classes.html', views.getClassesPage),
@@ -11,8 +12,6 @@ urlpatterns = [
     url(r'notifications.html', views.getNotificationsPage),
     url(r'^admin-dashboard', views.index, name="admin-dashboard"),
     url(r'^studentdetail/(?P<pk>\d+)/', views.StudentDetail),
-    url(r'^getnotifications/', views.getNotifications, name="getnotifications"),
-    url(r'^getnotificationslist/', views.getNotificationslist, name="getnotificationslist"),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^documentupload/$', views.showdocumentuploadtest, name='documentuploadtest'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
@@ -30,6 +29,6 @@ urlpatterns = [
 
     url(r'^ajax/CallForDeleteRole/$', views.ajaxCallForDeleteRole, name='ajaxCallForDeleteRole'),
     url(r'^ajax/CallForActivationRole/$', views.ajaxCallForActivationRole, name='ajaxCallForActivationRole'),
-
     url(r'^ajax/ajaxRemovePickupDocument/$', views.ajaxRemovePickupDocument, name='ajaxRemovePickupDocument'),
+
 ]

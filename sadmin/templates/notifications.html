@@ -1,6 +1,5 @@
 {%load static%}
 <div class="container-fluid notifications">
-
     <div class="row">
         <!-- Page Content Title -->
         <div class="col-md-12">
@@ -8,7 +7,6 @@
         </div>
         <!-- / Page Content Title -->
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -30,70 +28,18 @@
                     <div class="pull-right">
                         <div class="pmd-tabs activities-tab">
                             <div class="pmd-tab-active-bar"></div>
-                            <ul role="tablist" class="nav nav-tabs">
-                                <li class="active" role="presentation"><a data-toggle="tab" role="tab"
-                                                                          aria-controls="today"
-                                                                          href="#today-noti">Today</a></li>
-                                <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="week"
-                                                           href="#week-noti">Week</a></li>
-                                <li role="presentation"><a data-toggle="tab" role="tab" aria-controls="month"
-                                                           href="#month-noti">Month</a></li>
+                            <ul id="notification_time_select" role="tablist" class="nav nav-tabs">
+                                <li class="active" role="presentation" value="1"> <a data-toggle="tab" role="tab" aria-controls="today" href=""> Today </a> </li>
+                                <li role="presentation" value="7"><a data-toggle="tab" role="tab" aria-controls="week"
+                                                           href="">Week</a></li>
+                                <li role="presentation" value="30" ><a data-toggle="tab" role="tab" aria-controls="month"
+                                                           href="">Month</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="tab-content notifications-tab-content">
-                    <ul role="tabpanel" id="today-noti" class="tab-pane active list-group pmd-list pmd-card-list">
-                        <li class="list-group-item">
-                            <a href="javascript:void(0);">
-                                <div class="media-left">
-                                    <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
-                                </div>
-                                <div class="media-body">
-                                    <h3 class="list-group-item-heading">This is notification title</h3>
-                                    <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span
-                                            class="see_more">see more...</span></span>
-                                    <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
-                                    <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
-                                </div>
-                                <div class="noti-time">12 min ago</div>
-                            </a>
-                        </li>
-                        <li class="list-group-item">
-                            <a href="javascript:void(0);">
-                                <div class="media-left">
-                                    <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
-                                </div>
-                                <div class="media-body">
-                                    <h3 class="list-group-item-heading">This is notification title</h3>
-                                    <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span
-                                            class="see_more">see more...</span></span>
-                                    <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
-                                    <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
-                                </div>
-                                <div class="noti-time">yesterday at 10:00 am</div>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul role="tabpanel" id="week-noti" class="tab-pane list-group pmd-list pmd-card-list">
-                        <li class="list-group-item">
-                            <a href="javascript:void(0);">
-                                <div class="media-left">
-                                    <img alt="40x40" src="{% static 'assets/images/avatar-icon-40x40.png' %}">
-                                </div>
-                                <div class="media-body">
-                                    <h3 class="list-group-item-heading">This is notification title</h3>
-                                    <span class="list-group-item-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry. <span
-                                            class="see_more">see more...</span></span>
-                                    <span class="list-group-item-sub-text">Sent by: Alpha Beta Consultancy</span>
-                                    <span class="list-group-item-sub-text">To: Rupesh Kumar Shah</span>
-                                </div>
-                                <div class="noti-time">12 min ago</div>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul role="tabpanel" id="month-noti" class="tab-pane list-group pmd-list pmd-card-list">
-                    </ul>
+                <div id="notification_list_view" class="tab-content notifications-tab-content">
+                    {% include 'notification_list.html'%}
                 </div>
             </div>
         </div>
@@ -119,13 +65,6 @@
                             {% for type in types %}
                                 <option id="notification_type_{{type.id}}" value="{{type.id}}">{{type.title}}</option>
                             {% endfor %}
-
-                            <!--<option value="3">Document Upload Request</option>-->
-                            <!--<option value="4">Document Receieved</option>-->
-                            <!--<option value="5">Map</option>-->
-                            <!--<option value="6">Organizing Event</option>-->
-                            <!--<option value="7">Visit Web Site Request</option>-->
-                            <!--<option value="8">Other</option>-->
                         </select>
                     </div>
                     <div class="form-group">
@@ -154,7 +93,7 @@
                 </form>
             </div>
             <div class="pmd-modal-action clearfix">
-                <button onclick="create_notification_upload()" id="upload_notification" data-dismiss="modal"
+                <button onclick="create_notification_upload()" id="upload_notification"
                         class="btn btn-submit pull-right" type="submit">Send
                 </button>
             </div>
@@ -162,4 +101,4 @@
         </div>
     </div>
 </div>
-<script type="text/javascript"></button>
+<script src="/static/assets/js/notification_scripts.js?version={{'123456789'|random}}" type="text/javascript"></script>

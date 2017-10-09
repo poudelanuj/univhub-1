@@ -7,17 +7,102 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
 
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils import timezone
 
-# (what to be entered, what to be shown)
-statusTypes = {
-    ('Pending', 'Pending'),
-    ('Scheduled', 'Scheduled'),
-    ('Picked', 'Picked'),
-    ('Unpicked', 'Unpicked'),
-}
+
+class Consultancy(models.Model):
+    consultancyname = models.CharField(db_column='consultancyName', max_length=30)  # Field name made lowercase.
+    pan_vat = models.CharField(max_length=20)
+    reg_no = models.CharField(max_length=20)
+    location = models.CharField(max_length=20)
+    website = models.CharField(max_length=50)
+    phone = models.IntegerField()
+    description = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="admin_user_profile")
+    is_blocked = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'consultancy'
+
+    def __str__(self):
+        return (self.consultancyname)
+
+
+class ApplyType(models.Model):
+    applytype = models.CharField(max_length=15)
+
+    class Meta:
+        db_table = 'applytype'
+
+
+class ClassType(models.Model):
+    title = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'classtype'
+
+    def __str__(self):
+        return self.title
+
+
+class Counselor(models.Model):
+    mobile = models.IntegerField()
+    address = models.CharField(max_length=20)
+    admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
+    is_blocked = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'counselor_profile'
+
+
+class Country(models.Model):
+    countryname = models.CharField(max_length=15)
+
+    class Meta:
+        db_table = 'country'
+
+
+class Deliveryman(models.Model):
+    name = models.CharField(max_length=30)
+    mobile = models.CharField(max_length=10)
+
+    class Meta:
+        db_table = 'deliveryman'
+
+
+class District(models.Model):
+    districtname = models.CharField(max_length=15)
+
+    class Meta:
+        db_table = 'district'
+
+    def __str__(self):
+        return self.districtname
+
+
+class DocumentFor(models.Model):
+    documentforname = models.CharField(max_length=30)
+
+    class Meta:
+        db_table = 'document_for'
+
+    def __str__(self):
+        return self.documentforname
+
+
+class DocumentType(models.Model):
+    name = models.CharField(max_length=30)
+    documentfor = models.ForeignKey('DocumentFor', on_delete=None)
+
+    class Meta:
+        db_table = 'document_type'
+
+    def __str__(self):
+        return self.name
 
 
 class Header(models.Model):
@@ -27,15 +112,141 @@ class Header(models.Model):
         db_table = 'header'
 
 
+class Levels(models.Model):
+    level_id = models.IntegerField(primary_key=True)
+    level_name = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        db_table = 'levels'
+
+
 class Major(models.Model):
     major_name = models.CharField(max_length=250)
 
     class Meta:
         db_table = 'major'
 
+    def __str__(self):
+        return self.major_name
+
+
+class ModeratorProfile(models.Model):
+    mobile = models.IntegerField()
+    address = models.CharField(max_length=20)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="moderator_user_profile")
+    is_blocked = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'moderator_profile'
+
+
+class NotificationType(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=400)
+
+    class Meta:
+        db_table = 'notification_type'
+
+
+class Notification(models.Model):
+    read = models.IntegerField()
+    title = models.CharField(max_length=50, blank=True, null=True)
+    type = models.ForeignKey('NotificationType', models.DO_NOTHING)
+    message = models.TextField()
+    created = models.DateTimeField()
+    map_url = models.TextField(blank=True, null=True)
+    web_url = models.TextField(blank=True, null=True)
+    receiver = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_receiver')
+    sender = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_sender')
+
+    class Meta:
+        db_table = 'notification'
+
+
+class Offer(models.Model):
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+    discountpercent = models.IntegerField(blank=True, null=True)
+    scholarshippercent = models.IntegerField(blank=True, null=True)
+    validity = models.DateField()
+    created = models.DateTimeField()
+    offerinclass = models.ForeignKey('OfferedClass', models.DO_NOTHING, blank=True, null=True)
+    offertype = models.ForeignKey('OfferType', models.DO_NOTHING)
+    university = models.ForeignKey('University', models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        db_table = 'offer'
+
+    def __str__(self):
+        return self.title
+
+
+class OfferedClass(models.Model):
+    name = models.CharField(max_length=100)
+    startdate = models.DateField()
+    enddate = models.DateField()
+    price = models.IntegerField()
+    discountpercent = models.IntegerField()
+    location = models.CharField(max_length=100)
+    starttime = models.TimeField()
+    endtime = models.TimeField()
+    created = models.DateTimeField()
+    classtype = models.ForeignKey(ClassType, models.DO_NOTHING)
+    tutor = models.ForeignKey('Tutor', models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'offered_class'
+
+    def __str__(self):
+        return self.name
+
+
+class OfferType(models.Model):
+    title = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'offer_type'
+
+    def __str__(self):
+        return self.title
+
+
+class Pickup(models.Model):
+    pickup_date = models.DateField(blank=True, null=True)
+    time = models.TimeField(blank=True, null=True)
+    location = models.CharField(max_length=50, blank=True, null=True)
+    map_url = models.CharField(max_length=150, blank=True, null=True)
+    is_pending = models.IntegerField(default=1)
+    created = models.DateTimeField(default=datetime.now)
+    document_for = models.ForeignKey('DocumentFor', models.DO_NOTHING)
+
+    pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'pickup'
+
+    def __str__(self):
+        return str(self.pk)
+
+
+class PickupDetail(models.Model):
+    document = models.ForeignKey('UploadedDocument', models.DO_NOTHING)
+    pickup = models.ForeignKey(Pickup, models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'pickup_detail'
+
+
+class ProgramsOffered(models.Model):
+    programoffered = models.CharField(max_length=20)  # Field name made lowercase.
+
+    class Meta:
+        db_table = 'programs_offered'
+
 
 class Ranking(models.Model):
-    u = models.ForeignKey('Universities', models.DO_NOTHING, blank=True, null=True)
+    university = models.ForeignKey('University', models.DO_NOTHING, blank=True, null=True)
     ranking = models.IntegerField(blank=True, null=True)
     ranking_type = models.CharField(max_length=7, blank=True, null=True)
     type_reference_table = models.IntegerField(blank=True, null=True)
@@ -44,8 +255,44 @@ class Ranking(models.Model):
         db_table = 'ranking'
 
 
+class RegisteredClass(models.Model):
+    offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'registered_class'
+
+
+class RegisteredOffer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'registered_offer'
+
+
+class ReqMap(models.Model):
+    hash_id = models.IntegerField(primary_key=True)
+    u = models.ForeignKey('University', models.DO_NOTHING)
+    level = models.ForeignKey(Levels, models.DO_NOTHING)
+    submajor = models.ForeignKey('SubMajor', models.DO_NOTHING, blank=True, null=True)
+    req = models.ForeignKey('SubReqByUniversity', models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'req_map'
+
+
+class Requirements(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=250, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'requirements'
+
+
 class RequirementBySubject(models.Model):
-    u = models.ForeignKey('Universities', models.DO_NOTHING)
+    u = models.ForeignKey('University', models.DO_NOTHING)
     r_id = models.IntegerField()
     sub = models.ForeignKey('Requirements', models.DO_NOTHING)
     requirement_description = models.TextField(blank=True, null=True)
@@ -54,11 +301,15 @@ class RequirementBySubject(models.Model):
         db_table = 'requirement_by_subject'
 
 
-class Requirements(models.Model):
-    name = models.CharField(max_length=250, blank=True, null=True)
+class Scheduledpickup(models.Model):
+    deliverydate = models.DateField()
+    deliverytime = models.TimeField()
+    is_picked = models.IntegerField(blank=True, null=True)
+    deliveryman = models.ForeignKey(Deliveryman, models.DO_NOTHING)
+    pickup = models.ForeignKey(Pickup, models.DO_NOTHING)
 
     class Meta:
-        db_table = 'requirements'
+        db_table = 'scheduled_pickup'
 
 
 class SubHeader(models.Model):
@@ -69,11 +320,39 @@ class SubHeader(models.Model):
 
 
 class SubMajor(models.Model):
-    major = models.ForeignKey(Major, models.DO_NOTHING, blank=True, null=True)
+    major = models.ForeignKey('Major', models.DO_NOTHING)
     sub_major_name = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         db_table = 'sub_major'
+
+    def __str__(self):
+        return self.sub_major_name
+
+
+class SubReqByUniversity(models.Model):
+    r_id = models.IntegerField(primary_key=True)
+    description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'sub_req_by_uni'
+
+
+class Subjects(models.Model):
+    sub_id = models.IntegerField(primary_key=True)
+    name = models.TextField(blank=True, null=True)
+    belongs_to = models.ForeignKey(SubMajor, models.DO_NOTHING, db_column='belongs_to')
+
+    class Meta:
+        db_table = 'subjects'
+
+
+class Tutor(models.Model):
+    name = models.CharField(max_length=200)
+    qualification = models.TextField()
+
+    class Meta:
+        db_table = 'tutor'
 
 
 class UniAddress(models.Model):
@@ -88,7 +367,7 @@ class UniAddress(models.Model):
 
 
 class UniAddressMapping(models.Model):
-    u = models.ForeignKey('Universities', models.DO_NOTHING, blank=True, null=True)
+    u = models.ForeignKey('University', models.DO_NOTHING)
     a = models.ForeignKey(UniAddress, models.DO_NOTHING, blank=True, null=True)
     is_main = models.IntegerField(blank=True, null=True)
 
@@ -96,7 +375,7 @@ class UniAddressMapping(models.Model):
         db_table = 'uni_address_mapping'
 
 
-class Universities(models.Model):
+class University(models.Model):
     name = models.CharField(max_length=250, blank=True, null=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     logo_url = models.CharField(max_length=1000, blank=True, null=True)
@@ -109,7 +388,7 @@ class Universities(models.Model):
 
 
 class UniversityContent(models.Model):
-    u = models.ForeignKey(Universities, models.DO_NOTHING)
+    u = models.ForeignKey(University, models.DO_NOTHING)
     h = models.ForeignKey(Header, models.DO_NOTHING)
     sh = models.ForeignKey(SubHeader, models.DO_NOTHING, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -119,285 +398,47 @@ class UniversityContent(models.Model):
 
 
 class UniversityRequirement(models.Model):
-    u = models.ForeignKey(Universities, models.DO_NOTHING)
-    r = models.ForeignKey(Requirements, models.DO_NOTHING, blank=True, null=True)
-    requirement_for = models.IntegerField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    u = models.ForeignKey(University, models.DO_NOTHING)
+    r = models.ForeignKey(Requirements, models.DO_NOTHING)
+    base_score = models.IntegerField(blank=True, null=True)
 
     class Meta:
         db_table = 'university_requirement'
 
 
-class District(models.Model):  # location of students
-    districtname = models.CharField(max_length=15)
+class UploadedDocument(models.Model):
+    student = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
+    docname = models.CharField(max_length=30)
+    url = models.TextField()
+    doctype = models.ForeignKey('DocumentType', models.DO_NOTHING)
 
     class Meta:
-        db_table = "district"
+        db_table = 'uploaded_document'
 
-
-class Country(models.Model):  # available country for which students can apply
-    countryname = models.CharField(max_length=15)
-
-    class Meta:
-        db_table = "country"
-
-
-class ApplyType(models.Model):  # student apply or dependendent apply ?
-    applytype = models.CharField(max_length=15)
-
-    class Meta:
-        db_table = "applytype"
-
-
-class ProgramsOffered(models.Model):  # bachelor, masters, phd or diploma
-    programOffered = models.CharField(max_length=20)
-
-    class Meta:
-        db_table = "programsOffered"
+    def __str__(self):
+        return self.docname
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="studentprofile")
 
     dob = models.DateField()
     mobile = models.IntegerField()
     remember_token = models.CharField(max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
-    scholarship = models.BooleanField(default=False)  # apply for scholarship or not ?
+    scholarship = models.IntegerField()
     citizenship = models.CharField(max_length=15)
     passport = models.CharField(max_length=15, blank=True, null=True)
 
-    district = models.ForeignKey(District, models.DO_NOTHING,blank=True,null=True)
-    apply_for = models.ForeignKey(Country, models.DO_NOTHING)
-    sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING,blank=True,null=True)
-    apply_type = models.ForeignKey(ApplyType, models.DO_NOTHING,blank=True,null=True )
-    program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING,blank=True,null=True)
+    district = models.ForeignKey('District', models.DO_NOTHING)
+    applied_country = models.ForeignKey('Country', models.DO_NOTHING)
+    sub_major = models.ForeignKey('SubMajor', models.DO_NOTHING)
+    apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
+    program = models.ForeignKey('ProgramsOffered', models.DO_NOTHING)
+    isblocked = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'user_profile'
 
-
-class Notification(models.Model):
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver', blank=True, null=True)
-    sender = models.ForeignKey(User, related_name='sender', blank=True, null=True)
-    read = models.BooleanField(default=False)
-    title = models.CharField(blank=True, null=True, max_length=50)
-    Type = models.IntegerField(blank=True, null=True)
-    message = models.TextField()
-    created = models.DateTimeField()
-    map_url = models.TextField(blank=True, null=True, )
-    web_url = models.TextField(blank=True, null=True)
-
-    class Meta:
-        db_table = 'notifications'
-
-
-class AdminProfile(models.Model):
-    consultancyName = models.CharField(max_length=30)
-    pan_vat = models.CharField(max_length=20)
-    reg_no = models.CharField(max_length=20)
-    location = models.CharField(max_length=20)
-    website = models.CharField(max_length=50)
-    phone = models.IntegerField()
-    description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    company_logo = models.ImageField(upload_to='images/admincompanylogo/', blank=True, null=True)
-
-    class Meta:
-        db_table = "adminprofile"
-
-
-class ModeratorProfile(models.Model):
-    mobile = models.IntegerField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    address = models.CharField(max_length=20)
-    profile_image = models.ImageField(upload_to='images/moderatorprofileimage/',blank=True,null=True)
-
-    class Meta:
-        db_table = "moderatorprofile"
-
-
-class CounselorProfile(models.Model):
-    mobile = models.IntegerField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='userid')
-    address = models.CharField(max_length=20)
-    admin = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='adminid')
-    profile_image = models.ImageField(upload_to='images/counselorprofileimage/',blank=True,null=True)
-
-    class Meta:
-        db_table = "counselorprofile"
-
-
-class documenttype(models.Model):
-    name = models.CharField(max_length=30)
-
-    class Meta:
-        db_table = 'documenttype'
-
     def __str__(self):
-        return self.name
-
-
-class uploadeddocuments(models.Model):
-    student_id = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
-    doctype = models.ForeignKey(documenttype)
-    docname = models.CharField(max_length=30)
-    file = models.FileField(upload_to='documents/%Y/%m/%d/')
-
-    class Meta:
-        db_table = 'uploadeddocuments'
-
-    def __str__(self):
-        return str(self.student_id) + " : " + str(self.docname)
-
-
-class documentfor(models.Model):
-    documentforname = models.CharField(max_length=30)
-
-    class Meta:
-        db_table = 'documentfor'
-
-    def __str__(self):
-        return str(self.documentforname)
-
-
-class pickup(models.Model):
-    pickupof = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
-    pickup_date = models.DateField()
-    time = models.TimeField()
-    location = models.CharField(max_length=50)
-    is_pending = models.BooleanField(default=1)
-    created_date = models.DateField()
-    documentfor = models.ForeignKey(documentfor, models.DO_NOTHING)
-
-    class Meta:
-        db_table = 'pickup'
-
-    def __str__(self):
-        return str(self.pickupof.username)
-
-
-class deliveryMan(models.Model):
-    name = models.CharField(max_length=30)
-    mobile = models.CharField(max_length=10)
-
-    class Meta:
-        db_table = "deliveryman"
-
-    def __str__(self):
-        return self.name
-
-
-class scheduledpickup(models.Model):
-    deliveryman = models.ForeignKey(deliveryMan, on_delete=models.DO_NOTHING)
-    deliverydate = models.DateField()
-    deliverytime = models.TimeField()
-    pickup = models.ForeignKey(pickup, on_delete=models.CASCADE)
-    is_picked = models.NullBooleanField(blank=True, null=True)
-
-    class Meta:
-        db_table = "scheduledpickup"
-
-    def __str__(self):
-        return str(self.deliverydate) + " : " + str(self.deliveryman.name)
-
-
-class pickupdetails(models.Model):
-    pickupid = models.ForeignKey(pickup, on_delete=models.CASCADE)
-    documentid = models.ForeignKey(uploadeddocuments, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'pickupdetails'
-
-    def __str__(self):
-        return str(self.pickupid) + str(self.documentid)
-
-
-class Tutor(models.Model):
-    name = models.CharField(max_length=200)
-    qualification = models.TextField()
-
-    class Meta:
-        db_table = 'tutor'
-
-    def __str__(self):
-        return self.name
-
-
-class ClassType(models.Model):
-    title = models.CharField(max_length=50)
-
-    class Meta:
-        db_table = 'classtype'
-
-    def __str__(self):
-        return self.title
-
-
-class OfferedClass(models.Model):
-    name = models.CharField(max_length=100)
-    classtype = models.ForeignKey(ClassType, on_delete=models.CASCADE)
-    startdate = models.DateField()
-    enddate = models.DateField()
-    price = models.IntegerField()
-    discountpercent = models.IntegerField()
-    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
-    scholarshippercent = models.IntegerField()
-    location = models.CharField(max_length=100)
-    starttime = models.TimeField()
-    endtime = models.TimeField()
-    created = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        db_table = 'offeredclass'
-
-    def __str__(self):
-        return self.name
-
-
-class RegisteredClass(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    offeredclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'registeredclass'
-
-
-class OfferType(models.Model):
-    title = models.CharField(max_length=50)
-
-    class Meta:
-        db_table = 'offertype'
-
-    def __str__(self):
-        return self.title
-
-
-class Offer(models.Model):
-    title = models.CharField(max_length=50)
-    description = models.TextField()
-    offertype = models.ForeignKey(OfferType, on_delete=models.CASCADE)
-    offerinclass = models.ForeignKey(OfferedClass, on_delete=models.CASCADE, blank=True, null=True)
-    discountpercent = models.IntegerField(null=True, blank=True)
-    university = models.ForeignKey(Universities, on_delete=models.CASCADE, blank=True, null=True)
-    scholarshippercent = models.IntegerField(null=True, blank=True)
-    validity = models.DateField()
-    created = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        db_table = 'offer'
-
-    def __str__(self):
-        return self.title
-
-
-class NotificationType(models.Model):
-    id = models.IntegerField(primary_key=True)
-    title = models.CharField(max_length=100)
-    description = models.CharField(max_length=400)
-
-    class Meta:
-        db_table = 'notification_type'
-
-    def __str__(self):
-        return self.title
+        return ("profile of " + str(self.user))

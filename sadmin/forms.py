@@ -5,7 +5,7 @@ from django.contrib.auth.models import User, Group
 from django.shortcuts import get_object_or_404
 
 from .models import Country
-from .models import UserProfile, AdminProfile, ModeratorProfile, CounselorProfile
+from .models import UserProfile, Consultancy, ModeratorProfile, Counselor
 
 
 class AddAdminForm(forms.Form):
@@ -44,14 +44,14 @@ class AddAdminForm(forms.Form):
                                             is_superuser=False,
                                             is_staff=False,
                                             )
-        m1 = AdminProfile(user=new_user, consultancyName=self.cleaned_data.get('consultancyName'),
-                          pan_vat=self.cleaned_data.get('pan_vat'),
-                          reg_no=self.cleaned_data.get('reg_no'),
-                          location=self.cleaned_data.get('location'),
-                          website=self.cleaned_data.get('website'),
-                          phone=self.cleaned_data.get('phone'),
-                          company_logo=self.cleaned_data.get('image'),
-                          description=self.cleaned_data.get('description'))
+        m1 = Consultancy(user=new_user, consultancyName=self.cleaned_data.get('consultancyName'),
+                         pan_vat=self.cleaned_data.get('pan_vat'),
+                         reg_no=self.cleaned_data.get('reg_no'),
+                         location=self.cleaned_data.get('location'),
+                         website=self.cleaned_data.get('website'),
+                         phone=self.cleaned_data.get('phone'),
+                         company_logo=self.cleaned_data.get('image'),
+                         description=self.cleaned_data.get('description'))
 
         m1.save()
         admingroup = get_object_or_404(Group, name="adminGroup")
@@ -145,10 +145,10 @@ class AddCounselorForm(forms.Form):
                                             is_staff=False,
                                             is_superuser=False,
                                             )
-        m1 = CounselorProfile(user=new_user, mobile=00,
-                              address=self.cleaned_data.get('address'),
-                              profile_image=self.cleaned_data['image'],
-                              admin=self.user)
+        m1 = Counselor(user=new_user, mobile=00,
+                       address=self.cleaned_data.get('address'),
+                       profile_image=self.cleaned_data['image'],
+                       admin=self.user)
         m1.save()
         counselorgroup = get_object_or_404(Group, name="counsellorGroup")
         counselorgroup.user_set.add(new_user)
@@ -195,6 +195,6 @@ class SignupForm(forms.Form):
         country = get_object_or_404(Country, countryname=self.cleaned_data.get('apply_for'))
         m1 = UserProfile(user=new_user, mobile=self.cleaned_data.get('mobile'),
                          dob=self.cleaned_data.get('dob'),
-                         apply_for=country)
+                         apply_for=Country)
         m1.save()
         return new_user

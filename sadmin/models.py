@@ -255,15 +255,48 @@ class UploadedDocument(models.Model):
         db_table = 'uploaded_document'
 
 
+
+identification=(
+    ('Passport', 'Passport'),
+    ('Citizenship', 'Citizenship')
+)
+
+class Sponsor(User):
+    middle_name = models.CharField(max_length=20, blank=True, null=True)
+    relationship = models.CharField(max_length=20)
+    identification = models.CharField(choices=identification, max_length=15)
+    fileurl = models.TextField()
+    phone1 = models.CharField(max_length=15, blank=True, null=True)
+    phone2 = models.CharField(max_length=15, blank=True, null=True)
+    phone3 = models.CharField(max_length=15, blank=True, null=True)
+
+
+
+
+class Address(models.Model):
+    district = models.ForeignKey('District', models.DO_NOTHING)
+    city = models.CharField(max_length=20)
+    AddressLine1 = models.CharField(max_length=20)
+    AddressLine2 = models.CharField(max_length=20)
+    AddressLine3 = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.district + " : " + self.city
+
+
 gender = (
     ('Male','Male'),
     ('Female','Female')
 )
 
 class Student(User):
+    middle_name = models.CharField(max_length=20, blank=True, null=True)
     gender = models.CharField(choices=gender, max_length=6)
-    dob = models.DateField()
-    mobile = models.IntegerField()
+    dob_np = models.DateField()
+    dob_en = models.DateField()
+    phone1 = models.CharField(max_length=15, blank=True, null=True)
+    phone2 = models.CharField(max_length=15, blank=True, null=True)
+    phone3 = models.CharField(max_length=15, blank=True, null=True)
     remember_token = models.CharField(max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     scholarship = models.IntegerField()
@@ -277,18 +310,16 @@ class Student(User):
     isblocked = models.BooleanField(default=False)
     student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True, related_name="consultancy_student")
 
+    temp_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, related_name="temp_address")
+    perm_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING,blank=True, null=True, related_name="perm_address")
+
     class Meta:
         db_table = 'user_profile'
 
     def __str__(self):
         return ("profile of " + str(user))
 
-class Address(models.Model):
-    district = models.ForeignKey('District', models.DO_NOTHING)
-    city = models.CharField(max_length=20)
-    Locality = models.CharField(max_length=20)
 
-
-    class Admin(admin.ModelAdmin):
-        list_display = ('applied_country', 'sub_major', 'program', 'isblocked', 'consultancy')
+# class Admin(admin.ModelAdmin):
+#     list_display = ('applied_country', 'sub_major', 'program', 'isblocked', 'consultancy')
 

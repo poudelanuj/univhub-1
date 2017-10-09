@@ -28,19 +28,19 @@ from django.contrib.auth.decorators import login_required
 
 
 # any user must have profile form to check if it is blocked or not
-def informationCenter(user:User):
-    group=user.groups.all()[0]
-    if group=='super_admin':
-        pass
-
-    print(group.name)
-    parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
-              'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
-              'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
-              'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
-              }
-    return parcel
+# def informationCenter(user:User):
+#     group=user.groups.all()[0]
+#     if group=='super_admin':
+#         pass
+#
+#     print(group.name)
+#     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
+#               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
+#               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
+#               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
+#               'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
+#               }
+#     return parcel
 
 
 
@@ -74,12 +74,6 @@ def getNotificationsPage(request):
     return render(request, "notifications.html",
                   context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
 
-
-def StudentDetail(request, pk):
-    student = get_object_or_404(User, pk=pk)
-    documents = UploadedDocument.objects.filter(student=student)
-
-    return render(request, "student-detail.html", context={'student': student, 'documents': documents})
 
 
 def getNotifications(request):

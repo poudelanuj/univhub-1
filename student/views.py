@@ -39,9 +39,10 @@ class ProfileSetupSubMajor(FormView):
 
 
 def StudentDetail(request, pk):
-    student = get_object_or_404(User, pk=pk)
-    documents = UploadedDocument.objects.filter(student=student)
-    return render(request, 'student-profile.html', {'student': student})
+    usr = get_object_or_404(User, pk=pk)
+    spnsr = Sponsor.objects.filter(sponsorof=pk)
+    # documents = UploadedDocument.objects.filter(student=student)
+    return render(request, 'student-profile.html', {'user': usr, 'sponsor': spnsr})
 
 
 def getStudentUploadedDocuments(request, student_id):
@@ -66,6 +67,6 @@ def getStudentNotice(request, student_id):
     return render(request, 'studentuploadeddocuments.html', {'notifications': notifications})
 
 
-def editStudentProfile(request,student_id):
+def editStudentProfile(request, student_id):
     student = get_object_or_404(User, pk=student_id)
-    return render(request,'edit-profile.html',context={'student':student})
+    return render(request, 'edit-profile.html', context={'student': student})

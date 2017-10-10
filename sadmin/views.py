@@ -282,14 +282,6 @@ def getOffersPage(request):
             'offer_month': offer_month}
     return render(request, 'offers.html', json)
 
-
-def StudentDetail(request, pk):
-    usr = get_object_or_404(User, pk=pk)
-    spnsr = Sponsor.objects.get(sponsorof = pk )
-    # documents = UploadedDocument.objects.filter(student=student)
-    return render(request, 'student-profile.html', {'user': usr, 'sponsor':spnsr})
-
-
 # ajax calls handling part
 
 def addcounselor(request):

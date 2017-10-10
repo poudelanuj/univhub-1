@@ -45,7 +45,7 @@ class ClassType(models.Model):
 class Counselor(User):
     mobile = models.IntegerField()
     address = models.CharField(max_length=20)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="counselor_user_profile")
+    counselor_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, default=None, blank=True,related_name="counselor_counsultancy")
     is_blocked = models.BooleanField(default=False)
 
 
@@ -193,18 +193,6 @@ identification = (
 )
 
 
-class Sponsor(User):
-    middle_name = models.CharField(max_length=20, blank=True, null=True)
-    relationship = models.CharField(max_length=20)
-    identification = models.CharField(choices=identification, max_length=15)
-    fileurl = models.TextField()
-    phone1 = models.CharField(max_length=15, blank=True, null=True)
-    phone2 = models.CharField(max_length=15, blank=True, null=True)
-    phone3 = models.CharField(max_length=15, blank=True, null=True)
-
-    def __str__(self):
-        return self.middle_name + " : " + self.relationship
-
 
 class Address(models.Model):
     district = models.ForeignKey('District', models.DO_NOTHING)
@@ -241,12 +229,27 @@ class Student(User):
     apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
     program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
     isblocked = models.BooleanField(default=False)
-    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True,
-                                            related_name="consultancy_student")
+    student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True, related_name="consultancy_student")
+
     temp_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, related_name="temp_address")
-    perm_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, blank=True, null=True,
-                                     related_name="perm_address")
+    perm_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING,blank=True, null=True, related_name="perm_address")
+
 
     def __str__(self):
         return ("profile of " + str(self.user))
+
+class Sponsor(models.Model):
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    middle_name = models.CharField(max_length=20, blank=True, null=True)
+    relationship = models.CharField(max_length=20)
+    identification = models.CharField(choices=identification, max_length=15)
+    fileurl = models.TextField()
+    phone1 = models.CharField(max_length=15)
+    phone2 = models.CharField(max_length=15, blank=True, null=True)
+    phone3 = models.CharField(max_length=15, blank=True, null=True)
+    sponsorof = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.middle_name + " : " + self.relationship
 

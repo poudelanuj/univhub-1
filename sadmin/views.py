@@ -1,19 +1,17 @@
 import json
 
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.handlers import wsgi
 from django.core.mail import EmailMessage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.timezone import datetime
 from django.views.decorators.csrf import csrf_exempt
 
 from json_requests import handler
@@ -285,6 +283,13 @@ def getOffersPage(request):
     return render(request, 'offers.html', json)
 
 
+def StudentDetail(request, pk):
+    usr = get_object_or_404(User, pk=pk)
+    spnsr = Sponsor.objects.get(sponsorof = pk )
+    # documents = UploadedDocument.objects.filter(student=student)
+    return render(request, 'student-profile.html', {'user': usr, 'sponsor':spnsr})
+
+
 # ajax calls handling part
 
 def addcounselor(request):
@@ -326,8 +331,9 @@ def ajaxCallForDeleteRole(request):
     usr = User.objects.get(id=userId)
     usr.is_active = False
 
+
     mygroup = Consultancy.objects.filter(user=userId)
-    if (len(mygroup)):
+    if(len(mygroup)):
         mygroup[0].is_blocked = True
         mygroup[0].save()
 
@@ -344,6 +350,7 @@ def ajaxCallForDeleteRole(request):
     data = informationCenter()
     reloadPortion = render_to_string('dashboard_admins_Info.html', data)
     return HttpResponse(reloadPortion)
+
 
 
 def ajaxCallForActivationRole(request):
@@ -448,5 +455,3 @@ def passwordchange(request, uidb64, token):
         return HttpResponse('Password is changed')
     else:
         return HttpResponse('Activation link is invalid!')
-
-

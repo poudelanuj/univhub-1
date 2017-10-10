@@ -19,7 +19,7 @@ admin.site.register(OfferedClass)
 admin.site.register(RegisteredClass)
 admin.site.register(OfferType)
 admin.site.register(Offer)
-
+admin.site.register(University)
 admin.site.register(Deliveryman)
 admin.site.register(DocumentType)
 admin.site.register(DocumentFor)

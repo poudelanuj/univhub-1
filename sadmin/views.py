@@ -55,7 +55,7 @@ def index(request):
                        'counsellorGroup': User.objects.filter(groups__name='consultancy_moderator'),
                        'studentCount': User.objects.filter(groups__name='student').count(),
                        'todayjoined': User.objects.filter(date_joined__day=datetime.now().day,
-                                                          groups__name='studentGroup').count()
+                                                          groups__name='student').count()
                        })
     elif group == 'student':
         pass

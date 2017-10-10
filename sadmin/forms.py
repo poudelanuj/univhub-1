@@ -4,8 +4,7 @@ from django import forms
 from django.contrib.auth.models import User, Group
 from django.shortcuts import get_object_or_404
 
-from .models import Country
-from .models import UserProfile, Consultancy, ModeratorProfile, Counselor
+from .models import Student, Consultancy, ModeratorProfile, Counselor, Country
 
 
 class AddAdminForm(forms.Form):
@@ -192,9 +191,10 @@ class SignupForm(forms.Form):
                                             is_superuser=False,
                                             is_active=False,
                                             )
-        country = get_object_or_404(Country, countryname=self.cleaned_data.get('apply_for'))
-        m1 = UserProfile(user=new_user, mobile=self.cleaned_data.get('mobile'),
-                         dob=self.cleaned_data.get('dob'),
-                         apply_for=Country)
+        country=get_object_or_404(Country,countryname=self.cleaned_data.get('apply_for'))
+        m1 = Student(user=new_user, mobile=self.cleaned_data.get('mobile'),
+
+                     dob=self.cleaned_data.get('dob'),
+                     apply_for=Country)
         m1.save()
         return new_user

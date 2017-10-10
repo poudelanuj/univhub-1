@@ -58,3 +58,14 @@ def getStudentRegisteredClasses(request, student_id):
     student = get_object_or_404(User, pk=student_id)
     classes = RegisteredClass.objects.filter(user=student)
     return render(request, 'studentuploadeddocuments.html', {'classes': classes})
+
+
+def getStudentNotice(request, student_id):
+    student = get_object_or_404(User, pk=student_id)
+    notifications = Notification.objects.filter(receiver=student)
+    return render(request, 'studentuploadeddocuments.html', {'notifications': notifications})
+
+
+def editStudentProfile(request,student_id):
+    student = get_object_or_404(User, pk=student_id)
+    return render(request,'edit-profile.html',context={'student':student})

@@ -21,35 +21,60 @@ from json_requests import handler
 from .forms import SignupForm, AddModeratorForm, AddAdminForm, AddCounselorForm
 from .models import *
 from .tokens import account_activation_token
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.timezone import datetime
+from django.contrib.auth.models import User, Group
+import traceback
 
+from django.contrib.auth.decorators import login_required
 
-# from fcm_django.models import FCMDevice
 
 # any user must have profile form to check if it is blocked or not
-def informationCenter():
-    parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup', admin_user_profile__is_blocked=False),
-              'moderatorGroup': User.objects.filter(groups__name='moderatorGroup',
-                                                    moderator_user_profile__is_blocked=False),
-              'counsellorGroup': User.objects.filter(groups__name='counsellorGroup',
-                                                     counselor_user_profile__is_blocked=False),
-              'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-              'todayjoined': User.objects.filter(date_joined__day=datetime.now().day,
-                                                 groups__name='studentGroup').count()
-              }
-    return parcel
+# def informationCenter(user:User):
+#     group=user.groups.all()[0]
+#     if group=='super_admin':
+#         pass
+#
+#     print(group.name)
+#     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
+#               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
+#               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
+#               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
+#               'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
+#               }
+#     return parcel
+
 
 
 @login_required
 def index(request):
-    parcel = informationCenter()
-    return render(request, 'admin-dashboard.html', parcel)
+    user = request.user
+    group = user.groups.all()[0]
+    if group.name == 'univhub_super_admin' or group.name == 'univhub_moderator':
+        return render(request, 'admin-dashboard.html',
+                      {'adminGroup': User.objects.filter(groups__name='consultancy_admin'),
+                       'moderatorGroup': User.objects.filter(groups__name='univhub_moderator'),
+                       'counsellorGroup': User.objects.filter(groups__name='consultancy_moderator'),
+                       'studentCount': User.objects.filter(groups__name='student').count(),
+                       'todayjoined': User.objects.filter(date_joined__day=datetime.now().day,
+                                                          groups__name='studentGroup').count()
+                       })
+    elif group == 'student':
+        pass
+    else:
+        return render(request, 'consultancy_dashboard.html',
+                      {
+                          'counsellorGroup': Counselor.objects.filter(consultancy__pk=user.pk),
+                          'studentCount': Student.objects.filter(consultancy=user.pk).count(),
+                          'todayjoined': Student.objects.filter(user__date_joined__day=datetime.now().day,
+                                                                consultancy=user.pk).count()
+                      })
 
 
 def getNotificationsPage(request):
     print("size of notification", len(Notification.objects.all()))
     return render(request, "notifications.html",
                   context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
-
 
 
 def getNotifications(request):
@@ -94,8 +119,8 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        m = UserProfile(user=user)
-        m1.save()
+        m = Student(user=user)
+        m.save()
         login(request, user)
         # return redirect('home')
         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
@@ -293,7 +318,9 @@ def addcounselor(request):
     return JsonResponse({'success': False})
 
 
-# delete role will cause the name not to appear in the list
+#todo
+#redo this function
+#delete role will cause the name not to appear in the list
 def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
     usr = User.objects.get(id=userId)

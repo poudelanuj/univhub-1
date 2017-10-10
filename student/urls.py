@@ -9,5 +9,7 @@ urlpatterns = [
     url(r'uploadeddocuments/(?P<student_id>\d+)', views.getStudentUploadedDocuments),
     url(r'applieduniversities/(?P<student_id>\d+)', views.getStudentAppliedUniversities),
     url(r'classes/(?P<student_id>\d+)', views.getStudentRegisteredClasses),
+    url(r'notice/(?P<student_id>\d+)', views.getStudentNotice),
+    url(r'^editprofile/(?P<student_id>\d+)', views.editStudentProfile),
 
 ]

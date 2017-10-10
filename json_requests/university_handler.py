@@ -9,8 +9,10 @@ from sadmin.models import *;
 
 from django.http import JsonResponse
 
+
 def basic_info_university(request):
-    print(request.user.pk,request.user)
+
+    print(request.user.pk, request.user)
 
     universities = University.objects.all();
     univ_list = []
@@ -43,4 +45,4 @@ def basic_info_university(request):
             else:
                 univ_lev[sub.level.level_name] = {sub.submajor.major.major_name: [sub.submajor.sub_major_name]}
         univ_list.append(dic)
-    return JsonResponse(univ_list,safe=False)
+    return JsonResponse(univ_list, safe=False)

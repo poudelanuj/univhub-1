@@ -7,4 +7,5 @@ db.sqlite3
 json_requests/__pycache__/
 sadmin/__pycache__/
 /sadmin/migrations/
-!/sadmin/migrations/
+/student/migrations/
+/university/migrations/

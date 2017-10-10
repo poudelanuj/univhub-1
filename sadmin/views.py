@@ -28,19 +28,19 @@ from django.contrib.auth.decorators import login_required
 
 
 # any user must have profile form to check if it is blocked or not
-# def informationCenter(user:User):
-#     group=user.groups.all()[0]
-#     if group=='super_admin':
-#         pass
-#
-#     print(group.name)
-#     parcel = {'adminGroup': User.objects.filter(groups__name='adminGroup'),
-#               'moderatorGroup': User.objects.filter(groups__name='moderatorGroup'),
-#               'counsellorGroup': User.objects.filter(groups__name='counsellorGroup'),
-#               'studentCount': User.objects.filter(groups__name='studentGroup').count(),
-#               'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='studentGroup').count()
-#               }
-#     return parcel
+def informationCenter(user:User):
+    group=user.groups.all()[0]
+    if group=='univhub_super_admin':
+        pass
+
+    print(group.name)
+    parcel = {'adminGroup': User.objects.filter(groups__name='consultancy_admin'),
+              'moderatorGroup': User.objects.filter(groups__name='univhub_moderator'),
+              'counsellorGroup': User.objects.filter(groups__name='consultancy_moderator'),
+              'studentCount': User.objects.filter(groups__name='student').count(),
+              'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='student').count()
+              }
+    return parcel
 
 
 

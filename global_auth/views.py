@@ -1,5 +1,11 @@
+from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.core.mail import EmailMessage
+
 from django.views import View
 from django.http import JsonResponse, HttpResponseRedirect, QueryDict
 from django.views.generic.edit import FormView
@@ -8,6 +14,36 @@ from django.contrib.auth import authenticate,login
 from django import forms
 from sadmin.models import Consultancy
 import json
+
+from sadmin.tokens import account_activation_token
+
+def resetpassword(request):
+    print("check reset")
+    user = request.user
+    if request.method == 'POST':
+        print("processing your email reset...")
+        myemail = request.POST.get('email')
+        try:
+            user = User.objects.get(email=myemail)
+            print(user)
+        except:
+            return JsonResponse({'success':False, 'error':'User do not exist'})
+
+        current_site = get_current_site(request)
+        subject = "Reset Password"
+        message = render_to_string('password_change_email.html',
+                                    {'user':user, 'domain':current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                                    'token':account_activation_token.make_token(user)
+                                    }
+                                   )
+        email = EmailMessage(subject,message,to=[myemail])
+        email.send()
+        return JsonResponse({'success':True, 'message': 'Check Your Email for reseting password.'})
+
+    else:
+        return render(request, 'forgetpassword.html')
+
 
 
 class LoginView(FormView):
@@ -61,3 +97,5 @@ class LoginView(FormView):
                 return JsonResponse({'success': True, 'home': '/sadmin/admin-dashboard.html'})
             else:
                 return redirect('/sadmin/admin-dashboard.html');
+
+

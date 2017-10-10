@@ -98,6 +98,11 @@ def signup(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
+            superadmin = get_object_or_404(User, pk=1)
+            Notification.objects.create(type=1, receiver=superadmin, sender=user,
+                                        title= "New Sign Up",
+                                        message=user.first_name + user.last_name + "Signed Up", created=datetime.datetime.now())
+
             return render(request, 'checkemail.html', {'form': form})
     else:
         form = SignupForm()
@@ -164,9 +169,10 @@ def addadmin(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
-                                        title="New Admin Creation",
-                                        message="New admin has been created", created=datetime.datetime.now())
+            superadmin = get_object_or_404(User, pk=1)
+            Notification.objects.create(type = 2, receiver=superadmin, sender=newuser,
+                                        title="Consultancy Created",
+                                        message="Username : " + newuser.username , created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
             print("form invalid")
@@ -196,9 +202,10 @@ def addmoderator(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+            superadmin = get_object_or_404(User, pk=1)
+            Notification.objects.create(type = 2, receiver=superadmin, sender=newuser,
                                         title="New Moderator Creation",
-                                        message="New moderator has been created", created=datetime.datetime.now())
+                                        message="Username : " + newuser.username, created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
             errors = form.errorlist
@@ -302,9 +309,9 @@ def addcounselor(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(receiver=get_object_or_404(User, pk=1), sender=newuser,
+            Notification.objects.create(type = 2, receiver=get_object_or_404(User, pk=1), sender=newuser,
                                         title="New Counselor Creation",
-                                        message="New Counselor has been created", created=datetime.datetime.now())
+                                        message="Counsellor username:"+ newuser.username, created=datetime.datetime.now())
             return JsonResponse(errors)
         else:
             print("form1 invalid")

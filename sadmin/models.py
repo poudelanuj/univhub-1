@@ -12,6 +12,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from university.models import *
 from student.models import *
+from django.contrib.auth.models import Group
+
 
 
 class Consultancy(User):
@@ -90,15 +92,17 @@ class NotificationType(models.Model):
 
 
 class Notification(models.Model):
-    read = models.IntegerField()
+    read = models.BooleanField(default=False)
     title = models.CharField(max_length=50, blank=True, null=True)
     type = models.ForeignKey('NotificationType', models.DO_NOTHING)
     message = models.TextField()
     created = models.DateTimeField()
     map_url = models.TextField(blank=True, null=True)
     web_url = models.TextField(blank=True, null=True)
-    receiver = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_receiver')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='pk_not_receiver')
+    receiver_group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
     sender = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name='pk_not_sender')
+    jsondata = models.TextField(blank=True, null=True)
 
 
 class Offer(models.Model):

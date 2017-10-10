@@ -15,7 +15,7 @@ class IntendedSubMajor (models.Model):
 
 
 class IntendedUniversity(models.Model):
-    process = models.Model(Process, on_delete=models.CASCADE)
+    process = models.ForeignKey(Process, on_delete=models.CASCADE)
     university = models.ForeignKey(University, on_delete=models.CASCADE)
 
 class ScoreProfile(Student):

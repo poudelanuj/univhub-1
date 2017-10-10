@@ -18,3 +18,8 @@ class IntendedUniversity(models.Model):
     process = models.Model(Process, on_delete=models.CASCADE)
     university = models.ForeignKey(University, on_delete=models.CASCADE)
 
+class ScoreProfile(Student):
+    ieltsScore = models.IntegerField(blank=True, null=True)
+    toeflScore = models.IntegerField(blank=True, null=True)
+    satScore = models.IntegerField(blank=True, null=True)
+    

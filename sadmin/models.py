@@ -94,7 +94,7 @@ class NotificationType(models.Model):
 class Notification(models.Model):
     read = models.BooleanField(default=False)
     title = models.CharField(max_length=50, blank=True, null=True)
-    type = models.ForeignKey('NotificationType', models.DO_NOTHING)
+    type = models.ForeignKey(NotificationType, models.DO_NOTHING)
     message = models.TextField()
     created = models.DateTimeField()
     map_url = models.TextField(blank=True, null=True)

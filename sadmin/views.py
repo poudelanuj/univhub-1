@@ -26,6 +26,7 @@ import traceback
 
 from django.contrib.auth.decorators import login_required
 
+import datetime
 
 # any user must have profile form to check if it is blocked or not
 def informationCenter(user:User):
@@ -94,7 +95,8 @@ def signup(request):
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
             superadmin = get_object_or_404(User, pk=1)
-            Notification.objects.create(type=1, receiver=superadmin, sender=user,
+            type1 = get_object_or_404(NotificationType, id=1)
+            Notification.objects.create(type=type1, receiver=superadmin, sender=user,
                                         title= "New Sign Up",
                                         message=user.first_name + user.last_name + "Signed Up", created=datetime.datetime.now())
 
@@ -147,6 +149,7 @@ def getStudentslistPage(request):
 
 
 def addadmin(request):
+    print("saving admin")
     form = AddAdminForm(request.POST, request.FILES)
     if request.method == 'POST':
         if form.is_valid():
@@ -164,10 +167,13 @@ def addadmin(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
+            print("email sent")
             superadmin = get_object_or_404(User, pk=1)
-            Notification.objects.create(type = 2, receiver=superadmin, sender=newuser,
+            type1 = get_object_or_404(NotificationType, id=1)
+            Notification.objects.create(type = type1, receiver=superadmin, sender=newuser,
                                         title="Consultancy Created",
                                         message="Username : " + newuser.username , created=datetime.datetime.now())
+            print("notification also sent")
             return JsonResponse(errors)
         else:
             print("form invalid")
@@ -176,7 +182,7 @@ def addadmin(request):
             print(errors)
             return JsonResponse(errors)
 
-    return JsonResponse({'success'"False"})
+    return JsonResponse({'success':"False"})
 
 
 def addmoderator(request):

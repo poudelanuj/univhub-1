@@ -34,28 +34,31 @@ class AddAdminForm(forms.Form):
         return cleaned_data
 
     def save(self):
-        new_user = User.objects.create_user(username=self.cleaned_data['username'],
-                                            first_name="admin",
-                                            last_name="admin",
-                                            password=self.cleaned_data['password'],
-                                            email=self.cleaned_data['email'],
-                                            date_joined=datetime.datetime.today(),
-                                            is_superuser=False,
-                                            is_staff=False,
-                                            )
-        m1 = Consultancy(pk=new_user, consultancyname=self.cleaned_data.get('consultancyName'),
-                         pan_vat=self.cleaned_data.get('pan_vat'),
-                         reg_no=self.cleaned_data.get('reg_no'),
-                         location=self.cleaned_data.get('location'),
-                         website=self.cleaned_data.get('website'),
-                         phone=self.cleaned_data.get('phone'),
-                         company_logo=self.cleaned_data.get('image'),
-                         description=self.cleaned_data.get('description'))
 
-        m1.save()
-        admingroup = get_object_or_404(Group, name="adminGroup")
+        c = Consultancy.objects.create(username=self.cleaned_data['username'],
+                        first_name="admin",
+                        last_name="admin",
+                        password=self.cleaned_data['password'],
+                        email=self.cleaned_data['email'],
+                        date_joined=datetime.datetime.today(),
+                        is_superuser=False,
+                        is_staff=False,
+                       consultancyname=self.cleaned_data.get('consultancyName'),
+                       pan_vat=self.cleaned_data.get('pan_vat'),
+                       reg_no=self.cleaned_data.get('reg_no'),
+                       location=self.cleaned_data.get('location'),
+                       website=self.cleaned_data.get('website'),
+                       phone=self.cleaned_data.get('phone'),
+                       description=self.cleaned_data.get('description'),
+                       is_blocked=False,
+                       )
+        new_user=User.objects.get(pk=c.pk)
+        print("Consultancy create")
+        print(new_user)
+        admingroup = get_object_or_404(Group, name="consultancy_admin")
         admingroup.user_set.add(new_user)
         return new_user
+
 
 
 class AddModeratorForm(forms.Form):
@@ -191,7 +194,7 @@ class SignupForm(forms.Form):
                                             is_superuser=False,
                                             is_active=False,
                                             )
-        country=get_object_or_404(Country,countryname=self.cleaned_data.get('apply_for'))
+        country = get_object_or_404(Country, countryname=self.cleaned_data.get('apply_for'))
         m1 = Student(pk=new_user, mobile=self.cleaned_data.get('mobile'),
 
                      dob=self.cleaned_data.get('dob'),

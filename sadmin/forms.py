@@ -31,6 +31,13 @@ class AddAdminForm(forms.Form):
             self.errorlist['username'] = 'This username already exists'
             raise forms.ValidationError("This username already exists")
 
+        if email in User.objects.all().values_list('email', flat=True):
+            self.errorlist['email'] = 'This email already exists'
+            raise forms.ValidationError("This email already exists")
+        if password != password2:
+            self.errorlist['password'] = 'The two password fields must match. Got it!!??'
+            raise forms.ValidationError("The two password fields must match. Got it!!??")
+
         return cleaned_data
 
     def save(self):
@@ -53,8 +60,6 @@ class AddAdminForm(forms.Form):
                        is_blocked=False,
                        )
         new_user=User.objects.get(pk=c.pk)
-        print("Consultancy create")
-        print(new_user)
         admingroup = get_object_or_404(Group, name="consultancy_admin")
         admingroup.user_set.add(new_user)
         return new_user
@@ -80,37 +85,43 @@ class AddModeratorForm(forms.Form):
         if username in User.objects.all().values_list('username', flat=True):
             self.errorlist['username'] = 'This username already exists'
             raise forms.ValidationError("This username already exists")
-        if email in User.objects.all().values_list('email', flat=True):
-            self.errorlist['email'] = 'This email already exists'
-            raise forms.ValidationError("This email already exists")
+        # if email in User.objects.all().values_list('email', flat=True):
+        #     self.errorlist['email'] = 'This email already exists'
+        #     raise forms.ValidationError("This email already exists")
         if password != password2:
             self.errorlist['password'] = 'The two password fields must match. Got it!!??'
             raise forms.ValidationError("The two password fields must match. Got it!!??")
 
         return cleaned_data
 
+    #todo
+    #add mobile in the moderator form
+
     def save(self):
-        new_user = User.objects.create_user(username=self.cleaned_data['username'],
-                                            first_name="moderator",
-                                            last_name="moderator",
-                                            password=self.cleaned_data['password'],
-                                            email=self.cleaned_data['email'],
-                                            date_joined=datetime.datetime.today(),
-                                            is_superuser=False,
-                                            is_staff=False,
-                                            )
-        m1 = ModeratorProfile(pk=new_user, mobile=00000000,
-                              address=self.cleaned_data['location'], profile_image=self.cleaned_data['image'], )
-        m1.save()
-        moderatorgroup = get_object_or_404(Group, name="moderatorGroup")
+        m = ModeratorProfile.objects.create(username=self.cleaned_data['username'],
+                            first_name="moderator",
+                            last_name="moderator",
+                            password=self.cleaned_data['password'],
+                            email=self.cleaned_data['email'],
+                            date_joined=datetime.datetime.today(),
+                            is_superuser=False,
+                            is_staff=False,
+                          mobile=00000000,
+                          address=self.cleaned_data['location'], )
+        print("Moderator Created")
+        new_user = User.objects.get(pk=m.pk)
+        moderatorgroup = get_object_or_404(Group, name="univhub_moderator")
         moderatorgroup.user_set.add(new_user)
+        print("Added to moderator group")
+
         return new_user
 
-
+#
+# todo
+# add the form input field in the dashboard form pages, and remove the default value stated in the given funnction
 class AddCounselorForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
-
         super(AddCounselorForm, self).__init__(*args, **kwargs)
 
     username = forms.CharField(max_length=25)
@@ -120,9 +131,15 @@ class AddCounselorForm(forms.Form):
     password2 = forms.CharField(widget=forms.PasswordInput())
     errorlist = {}
 
+    #todo
+    #change the default values here later
+
     def clean(self):
+        print("Cleaning")
         cleaned_data = super(AddCounselorForm, self).clean()
+        print(cleaned_data )
         username = cleaned_data.get('username')
+        print(username)
         password = cleaned_data.get('password')
         password2 = cleaned_data.get('password2')
         email = cleaned_data.get('email')
@@ -138,7 +155,7 @@ class AddCounselorForm(forms.Form):
         return cleaned_data
 
     def save(self):
-        new_user = User.objects.create_user(username=self.cleaned_data['username'],
+        cc = Counselor.objects.create_user(username=self.cleaned_data['username'],
                                             first_name="counselor",
                                             last_name="counselor",
                                             password=self.cleaned_data['password'],
@@ -146,14 +163,14 @@ class AddCounselorForm(forms.Form):
                                             date_joined=datetime.datetime.today(),
                                             is_staff=False,
                                             is_superuser=False,
-                                            )
-        m1 = Counselor(pk=new_user, mobile=00,
-                       address=self.cleaned_data.get('address'),
-                       profile_image=self.cleaned_data['image'],
-                       counselor_consultancy=self.user)
-        m1.save()
-        counselorgroup = get_object_or_404(Group, name="counsellorGroup")
-        counselorgroup.user_set.add(new_user)
+                                            mobile=00,
+                                           address=self.cleaned_data.get('address'),
+                                           counselor_consultancy=self.user)
+        print("Counsellor Created")
+        new_user = User.objects.get(pk=cc.pk)
+        moderatorgroup = get_object_or_404(Group, name="consultancy_moderator")
+        moderatorgroup.user_set.add(new_user)
+        print("Added to counsellor group")
         return new_user
 
 

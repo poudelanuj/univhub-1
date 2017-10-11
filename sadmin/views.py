@@ -26,7 +26,7 @@ import traceback
 
 from django.contrib.auth.decorators import login_required
 
-import datetime
+from datetime import datetime
 
 # any user must have profile form to check if it is blocked or not
 def informationCenter(user:User):
@@ -147,14 +147,54 @@ def getStudentslistPage(request):
     # print(students)
     # return render(request, 'students-list.html')
 
+# todo
+# change the notification type in the addadmin and addmoderator functions
 
 def addadmin(request):
     print("saving admin")
     form = AddAdminForm(request.POST, request.FILES)
     if request.method == 'POST':
         if form.is_valid():
+            print("form valid")
             newuser = form.save()
-            print("add here")
+            print("form saved")
+            errors = form.errorlist
+            errors.update(dict(form.errors.items()))
+            current_site = get_current_site(request)
+            subject = 'Activate your UnivHub Account.'
+            message = render_to_string('password_change_email.html', {
+                'user': newuser, 'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
+                'token': account_activation_token.make_token(newuser),
+            })
+            toemail = form.cleaned_data.get('email')
+            email = EmailMessage(subject, message, to=[toemail])
+            print("email sent")
+            email.send()
+            superadmin = get_object_or_404(User, pk=1)
+            type1 = get_object_or_404(NotificationType, id=1)
+            Notification.objects.create(type = type1, receiver=superadmin, sender=newuser,
+                                        title="Consultancy Created",
+                                        message="Username : " + newuser.username , created=datetime.now())
+            print("notification sent")
+            return JsonResponse(errors)
+        else:
+            errors = form.errorlist
+            errors.update(dict(form.errors.items()))
+            print("Form invalid. Error = ", errors)
+            return JsonResponse(errors)
+
+    return JsonResponse({'success': False,'Reasson':'Request not POST'})
+
+
+def addmoderator(request):
+    print("saving moderator")
+    form = AddModeratorForm(request.POST, request.FILES or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            print("form valid")
+            newuser = form.save()
+            print("form saved")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             current_site = get_current_site(request)
@@ -170,48 +210,17 @@ def addadmin(request):
             print("email sent")
             superadmin = get_object_or_404(User, pk=1)
             type1 = get_object_or_404(NotificationType, id=1)
-            Notification.objects.create(type = type1, receiver=superadmin, sender=newuser,
-                                        title="Consultancy Created",
-                                        message="Username : " + newuser.username , created=datetime.datetime.now())
-            print("notification also sent")
-            return JsonResponse(errors)
-        else:
-            print("form invalid")
-            errors = form.errorlist
-            errors.update(dict(form.errors.items()))
-            print(errors)
-            return JsonResponse(errors)
-
-    return JsonResponse({'success':"False"})
-
-
-def addmoderator(request):
-    form = AddModeratorForm(request.POST, request.FILES or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            newuser = form.save()
-            errors = form.errorlist
-            errors.update(dict(form.errors.items()))
-            current_site = get_current_site(request)
-            # newuser.groups.add(Group.objects.get(name='employer'))
-            subject = 'Activate your UnivHub Account.'
-            message = render_to_string('password_change_email.html', {
-                'user': newuser, 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(newuser.pk)),
-                'token': account_activation_token.make_token(newuser),
-            })
-            toemail = form.cleaned_data.get('email')
-            email = EmailMessage(subject, message, to=[toemail])
-            email.send()
-            superadmin = get_object_or_404(User, pk=1)
-            Notification.objects.create(type = 2, receiver=superadmin, sender=newuser,
-                                        title="New Moderator Creation",
-                                        message="Username : " + newuser.username, created=datetime.datetime.now())
+            Notification.objects.create(type=type1, receiver=superadmin, sender=newuser,
+                                        title="Moderator Created",
+                                        message="Username : " + newuser.username, created=datetime.now())
+            print("notification sent")
             return JsonResponse(errors)
         else:
             errors = form.errorlist
+            print("Errors: ", errors)
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
+
     return JsonResponse({'success': False})
 
 
@@ -292,12 +301,19 @@ def getOffersPage(request):
 
 # ajax calls handling part
 
+
 def addcounselor(request):
+    print("Saving Counsellor")
     user = request.user
-    form = AddCounselorForm(request.FILES, request.POST, user=user or None)
+    print(user)
+    print(request.POST)
+    form = AddCounselorForm(request.POST, request.FILES,user=user or None)
+    # form = AddCounselorForm(request.FILES, request.POST)
     if request.method == 'POST':
         if form.is_valid():
+            print("form valid")
             newuser = form.save()
+            print("form saved")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
             current_site = get_current_site(request)
@@ -310,14 +326,18 @@ def addcounselor(request):
             toemail = form.cleaned_data.get('email')
             email = EmailMessage(subject, message, to=[toemail])
             email.send()
-            Notification.objects.create(type = 2, receiver=get_object_or_404(User, pk=1), sender=newuser,
-                                        title="New Counselor Creation",
-                                        message="Counsellor username:"+ newuser.username, created=datetime.datetime.now())
+            superadmin = get_object_or_404(User, pk=1)
+            type1 = get_object_or_404(NotificationType, id=1)
+            Notification.objects.create(type=type1, receiver=superadmin, sender=newuser,
+                                        title="Consultancy Created",
+                                        message="Username : " + newuser.username, created=datetime.now())
+            print("notification sent")
             return JsonResponse(errors)
         else:
             print("form1 invalid")
             errors = form.errorlist
             errors.update(dict(form.errors.items()))
+            print("Errors: ", errors)
             return JsonResponse(errors)
 
     return JsonResponse({'success': False,'Reasson':'Request not POST'})

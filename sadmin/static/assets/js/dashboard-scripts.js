@@ -83,8 +83,8 @@ $(document).ready(function () {
             }
         });
     });
-    $('#addadminbutton').click(function () {
 
+    $('#addadminbutton').click(function () {
 
         $.ajax({
             type: 'POST',
@@ -98,8 +98,8 @@ $(document).ready(function () {
             }
         });
     });
-    $('#addcounselorbutton').click(function () {
 
+    $('#addcounselorbutton').click(function () {
 
         $.ajax({
             type: 'POST',
@@ -113,6 +113,7 @@ $(document).ready(function () {
             }
         });
     });
+
     $('#classes_type').change(function () {
         $(".aside_classes").trigger('click', [$(this).val()]);
 

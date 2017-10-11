@@ -368,7 +368,8 @@ def ajaxRemovePickupDocument(request):
     PickupDetail.objects.filter(id=docId).delete()
     return 1
 
-
+# jsonhandler.django - json mai huncha action and operation
+# requesthandler - url mai auxa
 @csrf_exempt
 def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
     type = request.META.get('CONTENT_TYPE')

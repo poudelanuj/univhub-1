@@ -239,7 +239,7 @@ class Student(User):
 
 
     def __str__(self):
-        return ("profile of " + str(self.user))
+        return ("profile of " + str(self.pk))
 
 class Sponsor(models.Model):
     first_name = models.CharField(max_length=20)

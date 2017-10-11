@@ -50,12 +50,12 @@
         <!--/ header -->
         <ul class="profile-sidenav-nav nav">
             <li><a href="#" onclick="window.location.reload()" class="active">Overview</a></li>
-            <li><a href="javascript:;" class="student_profile_uploaded_documents" data-student_id="{{student.id}}">Uploaded
+            <li><a href="javascript:;" class="student_profile_uploaded_documents" data-student_id="{{user.id}}">Uploaded
                 Documents</a></li>
-            <li><a href="javascript:;" class="student_profile_applied_universities" data-student_id="{{student.id}}">Applied
+            <li><a href="javascript:;" class="student_profile_applied_universities" data-student_id="{{user.id}}">Applied
                 Universities</a></li>
-            <li><a href="javascript:;" class="student_profile_notice" data-student_id="{{student.id}}">Notices</a></li>
-            <li><a href="javascript:;" class="student_profile_classes" data-student_id="{{student.id}}">Classes</a></li>
+            <li><a href="javascript:;" class="student_profile_notice" data-student_id="{{user.id}}">Notices</a></li>
+            <li><a href="javascript:;" class="student_profile_classes" data-student_id="{{user.id}}">Classes</a></li>
         </ul>
     </div>
     <div class="profile-details pmd-content">
@@ -64,7 +64,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- Overview Details -->
-                    <div class="pmd-card pmd-z-depth overview-details">
+                    <div class="pmd-card pmd-z-depth overview-details" id="detailportion">
                         <div class="pmd-tabs overview-details-tab">
                             <div class="pmd-tab-active-bar"></div>
                             <ul class="nav nav-tabs" role="tablist">
@@ -79,7 +79,7 @@
                         <div class="pmd-card-body">
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="personal_information">
-                                    <a href="javascript:;"  data-student_id="{{student.id}}"
+                                    <a href="javascript:;"  data-student_id="{{user.id}}"
                                        class="btn pmd-btn-fab btn-edit-profile pmd-tooltip student_edit_profile"
                                        data-toggle="tooltip" data-placement="left" title="Click to edit"
                                        type="button"><i class="material-icons pmd-sm">edit</i></a>
@@ -173,36 +173,8 @@
 
 <script type="text/javascript" src="{% static 'assets/js/select2.full.js' %}"></script>
 
-<script type="text/javascript">
-    $(document).ready( function() {
-        $(".profile-sidenav-nav li a").on("click", function(e) {
-            e.preventDefault();
-            $(".profile-sidenav-nav li a").removeClass("active");	
-            $(this).addClass('active');				
-        });	
-    });
+<script src="/static/assets/js/student_scripts.js?version={{'123456789'|random}}" type="text/javascript"></script>
 
-</script>
-<script type="text/javascript">
-	$(document).ready( function() {
-		$('.overview-details-tab').pmdTab();
-    });
-
-    $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-
-$('input:radio[name="currentaddres_same_per"]').change(
-    function(){
-        if (this.checked && this.value == 'no') {
-            $('.currentaddres_same_per').css("display","block")
-        }
-        else{
-            $('.currentaddres_same_per').css("display","none")
-        }
-    });
-
-</script>
 
 </body>
 </html>

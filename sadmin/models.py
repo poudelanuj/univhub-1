@@ -150,9 +150,9 @@ class Pickup(models.Model):
     location = models.CharField(max_length=50)
     is_pending = models.IntegerField()
     created_date = models.DateField()
-    document_for = models.ForeignKey('DocumentType', models.DO_NOTHING)
+    document_for = models.ForeignKey('DocumentFor', models.DO_NOTHING)
 
-    pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
+    pickup_of = models.ForeignKey(User, limit_choices_to={'groups__name': "student"}, on_delete=models.CASCADE)
 
 
 class PickupDetail(models.Model):
@@ -184,7 +184,7 @@ class Tutor(models.Model):
 
 
 class UploadedDocument(models.Model):
-    student = models.ForeignKey(User, limit_choices_to={'groups__name': "studentGroup"}, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, limit_choices_to={'groups__name': "student"}, on_delete=models.CASCADE)
 
     docname = models.CharField(max_length=30)
     url = models.TextField()
@@ -230,8 +230,7 @@ class Student(User):
     passport = models.CharField(max_length=15, blank=True, null=True)
     applied_country = models.ForeignKey(Country, models.DO_NOTHING)
     sub_major = models.ForeignKey(SubMajor, models.DO_NOTHING)
-    apply_type = models.ForeignKey('ApplyType', models.DO_NOTHING, )
-    program = models.ForeignKey(ProgramsOffered, models.DO_NOTHING)
+    apply_type = models.ForeignKey(ApplyType, models.DO_NOTHING)
     isblocked = models.BooleanField(default=False)
     student_consultancy = models.ForeignKey(Consultancy, models.DO_NOTHING, blank=True, null=True, related_name="consultancy_student")
 

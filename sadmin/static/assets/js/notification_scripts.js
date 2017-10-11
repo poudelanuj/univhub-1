@@ -22,7 +22,7 @@ function get_notification_by_type(type, duration, page) {
         'notification',
         'filter',
         {
-            'filter_by': ['type', 'duration'],
+            filter_by: ['type', 'duration'],
             type: type,
             duration: duration,
             page: page

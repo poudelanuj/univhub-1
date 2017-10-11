@@ -47,6 +47,7 @@ def informationCenter(user:User):
 @login_required
 def index(request):
     user = request.user
+    print("User on connection: ", user)
     group = user.groups.all()[0]
     if group.name == 'univhub_super_admin' or group.name == 'univhub_moderator':
         return render(request, 'admin-dashboard.html',
@@ -73,12 +74,6 @@ def getNotificationsPage(request):
     print("size of notification", len(Notification.objects.all()))
     return render(request, "notifications.html",
                   context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
-
-
-def getNotifications(request):
-    user = request.user
-    data = {'notifycount': Notification.objects.filter(receiver=user).count()}
-    return JsonResponse(data)
 
 
 def signup(request):
@@ -133,7 +128,7 @@ def activate(request, uidb64, token):
 
 def getStudentslistPage(request):
     # students = User.objects.filter(groups__name="studentGroup", studentprofile__isblocked=False)
-    students = User.objects.filter(groups__name="studentGroup")
+    students = User.objects.filter(groups__name="student")
     return render(request, 'students-list.html', {'students': students})
 
     # all_students = User.objects.filter(groups=4)
@@ -319,7 +314,7 @@ def addcounselor(request):
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
-    return JsonResponse({'success': False})
+    return JsonResponse({'success': False,'Reasson':'Request not POST'})
 
 
 #todo

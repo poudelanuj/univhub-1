@@ -43,7 +43,7 @@ class AddAdminForm(forms.Form):
                                             is_superuser=False,
                                             is_staff=False,
                                             )
-        m1 = Consultancy(user=new_user, consultancyName=self.cleaned_data.get('consultancyName'),
+        m1 = Consultancy(pk=new_user, consultancyname=self.cleaned_data.get('consultancyName'),
                          pan_vat=self.cleaned_data.get('pan_vat'),
                          reg_no=self.cleaned_data.get('reg_no'),
                          location=self.cleaned_data.get('location'),
@@ -96,7 +96,7 @@ class AddModeratorForm(forms.Form):
                                             is_superuser=False,
                                             is_staff=False,
                                             )
-        m1 = ModeratorProfile(user=new_user, mobile=00000000,
+        m1 = ModeratorProfile(pk=new_user, mobile=00000000,
                               address=self.cleaned_data['location'], profile_image=self.cleaned_data['image'], )
         m1.save()
         moderatorgroup = get_object_or_404(Group, name="moderatorGroup")
@@ -144,10 +144,10 @@ class AddCounselorForm(forms.Form):
                                             is_staff=False,
                                             is_superuser=False,
                                             )
-        m1 = Counselor(user=new_user, mobile=00,
+        m1 = Counselor(pk=new_user, mobile=00,
                        address=self.cleaned_data.get('address'),
                        profile_image=self.cleaned_data['image'],
-                       admin=self.user)
+                       counselor_consultancy=self.user)
         m1.save()
         counselorgroup = get_object_or_404(Group, name="counsellorGroup")
         counselorgroup.user_set.add(new_user)
@@ -192,7 +192,7 @@ class SignupForm(forms.Form):
                                             is_active=False,
                                             )
         country=get_object_or_404(Country,countryname=self.cleaned_data.get('apply_for'))
-        m1 = Student(user=new_user, mobile=self.cleaned_data.get('mobile'),
+        m1 = Student(pk=new_user, mobile=self.cleaned_data.get('mobile'),
 
                      dob=self.cleaned_data.get('dob'),
                      apply_for=Country)

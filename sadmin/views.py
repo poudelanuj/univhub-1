@@ -75,12 +75,6 @@ def getNotificationsPage(request):
                   context={'types': NotificationType.objects.all(), 'notifications': Notification.objects.all()})
 
 
-def getNotifications(request):
-    user = request.user
-    data = {'notifycount': Notification.objects.filter(receiver=user).count()}
-    return JsonResponse(data)
-
-
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -128,7 +122,7 @@ def activate(request, uidb64, token):
 
 def getStudentslistPage(request):
     # students = User.objects.filter(groups__name="studentGroup", studentprofile__isblocked=False)
-    students = User.objects.filter(groups__name="studentGroup")
+    students = User.objects.filter(groups__name="student")
     return render(request, 'students-list.html', {'students': students})
 
     # all_students = User.objects.filter(groups=4)
@@ -312,7 +306,7 @@ def addcounselor(request):
             errors.update(dict(form.errors.items()))
             return JsonResponse(errors)
 
-    return JsonResponse({'success': False})
+    return JsonResponse({'success': False,'Reasson':'Request not POST'})
 
 
 #todo

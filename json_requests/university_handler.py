@@ -4,7 +4,8 @@ from sadmin.models import UniversityContent
 from sadmin.models import UniversityRequirement
 
 from django.db import models
-from sadmin.models import *;
+from sadmin.models import *
+from university.models import *
 # from sadmin.models import UniversityBasicInfo
 
 from django.http import JsonResponse
@@ -28,11 +29,11 @@ def basic_info_university(request):
 
         # load all the content in the
         for content in contents:
-            if content.h.title not in univ_content:
-                univ_content[content.h.title] = {content.sh.title: content.description}
+            if content.header.title not in univ_content:
+                univ_content[content.header.title] = {content.sub_header.title: content.description}
             else:
-                univ_content[content.h.title][content.sh.title] = content.description
-            univ_content[content.sh.title] = content.description;
+                univ_content[content.header.title][content.sub_header.title] = content.description
+            univ_content[content.sub_header.title] = content.description;
 
         univ_lev = dic['levels'] = {}
         subs = ReqMap.objects.filter(u=university.pk)

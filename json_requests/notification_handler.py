@@ -46,10 +46,8 @@ def detail_notification(request):
         return JsonResponse({'succes': False, 'Reason': "Error processing data on notification filter"})
 
 
-def live_notification(request):
-    print(request.user)
+def bell_drop_list_notification(request):
     notifications = Notification.objects.filter(receiver=request.user.pk).order_by('-created')
-    print(notifications)
     return render(request, 'notification_drop.html', {'notifications': notifications})
 
 

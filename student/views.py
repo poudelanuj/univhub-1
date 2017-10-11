@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.generic.edit import FormView
-
+from django.http import HttpResponseRedirect,JsonResponse
 from sadmin.models import *
-
+from .forms import *
+from django.urls import reverse
 
 # Create your views here.
 
@@ -69,4 +70,41 @@ def getStudentNotice(request, student_id):
 
 def editStudentProfile(request, student_id):
     student = get_object_or_404(User, pk=student_id)
-    return render(request, 'edit-profile.html', context={'student': student})
+    if request.method == 'POST':
+        print('1')
+        print(request.POST.get('firstname'))
+        print('2')
+        form=StudentEditForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            student.first_name=form.cleaned_data.get('firstname')
+            student.student.middle_name=form.cleaned_data.get('middlename')
+            student.last_name=form.cleaned_data.get('lastname')
+            student.email=form.cleaned_data.get('email')
+            student.student.gender = form.cleaned_data.get('gender')
+            student.student.dob_np=form.cleaned_data.get('dobnp')
+            student.student.dob_en=form.cleaned_data.get('doben')
+            student.student.phone1=form.cleaned_data.get('phone1')
+            student.student.phone2=form.cleaned_data.get('phone2')
+            student.student.phone3=form.cleaned_data.get('phone3')
+            addr1=Address.objects.create(district=get_object_or_404(District,districtname=form.cleaned_data.get('district')),city=form.cleaned_data.get('city'),
+                                         AddressLine1=form.cleaned_data.get('addressline1'),
+                                         AddressLine2=form.cleaned_data.get('addressline2'),
+                                         AddressLine3=form.cleaned_data.get('addressline3'),
+                           )
+            student.student.temp_address=addr1
+            addr2=Address.objects.create(district=get_object_or_404(District,districtname=form.cleaned_data.get('permdistrict')),city=form.cleaned_data.get('permcity'),
+                                         AddressLine1=form.cleaned_data.get('permaddressline1'),
+                                         AddressLine2=form.cleaned_data.get('permaddressline2'),
+                                         AddressLine3=form.cleaned_data.get('permaddressline3'),
+                           )
+            student.student.perm_address=addr2
+            student.student.save()
+            student.save()
+            return  HttpResponseRedirect(reverse('studentdetail',args=(student.id,)))
+        else:
+            print(form.errors)
+            return JsonResponse({'success':False})
+    else:
+        return render(request, 'edit-profile.html', {'user': student,})
+

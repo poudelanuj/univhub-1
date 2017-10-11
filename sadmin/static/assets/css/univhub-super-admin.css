@@ -457,7 +457,7 @@ h2.typo-fill-secondary{ color:rgba(77, 87, 93, 0.68); font-size:22px;}
 .no-table-found p {margin-bottom: 20px; opacity: 0.75; color:#555;}
 .no-table-found .btn{font-size: 15px; padding: 14px 30px; width: 290px;}
 
-/*==================== _todo list css ====================*/
+/*==================== todo list css ====================*/
 .todos .pmd-card-list{ min-height:312px;}
 .todo-lists .pmd-checkbox{ margin-bottom:0; vertical-align:middle;}
 .todo-lists span{ display:table-cell;}
@@ -562,6 +562,7 @@ h1.pmd-display4 { font-size: 4rem;}
 .notification .pmd-card-title {padding: 16px 12px 0 16px;margin-bottom: 10px;}
 .notification .pmd-card-title a{font-size: 13px;margin-top: -3px;}
 .notification .pmd-card-title h3{font-size: 14px;}
+.pmd-notifications{max-height: 350px;min-height: 350px;overflow-y: auto;}
 /* Sidbar */
 .pmd-sidebar .pmd-dropdown i.media-right.fa{vertical-align: middle;position:relative;top: 2px;font-size: 17px;}
 .pmd-sidebar .pmd-dropdown.open i.media-right.fa:before{content:"\f107";}
@@ -691,9 +692,12 @@ ul.panel-body.admin-crud-accor li{padding-right: 185px;margin-bottom: 25px;}
 .pickup .pick-up-tab-content .pick-up-date{margin: 10px 0;font-size: 13px;}
 .pickup .pick-up-tab-content .pick-up-date span{font-weight: 500;}
 .pickup.notifications .card .list-group-item{border:none;border-bottom: 1px solid #ded9d9;}
-.pickup-settings .dropdown-menu{position: relative;background: #f6f3f3;top: 10px;}
-.pickup-settings .dropdown-menu:before {border-bottom: 6px solid #f6f3f3;border-left: 8px solid transparent;border-right: 8px solid transparent;content: "";display: inline-block;right: 20px;position: absolute;top: -6px;}
-.pickup-settings.pmd-dropdown .dropdown-menu > li > a{padding: 6px 8px;font-size: 13px;color: #6F6B6B;}
+.pickup-settings .dropdown-menu{background: #fbfbfb;top: 30px;border:none;right: -20px;border-radius: 0px;}
+.dropdown.pickup-settings{position: relative;margin-right: 20px;}
+.pickup-settings .dropdown-menu:before {border-bottom: 6px solid #fbfbfb;border-left: 8px solid transparent;border-right: 8px solid transparent;content: "";display: inline-block;right: 22px;position: absolute;top: -6px;}
+.pickup-settings .dropdown-menu > li > a{padding: 6px 8px;font-size: 13px;color: #6F6B6B;}
+.pickup-settings .dropdown-menu > li{border-top: 1px solid #ebebeb;}
+.pickup-settings .dropdown-menu > li:first-child{border:none;}
 .btn-icon{padding: 0;background: transparent;min-width: auto;margin-right: 20px;}
 .btn-icon i{color: #605E5E;font-size: 22px;}
 .pickup .pmd-tabs.activities-tab .nav > li > a{padding: 10px 20px;}
@@ -720,6 +724,7 @@ ul.panel-body.admin-crud-accor li{padding-right: 185px;margin-bottom: 25px;}
 
 
 /* Students */
+.students-list .pickup-settings .dropdown-menu:before{right: 40px;}
 .students-list .students-list-title .form-group{margin-right: 20px;}
 .students-list .students-list-title .pull-right .form-group{margin-right: 0px;}
 .students-list .students-list-title .form-group .form-control{width: 170px;display: inline-block;}
@@ -735,5 +740,38 @@ ul.panel-body.admin-crud-accor li{padding-right: 185px;margin-bottom: 25px;}
 .pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover{color: #10a084;}
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{background-color: #1abc9c;border-color: #1abc9c;}
 .student-progress canvas{position: relative;z-index: 99;}
-.student-progress .student-progress-image{height: 74px;position: absolute;left: 18px;top: 16px;}
+.student-progress .student-progress-image{height: 74px;position: absolute;left: 18px;top: 15px;}
 .student-progress .student-progress-percent{background: #c1c1c1;color: #fff;font-size: 12px;font-weight:500;padding: 0 5px;}
+
+/* Add--Main Dashboard */
+label{font-weight: 400;margin-bottom: 10px !important;color: #868686;}
+textarea.form-control{min-height: 100px;resize: vertical;width: 100%;}
+.modal h2{color: #868686;margin: 0;font-size: 20px;}
+.add-modal .modal-body{padding: 0 15px;}
+#upload-file-selector{display:none;}
+.btn-upload{background: #1abc9c;color: #fff;height: 32px;line-height: 12px;text-transform: none;border-radius: 0px;}
+.btn-upload:hover, .btn-upload:focus{background: #10a084;color: #fff;}
+.company-logo-name{color:#2388ec;border-bottom: 1px solid #ccc;padding-bottom: 9px;padding-left: 5px;}
+
+/* Offers */
+.offers .list-group-item-text{color: #605E5E;}
+.notifications.offers .card .list-group-item{border-top: none;}
+.notifications.offers .card .list-group-item{padding-right: 50px;}
+.notifications.offers .card .list-group-item .dropdown.pickup-settings{position: absolute;right: 0;top: 0;margin: 0;}
+.notifications.offers .pickup-settings .dropdown-menu{right: -1px;}
+
+/* Classes */
+.classes .list-group-item-text{color: #605E5E;}
+.notifications.classes .card .list-group-item{border-top: none;}
+.notifications.classes .card .list-group-item{padding-right: 50px;}
+.notifications.classes .card .list-group-item .dropdown.pickup-settings{position: absolute;right: 0;top: 0;margin: 0;}
+.notifications.classes .pickup-settings .dropdown-menu{right: -1px;}
+
+/* Payment */
+
+
+/* Global */
+label.error{color: #ed3b3b;margin-top: 5px;margin-bottom: 0 !important;}
+.form-control.error{border-color: #ed3b3b;}
+.form-control.valid{color: #009688;}
+.form-control.error:focus{border-color: #ed3b3b;}

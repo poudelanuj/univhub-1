@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'sadmin/', include('sadmin.urls')),
     url(r'student/', include('student.urls')),
+    url(r'^university/', include('university.urls')),
     url(r'auth', include('global_auth.urls')),
     url(r'', include("global_auth.urls"))
 

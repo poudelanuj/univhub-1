@@ -9,7 +9,7 @@ from django import forms
 from sadmin.models import Consultancy
 import json
 
-from sadmin.models import SubMajor, Major, ReqMap
+from sadmin.models import SubMajor, Major
 
 
 # Create your views here.
@@ -26,7 +26,9 @@ class ProfileSetupSubMajor(FormView):
         # get all the list of major and submajor
         majors = {}
         for sub in sub_major:
-            uni_count = ReqMap.objects.filter(submajor=sub.id).count()
+            # TODO : This line was commented due to conflict, it must taken care of
+            #uni_count = ReqMap.objects.filter(submajor=sub.id).count()
+            uni_count=0;
             major = str(sub.major)
             if major in majors:
                 majors[major].sub_majors.append(self.Void())

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import *
-
+from django.contrib.auth import models as auth_models
 admin.site.register(District)
 admin.site.register(ApplyType)
 admin.site.register(ProgramsOffered)

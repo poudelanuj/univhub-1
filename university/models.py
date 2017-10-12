@@ -1,6 +1,16 @@
 from django.db import models
 
 
+class ListText(models.Model):
+    content = models.TextField(null=True, blank=True, default=None)
+
+
+class TitleText(models.Model):
+    name = models.TextField(null=False, blank=False)
+    def __str__(self):
+        return self.name
+
+
 # Create your models here.
 class UniversityRequirement(models.Model):
     university = models.ForeignKey('University', models.DO_NOTHING)
@@ -13,21 +23,17 @@ class UniversityAddress(models.Model):
     state = models.CharField(max_length=100)
     city = models.CharField(max_length=250)
     street = models.CharField(max_length=250, blank=True, null=True)
-    postal_code = models.SmallIntegerField(blank=True, null=True)
+    postal_code = models.IntegerField(blank=True, null=True)
     university = models.ForeignKey('University', models.DO_NOTHING)
     is_main = models.BooleanField(blank=False, null=False)
 
 
 class HighlightText(models.Model):
+    university = models.ForeignKey("University")
     content = models.TextField(blank=True, null=True, default=None)
 
     def __str__(self):
         return self.content
-
-
-class HighlightMap(models.Model):
-    highlight = models.ForeignKey(HighlightText, blank=False, null=False)
-    university = models.ForeignKey('University', blank=False, null=False)
 
 
 class University(models.Model):
@@ -39,12 +45,13 @@ class University(models.Model):
     def __str__(self):
         return self.name
 
-    def get_highlights(self):
+    def highlights(self):
         highlights = []
-        _highlights = HighlightMap.objects.filter(university=self)
+        _highlights = HighlightText.objects.filter(university=self)
         # append the highlights
         for highlight in _highlights:
-            highlights.append(highlight.highlight.content)
+            highlights.append(highlight.content)
+        return highlights
 
     def get_world_ranking(self):
         rank = Ranking.objects.filter(university=self,
@@ -53,11 +60,14 @@ class University(models.Model):
             return rank[0].ranking
         return None
 
+    def description(self):
+        return Detail.objects.filter(university=self)
 
-class UniversityContent(models.Model):
-    university = models.ForeignKey('University', models.DO_NOTHING, blank=False, null=False)
-    header = models.ForeignKey('Header', models.DO_NOTHING, blank=False, null=False)
-    sub_header = models.ForeignKey('SubHeader', models.DO_NOTHING, blank=True, null=True)
+
+class Detail(models.Model):
+    university = models.ForeignKey("University")
+    header = models.ForeignKey(TitleText, models.DO_NOTHING, blank=False, null=False, related_name="header")
+    sub_header = models.ForeignKey(TitleText, models.DO_NOTHING, blank=True, null=True, related_name="sub_header")
     description = models.TextField(blank=True, null=True)
 
 
@@ -89,12 +99,13 @@ class UniversitySubMajor(models.Model):
 
     completion_time = models.TextField(blank=True, null=True, default=None)
     cost_per_year = models.TextField(blank=True, null=True, default=None)
-    req = models.ForeignKey('SubReqByUniversity', models.DO_NOTHING, blank=True, null=True)
     detail_link = models.TextField(blank=True, null=True, default=None)
+    requirement_for_nepali = models.TextField(blank=True, null=True, default=None)
+
     start_date = models.ManyToManyField('Dates')
     scholarship_detail = models.ManyToManyField('UniversityCourseScholarship')
     entry_requirement = models.ManyToManyField('SubMajorEntryRequirement')
-    requirement_for_nepali = models.TextField(blank=True, null=True, default=None)
+
     detail = models.ManyToManyField('CourseItems')
     english_requirement = models.ManyToManyField('SubMajorEnglishRequirement')
     admission_process = models.ManyToManyField('UniversityCourseScholoarshipItem')
@@ -113,7 +124,7 @@ class UniversitySubMajor(models.Model):
             if x.major.name not in level:
                 level[x.major.name] = {}
             level[x.major.name][x.title.name] = x.title.pk
-        return levels
+        return levels, len(sub_majors)
 
     def get_detail_info(self):
         data = {
@@ -145,7 +156,7 @@ class UniversitySubMajor(models.Model):
             ]
         if self.detail:
             data['detail'] = [{'title': x.topic.title, 'description': [y.content for y in x.description]} for x in
-                              self.detail]
+                              self.detaildetail]
         return data
 
     def get_brief_info(self):
@@ -175,16 +186,12 @@ class Requirement(models.Model):
 class SubMajor(models.Model):
     name = models.TextField(blank=True, null=True, default=None)
 
-    def __str__(self):
-        return self.title
-
 
 class SubMajorTitle(models.Model):
     name = models.TextField(blank=True, null=True, default=None)
 
 
 class SubMajorStartDate(models.Model):
-    university = models.ForeignKey('University', blank=False, null=False)
     date = models.DateTimeField(null=False, blank=False)
     submajor = models.ForeignKey('SubMajor', blank=False, null=False)
 
@@ -237,7 +244,7 @@ class UniversitySubMajorTopic(models.Model):
 
 class SubMajorEnglishRequirement(models.Model):
     type = models.ForeignKey('RequirementType')
-    score = models.IntegerField(default=None, null=True, blank=True)
+    score = models.TextField(default=None, null=True, blank=True)
 
 
 class UniversityCourseScholarship(models.Model):
@@ -248,7 +255,7 @@ class UniversityCourseScholarship(models.Model):
 
 
 class UniversityCourseScholoarshipItem(models.Model):
-    content = models.TextField()
+    description = models.TextField()
     title = models.ForeignKey('UniversityCourseScholarshipItemTitle')
 
 

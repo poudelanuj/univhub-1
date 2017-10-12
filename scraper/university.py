@@ -33,23 +33,27 @@ class University():
     # @University
     def insert_location(self):
         add = self.university['location']
-        self.address = UniversityAddress.objects.get_or_create(
+        postalcode = -1
+        try:
+            postalcode = int(add['postal code'])
+        except ValueError:
+            pass
+        self.db_universityaddress = UniversityAddress.objects.get_or_create(
             university=self.db_university,
             country=add['country'],
             state=add['state'],
             city=add['city'],
             street=add['street'],
-            postal_code=add['postal code'],
+            postal_code=postalcode,
             is_main=True
         )[0]
 
     # @University
     def insert_highlight(self):
         for x in self.university['highlights']:
-            hilit = HighlightText(content=x)
-            hilit.save()
-            map = HighlightMap(highlight=hilit, university=self.db_university)
-            map.save()
+            HighlightText.objects.create(
+                university=self.db_university,
+                content=x)
 
     # @University
     def insert_world_ranking(self):
@@ -64,10 +68,12 @@ class University():
     # @University
     def insert_detail_description(self):
         for content in self.university["detailed_desc"]:
-            h = Header(content=content['topic'])
-            h.save()
-            uc = UniversityContent(university=self.db_university, header=h, description=content['description'])
-            uc.save()
+            h = TitleText.objects.create(name=content['topic'])
+            uc = Detail.objects.create(
+                university=self.db_university,
+                header=h,
+                description=content['description'].replace('\u200b', ' ').replace('\u2006', ' ')
+            )
 
     # @Course --> same for hotcourse and shiksha
     @staticmethod
@@ -75,7 +81,7 @@ class University():
 
         titles_shiksha = set([x['title'] for x in courses_shiksha
                               if x['title'] is not None])
-        titles_hot_course = set([x['title'] for x in courses_shiksha
+        titles_hot_course = set([x['title'] for x in courses_hot_course
                                  if x['title'] is not None])
 
         hot_course = []
@@ -85,18 +91,18 @@ class University():
         for x in courses_hot_course:
             if x['title'] is not None:
                 if x['title'] in titles_shiksha:
-                    common_course[x['title']].append(x)
+                    common_course[x['title']] = [x]
                 else:
-                    titles.append(x['title'])
                     hot_course.append(x)
+                titles.append(x['title'])
 
         for x in courses_shiksha:
             if x['title'] is not None:
                 if x['title'] in titles_hot_course:
-                    common_course[x['title']] = [x]
+                    common_course[x['title']].append(x)
                 else:
-                    titles.append(x['title'])
                     shiksha.append(x)
+                titles.append(x['title'])
 
         sub_majors = set([x['submajor'] for x in courses_shiksha
                           if x['submajor'] is not None
@@ -106,16 +112,16 @@ class University():
                            and x['submajor'] not in University.sub_major]
                           )
 
-        majors = [x['major'] for x in courses_shiksha
-                  if x['major'] is not None
-                  and x['major'] not in University.major]
+        majors = set([x['major'] for x in courses_shiksha
+                      if x['major'] is not None
+                      and x['major'] not in University.major])
         majors.update([x['major'] for x in courses_hot_course
                        if x['major'] is not None
                        and x['major'] not in University.major])
 
-        levels = [x['type'] for x in courses_shiksha
-                  if x['type'] is not None
-                  and x['type'] not in University.level]
+        levels = set([x['type'] for x in courses_shiksha
+                      if x['type'] is not None
+                      and x['type'] not in University.level])
         levels.update([x['type'] for x in courses_hot_course
                        if x['type'] is not None
                        and x['type'] not in University.level])
@@ -133,21 +139,21 @@ class University():
             title = SubMajorTitle(name=x)
             title.save()
             University.title[x] = title
-
         for x in levels:
             level = Level(name=x)
             level.save()
             University.level[x] = level
-        return common_course, hot_course, shiksha
+        return common_course.values(), hot_course, shiksha
 
+    # TODO REVIEW THIS
     def insert_admission_process_shiksha(self, course, uni_sub_major: UniversitySubMajor):
         if course['admission_process']:
             for x in course['admission_process']:
-                scholarship = UniversityCourseScholoarshipItem(
-                    title=UniversityCourseScholarshipItemTitle(title=x['topic']),
+                scholarship = UniversityCourseScholoarshipItem.objects.create(
+                    title=UniversityCourseScholarshipItemTitle.objects.get_or_create(title=x['topic'])[0],
                     description=x['description']
-                ).save()
-                uni_sub_major.scholarship_detail.add(scholarship)
+                )
+                uni_sub_major.admission_process.add(scholarship)
 
     # @hotcourse
     def insert_or_get_course_hot_course(self, course):
@@ -167,7 +173,7 @@ class University():
             cost_per_year=course['cost_per_year'],
             detail_link=course['course_details_link']
         )
-        uni_sub_major.save
+        uni_sub_major.save()
 
         self.uni_sub_major[course['title']] = uni_sub_major
         self.uni_sub_major['title'] = course['title'].lower()
@@ -178,9 +184,10 @@ class University():
         if course['other_expenses']:
             for x in course['other_expenses']:
                 exp = SubMajorOtherExpenses(
-                    title=UniversityCourseScholarshipItemTitle(title=x['component']),
+                    title=UniversityCourseScholarshipItemTitle.objects.get_or_create(title=x['component'])[0],
                     value=x['amount']
-                ).save()
+                )
+                exp.save()
                 uni_sub_major.other_expenses.add(exp)
 
     # @hotcourse
@@ -204,7 +211,7 @@ class University():
             )
             item.save()
             for desc in section['description']:
-                desc = desc.replace('\u200b', ' ')
+                desc = desc.replace('\u200b', ' ').replace('\u2006', " ")
                 description = CourseItemDescription(content=desc)
                 description.save()
                 item.description.add(description)
@@ -219,7 +226,7 @@ class University():
         )
         item.save()
         for desc in course['course_details']:
-            desc = desc.replace('\u200b', ' ')
+            desc = desc.replace('\u200b', ' ').replace('\u2006', " ")
             description = CourseItemDescription(content=desc)
             description.save()
             item.description.add(description)
@@ -239,30 +246,39 @@ class University():
             _type = RequirementType.objects.get_or_create(name=req['type'])[0]
             db_req = SubMajorEnglishRequirement(
                 type=_type,
-                score=int(req['score'])
+                score=req['score']
             )
             db_req.save()
             uni_sub_major.english_requirement.add(db_req)
 
     def insert_course_requirement_hot_course(self, course, uni_sub_major: UniversitySubMajor):
-        uni_sub_major.requirement_for_nepali = course['entry_requirements'][0]['desc']
+        for x in course['entry_requirements']:
+            uni_sub_major.requirement_for_nepali = x['desc']
+            return
 
     # @shiksha
     @staticmethod
-    def insert_course_scholarship(scholarship, uni_sub_major):
-        for item in scholarship['items']:
-            title = UniversityCourseScholarshipItemTitle.objects.get_or_create(item['topic'])[0]
-            description = CourseItemDescription(title=title, content=item['description'].replace('\u200b', ' '))
-            description.save()
+    def insert_course_scholarship_shiksha(scholarship, uni_sub_major):
+        if scholarship:
+            db_scholarship = UniversityCourseScholarship(
+                web_url=scholarship['campus_scholarship_link'][0] if scholarship['campus_scholarship_link'] else None,
+                deadline=scholarship['scholarship_deadline'],
+                amount=scholarship['scholarship_amount']
+            )
+            db_scholarship.save()
 
-        db_scholarship = UniversityCourseScholarship(
-            description=description,
-            web_url=scholarship['campus_scholarship_link'][0],
-            deadline=scholarship['scholarship_deadline'],
-            amount=scholarship['scholarship_amount']
-        )
-        db_scholarship.save()
-        uni_sub_major.scholarship = db_scholarship
+            for item in scholarship['items']:
+                title = UniversityCourseScholarshipItemTitle.objects.get_or_create(title=item['topic'])[0]
+                description = CourseItemDescription(
+                    content=item['description'].replace('\u200b', ' ').replace('\u2006', " "))
+                description.save()
+                item = UniversityCourseScholoarshipItem(
+                    title=title,
+                    description=description
+                )
+                item.save()
+                db_scholarship.description.add(item)
+            uni_sub_major.scholarship = db_scholarship
 
     @staticmethod
     def load_sub_major_hash():
@@ -280,41 +296,52 @@ class University():
             unknown = Major(name="Unknown")
             unknown.save()
             University.major[None] = unknown
+        else:
+            University.major[None] = University.major['Unknown']
+
         if 'Unknown' not in University.level:
             unknown = Level(name="Unknown")
             unknown.save()
             University.level[None] = unknown
+        else:
+            University.level[None] = University.level["Unknown"]
+
         if 'Unknown' not in University.sub_major:
             unknown = SubMajor(name="Unknown")
             unknown.save()
             University.sub_major[None] = unknown
+        else:
+            University.sub_major[None] = University.sub_major['Unknown']
+
         if 'Unknown' not in University.title:
             unknown = SubMajorTitle(name="Unknown")
             unknown.save()
             University.title[None] = unknown
+        else:
+            University.title[None] = University.title['Unknown']
 
     def insert_requirements(self):
         # TODO: University requirement is not done.
         pass
 
     def insertion_sequence(self):
-        sequence = [
-            {
-                "name": "Insert University Detail",
-                "operation": University.insert_course_detail,
-            },
-            {
-                "name": "Insert University Highlight",
-                "operation": University.insert_highlight,
-            },
-            {
-                "name": "Insert University Location",
-                "operation": University.insert_location, },
-            {
-                "name": "Insert University Wrold ranking",
-                "operation": University.insert_world_ranking
-            }
-        ]
+        # sequence = [
+        #     {
+        #         "name": "Insert University Description",
+        #         "operation": University.insert_course_detail,
+        #     },
+        #     {
+        #         "name": "Insert University Highlight",
+        #         "operation": University.insert_highlight,
+        #     },
+        #     {
+        #         "name": "Insert University Location",
+        #         "operation": University.insert_location, },
+        #     {
+        #         "name": "Insert University Wrold ranking",
+        #         "operation": University.insert_world_ranking
+        #     }
+        # ]
 
         with transaction.atomic():
             # the sequence of  following function calls
@@ -326,14 +353,16 @@ class University():
 
             # before doing anything load all the required courses
             # if it doesn't exist create it in database.
-            hot = self.university['courses_hot_courses']
-            shiksha = self.university['courses_shiksha']
+            hot = self.university['courses_hot_courses'] if 'courses_hot_courses' in self.university else []
+            shiksha = self.university['course_shiksha'] if 'course_shiksha' in self.university else []
 
-            common, hot, skhiksha = self.construct_sub_major_missing(hot if hot else [], shiksha if shiksha else [])
+            common, hot, skhiksha = self.construct_sub_major_missing(hot, shiksha)
 
-            for course_hot, course_shiksha in common:
+            for course in common:
+                course_hot = course[0]
+                course_shiksha = course[1]
+                print("common course :", course_hot['title'])
                 with transaction.atomic():
-                    print("common course :", course_hot['title'])
                     # creating a course table is first step
                     fk = self.insert_or_get_course_hot_course(course_hot)
                     # the sequence of following function calls
@@ -345,10 +374,11 @@ class University():
                     # no2 update from the shiksha one
                     # self.insert_course_detail_shiksha(course_shiksha, fk)
                     self.insert_course_requirement_shiksha(course_shiksha, fk)
-                    self.insert_course_scholarship(course_shiksha['scolarship'], fk)
-                    self.insert_admission_process_shiksha(course_shiksha)
-                    self.insert_course_expenses_shiksha(course_shiksha)
-
+                    if 'scholarship' in course_shiksha:
+                        self.insert_course_scholarship_shiksha(course_shiksha['scholarship'], fk)
+                    self.insert_admission_process_shiksha(course_shiksha, fk)
+                    self.insert_course_expenses_shiksha(course_shiksha, fk)
+                    fk.save()
             for course in hot:
                 with transaction.atomic():
                     print("hot course only course :", course['title'])
@@ -359,6 +389,7 @@ class University():
                     self.insert_course_start_date_hot_course(course, fk)
                     self.insert_course_detail_hot_course(course, fk)
                     self.insert_course_requirement_hot_course(course, fk)
+                    fk.save()
 
             for course in shiksha:
                 with transaction.atomic():
@@ -366,10 +397,12 @@ class University():
                     fk = self.insert_or_get_course_hot_course(course)
                     self.insert_course_detail_shiksha(course, fk)
                     self.insert_course_requirement_shiksha(course, fk)
-                    self.insert_course_scholarship(course['scolarship'], fk)
-                    self.insert_admission_process_shiksha(course)
-                    self.insert_course_expenses_shiksha(course)
+                    if 'scholarship' in course:
+                        self.insert_course_scholarship_shiksha(course['scholarship'], fk)
 
+                    self.insert_admission_process_shiksha(course, fk)
+                    self.insert_course_expenses_shiksha(course, fk)
+                    fk.save()
                     # now insert the courses from shiksha, but will be implemented in future
 
                     # let's ignore all the shiksha things.

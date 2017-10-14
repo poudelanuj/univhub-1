@@ -7,6 +7,7 @@ class ListText(models.Model):
 
 class TitleText(models.Model):
     name = models.TextField(null=False, blank=False)
+
     def __str__(self):
         return self.name
 
@@ -26,11 +27,20 @@ class UniversityAddress(models.Model):
     postal_code = models.IntegerField(blank=True, null=True)
     university = models.ForeignKey('University', models.DO_NOTHING)
     is_main = models.BooleanField(blank=False, null=False)
+    @staticmethod
+    def json(university):
+        address = UniversityAddress.objects.filter(university=university).values('country', 'state', "city", 'street', "postal_code").get()
+        return address
 
 
 class HighlightText(models.Model):
     university = models.ForeignKey("University")
     content = models.TextField(blank=True, null=True, default=None)
+
+    @staticmethod
+    def list(university):
+        highlights = []
+        return [x for x in HighlightText.objects.filter(university=university).values_list("content", flat=True).all()]
 
     def __str__(self):
         return self.content
@@ -45,24 +55,23 @@ class University(models.Model):
     def __str__(self):
         return self.name
 
-    def highlights(self):
-        highlights = []
-        _highlights = HighlightText.objects.filter(university=self)
-        # append the highlights
-        for highlight in _highlights:
-            highlights.append(highlight.content)
-        return highlights
-
-    def get_world_ranking(self):
-        rank = Ranking.objects.filter(university=self,
-                                      ranking_type=RankingType.objects.get_or_create(content="World")[0])
-        if len(rank):
-            return rank[0].ranking
-        return None
-
     def description(self):
         return Detail.objects.filter(university=self)
 
+    def brief_info(self):
+        address = UniversityAddress.objects.filter(university=self, is_main=True)[0]
+        return {
+            'id': self.pk,
+            'name': self.name,
+            'logo_url': self.logo_url,
+            'mainline': self.main_line,
+            'highlights': HighlightText.list(self),
+            'location': address.json(self),
+            "scholarship": "false",
+            "my_course": ["Course1", "Course2"],
+            'world_ranking': Ranking.world_ranking(self),
+            'course_count': UniversitySubMajor.count(self)
+        }
 
 class Detail(models.Model):
     university = models.ForeignKey("University")
@@ -77,6 +86,9 @@ class Header(models.Model):
 
 class Level(models.Model):
     name = models.TextField(blank=True, null=True, default=None)
+
+    def __str__(self):
+        return self.name
 
 
 class Major(models.Model):
@@ -126,6 +138,10 @@ class UniversitySubMajor(models.Model):
             level[x.major.name][x.title.name] = x.title.pk
         return levels, len(sub_majors)
 
+    @staticmethod
+    def count(university: University):
+        return UniversitySubMajor.objects.filter(university=university).count()
+
     def get_detail_info(self):
         data = {
             "id": self.pk,
@@ -163,11 +179,11 @@ class UniversitySubMajor(models.Model):
 
         return {
             "id": self.pk,
-            'title': self.title,
-            'level': self.level if self.level else 'Unknown',
+            'title': self.title.name,
+            'level': self.level.name if self.level else 'Unknown',
             'duration': self.completion_time if self.completion_time else 'Unknown',
             "scholarship_detail": "Available" if self.scholarship_detail else "Unavailable",
-            "start_data": self.start_date if self.start_date else "Unknown",
+            "start_data": [x.date for x in self.start_date.all()] if self.start_date else "Unknown",
             "tution_fees": self.cost_per_year if self.cost_per_year else "Unknown"
         }
 
@@ -189,6 +205,9 @@ class SubMajor(models.Model):
 
 class SubMajorTitle(models.Model):
     name = models.TextField(blank=True, null=True, default=None)
+
+    def __str__(self):
+        return self.name
 
 
 class SubMajorStartDate(models.Model):
@@ -224,6 +243,14 @@ class Ranking(models.Model):
     ranking_type = models.ForeignKey('RankingType', null=False, blank=False, default=None)
     type_reference_table = models.IntegerField(blank=True, null=True, default=None)
 
+    @staticmethod
+    def world_ranking(university: University):
+        rank = Ranking.objects.filter(university=university,
+                                      ranking_type=RankingType.objects.get(content="World"))
+        if len(rank):
+            return rank[0].ranking
+        return "Unknown"
+
 
 class SubHeader(models.Model):
     title = models.CharField(max_length=250)
@@ -244,7 +271,7 @@ class UniversitySubMajorTopic(models.Model):
 
 class SubMajorEnglishRequirement(models.Model):
     type = models.ForeignKey('RequirementType')
-    score = models.TextField(default=None, null=True, blank=True)
+    score = models.FloatField(default=None, null=True, blank=True)
 
 
 class UniversityCourseScholarship(models.Model):

@@ -1,0 +1,132 @@
+[
+  {
+    "course_count": 127,
+    "name": "Adelphi University",
+    "scholarship": "false",
+    "my_course": [
+      "Course1",
+      "Course2"
+    ],
+    "highlights": [
+      "Located in Garden City, N.Y.",
+      "Individual student attention - 10:1 Student faculty ratio",
+      "Ranked in the top 10% in the USA",
+      "Alumni network of 90,000+"
+    ],
+    "mainline": "With 50+ academic areas of study and hundreds of on-campus resources, Adelphi University has a well-established reputation for academic excellence.",
+    "location": {
+      "city": "GARDEN CITY",
+      "postal_code": 11530,
+      "street": "1 South Avenue",
+      "state": "New York",
+      "country": "United States"
+    },
+    "world_ranking": "Unknown",
+    "id": 1,
+    "logo_url": "https://images1.content-hci.com/hca-cont/img/default/img_px.gif"
+  },
+  {
+    "course_count": 74,
+    "name": "Alliant International University",
+    "scholarship": "false",
+    "my_course": [
+      "Course1",
+      "Course2"
+    ],
+    "highlights": [
+      "Alliant International University-a leader in global education",
+      "Prepares students to enter professional careers",
+      "Has produced 45,000 alumni across the globe",
+      "Regionally accredited by the WASC"
+    ],
+    "mainline": "Alliant International University operates nine campuses in four countries and is home to international students from 75+ countries.",
+    "location": {
+      "city": "San Diego",
+      "postal_code": 92131,
+      "street": " 10455 Pomerado Road",
+      "state": "CA",
+      "country": "Usa"
+    },
+    "world_ranking": "Unknown",
+    "id": 2,
+    "logo_url": "https://images1.content-hci.com/hca-cont/img/default/img_px.gif"
+  },
+  {
+    "course_count": 137,
+    "name": "American University",
+    "scholarship": "false",
+    "my_course": [
+      "Course1",
+      "Course2"
+    ],
+    "highlights": [
+      "AU- 1 of the top-ranked universities in the USA",
+      "Welcomes 1,370+ international students from 129 countries",
+      "200+ clubs with everything from language to sports to dance",
+      "John F. Kennedy & Barack Obama have spoken on campus"
+    ],
+    "mainline": "Nine out of ten AU graduates have landed jobs in their desired fields, enrolled in graduate school, or both, within 6 months of graduation.",
+    "location": {
+      "city": " DC 20016",
+      "postal_code": -1,
+      "street": " Washington",
+      "state": "US",
+      "country": "Usa"
+    },
+    "world_ranking": 351,
+    "id": 3,
+    "logo_url": "https://images1.content-hci.com/hca-cont/img/default/img_px.gif"
+  },
+  {
+    "course_count": 7,
+    "name": "Arkansas State University",
+    "scholarship": "false",
+    "my_course": [
+      "Course1",
+      "Course2"
+    ],
+    "highlights": [
+      "Marked its centennial year in 2009",
+      "The international student population is 7.5%",
+      "Have represented over 68 countries",
+      "90 percent of the students receive financial aid"
+    ],
+    "mainline": null,
+    "location": {
+      "city": " AR 72401",
+      "postal_code": -1,
+      "street": " Jonesboro",
+      "state": "US",
+      "country": "Usa"
+    },
+    "world_ranking": "Unknown",
+    "id": 4,
+    "logo_url": "https://images1.content-hci.com/hca-cont/img/default/img_px.gif"
+  },
+  {
+    "course_count": 139,
+    "name": "Auburn University",
+    "scholarship": "false",
+    "my_course": [
+      "Course1",
+      "Course2"
+    ],
+    "highlights": [
+      "Based in 1 of the \u201cBest Small Places for Business & Careers\u201d",
+      "12 colleges and schools and nationally ranked programs",
+      "Year round activities on campus for students to enjoy",
+      "Based in Auburn- among Top 10 Best places to live"
+    ],
+    "mainline": "Employers recruit Auburn graduates for their edge with their level of professionalism, communication skills, and employability.",
+    "location": {
+      "city": " AL 36849",
+      "postal_code": -1,
+      "street": " Auburn",
+      "state": "US",
+      "country": "Usa"
+    },
+    "world_ranking": 601,
+    "id": 5,
+    "logo_url": "https://images1.content-hci.com/hca-cont/img/default/img_px.gif"
+  }
+]

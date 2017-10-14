@@ -21,7 +21,10 @@ def overview_page():
     return None
 
 
-def course_page():
+def course_page(request,university_id):
+    sub = UniversitySubMajor.objects.filter(university=university_id).select_related('level', 'title').prefetch_related(
+        'start_date')[:10]
+    return render(request, 'courses.html', context={"courses": sub})
     print("course_page")
     return None
 
@@ -34,7 +37,7 @@ def detail_page(request, university_id):
     return render(request, 'index.html', context={'university': university, "address": address})
 
 
-def index_page(request, ):
+def index_page(request ):
     print("index_page")
     return None
 
@@ -47,6 +50,7 @@ def course_detail_page(request, university_id, course_id):
         submajor = UniversitySubMajor.objects.get(university=university,
                                                   title=course)
     except:
+        traceback.print_exc()
         print("Invalid university or course id in course_detail_patg", file=sys.stderr)
         response = JsonResponse({"success": False})
         response.status_code = 404
@@ -55,5 +59,5 @@ def course_detail_page(request, university_id, course_id):
 
 
 def course_info_page(request, university_id, course_id):
-    print("course_info_page")
-    return None
+    pass
+    #return JsonResponse([x.get_brief_info() for x in sub],safe=False)

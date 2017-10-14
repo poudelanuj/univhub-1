@@ -5,7 +5,7 @@ from . import views
 university_id = r'^(?P<university_id>\d+)/'
 
 urlpatterns = [
-    url(r'index\.html', views.index_page),
+    url(r'index.html', views.index_page),
     url(university_id + r'detail\.html', views.detail_page),
     url(university_id + r'courses.html', views.course_page),
     url(university_id + r'overview.html', views.overview_page),

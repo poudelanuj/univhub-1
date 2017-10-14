@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% load static %}
+<div class="clearfix" style="position:relative;">
+<h4 class="total-courses">128 Courses Offered</h4>
 
-</body>
-</html>
+</div>
+<div class="clearfix"style = padding-bottom:20px;">
+    <h6 class="my-course">My Course(Computer Science): Yes Offered - Bachelor in Computer Science</h6>
+    <button class="btn-small-grey">View detail</button>
+    <div class="dropdown course-sort pull-right">
+        <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Sort By:<i class="fa fa-sort"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a href="javascript:">Tuition Fee</a></li>
+            <li><a href="javascript:">Course Duration</a></li>
+            <li><a href="javascript:;">Scholarship Availability</a></li>
+        </ul>
+    </div>
+    <div class="dropdown course-sort pull-right">
+        <button class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Filter:<i class="fa fa-sliders"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a href="javascript:;">Bachelor</a></li>
+            <li><a href="javascript:;">Master</a></li>
+            <li><a href="javascript:;">Diploma</a></li>
+        </ul>
+    </div>
+</div>
+<div class="row courses-lists">
+    {% for course in courses %}
+        <div class="col-md-3 col-sm-4">
+            <div class="course-view">
+                <h2 class="course-view-title">{{course.title}}</h2>
+                <ul class="course-view-details">
+                    <li>Study level: {{course.level}}</li>
+                    <li>Course Duration:{{course.completion_time}}</li>
+                    <li>Scholarship: course.scholarship_available</li>
+                    <li>Start Date:
+                        {% for date in course.start_dates %}
+                            {{date}},
+                        {% endfor %}
+                    </li>
+                    <li>Tuition Fees: {{course.cost_per_year}}</li>
+                </ul>
+                <div class="clearfix">
+                    <button class="btn-univhub"
+                    data-detail-url="course/{{course.pk}}/detail.html"
+                    >View Detail</button>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="{% static 'university/js/courses.js' %}"></script>
+    {% endfor %}
+
+</div>

@@ -28,10 +28,11 @@ from django.contrib.auth.decorators import login_required
 
 from datetime import datetime
 
+
 # any user must have profile form to check if it is blocked or not
-def informationCenter(user:User):
-    group=user.groups.all()[0]
-    if group=='univhub_super_admin':
+def informationCenter(user: User):
+    group = user.groups.all()[0]
+    if group == 'univhub_super_admin':
         pass
 
     print(group.name)
@@ -42,7 +43,6 @@ def informationCenter(user:User):
               'todayjoined': User.objects.filter(date_joined__day=datetime.now().day, groups__name='student').count()
               }
     return parcel
-
 
 
 @login_required
@@ -97,8 +97,9 @@ def signup(request):
             superadmin = get_object_or_404(User, pk=1)
             type1 = get_object_or_404(NotificationType, id=1)
             Notification.objects.create(type=type1, receiver=superadmin, sender=user,
-                                        title= "New Sign Up",
-                                        message=user.first_name + user.last_name + "Signed Up", created=datetime.datetime.now())
+                                        title="New Sign Up",
+                                        message=user.first_name + user.last_name + "Signed Up",
+                                        created=datetime.datetime.now())
 
             return render(request, 'checkemail.html', {'form': form})
     else:
@@ -147,6 +148,7 @@ def getStudentslistPage(request):
     # print(students)
     # return render(request, 'students-list.html')
 
+
 # todo
 # change the notification type in the addadmin and addmoderator functions
 
@@ -173,9 +175,9 @@ def addadmin(request):
             email.send()
             superadmin = get_object_or_404(User, pk=1)
             type1 = get_object_or_404(NotificationType, id=1)
-            Notification.objects.create(type = type1, receiver=superadmin, sender=newuser,
+            Notification.objects.create(type=type1, receiver=superadmin, sender=newuser,
                                         title="Consultancy Created",
-                                        message="Username : " + newuser.username , created=datetime.now())
+                                        message="Username : " + newuser.username, created=datetime.now())
             print("notification sent")
             return JsonResponse(errors)
         else:
@@ -184,7 +186,7 @@ def addadmin(request):
             print("Form invalid. Error = ", errors)
             return JsonResponse(errors)
 
-    return JsonResponse({'success': False,'Reasson':'Request not POST'})
+    return JsonResponse({'success': False, 'Reasson': 'Request not POST'})
 
 
 def addmoderator(request):
@@ -299,6 +301,7 @@ def getOffersPage(request):
             'offer_month': offer_month}
     return render(request, 'offers.html', json)
 
+
 # ajax calls handling part
 
 
@@ -307,7 +310,7 @@ def addcounselor(request):
     user = request.user
     print(user)
     print(request.POST)
-    form = AddCounselorForm(request.POST, request.FILES,user=user or None)
+    form = AddCounselorForm(request.POST, request.FILES, user=user or None)
     # form = AddCounselorForm(request.FILES, request.POST)
     if request.method == 'POST':
         if form.is_valid():
@@ -340,20 +343,19 @@ def addcounselor(request):
             print("Errors: ", errors)
             return JsonResponse(errors)
 
-    return JsonResponse({'success': False,'Reasson':'Request not POST'})
+    return JsonResponse({'success': False, 'Reasson': 'Request not POST'})
 
 
-#todo
-#redo this function
-#delete role will cause the name not to appear in the list
+# todo
+# redo this function
+# delete role will cause the name not to appear in the list
 def ajaxCallForDeleteRole(request):
     userId = request.GET.get('userId')
     usr = User.objects.get(id=userId)
     usr.is_active = False
 
-
     mygroup = Consultancy.objects.filter(user=userId)
-    if(len(mygroup)):
+    if (len(mygroup)):
         mygroup[0].is_blocked = True
         mygroup[0].save()
 
@@ -370,7 +372,6 @@ def ajaxCallForDeleteRole(request):
     data = informationCenter()
     reloadPortion = render_to_string('dashboard_admins_Info.html', data)
     return HttpResponse(reloadPortion)
-
 
 
 def ajaxCallForActivationRole(request):
@@ -394,14 +395,16 @@ def ajaxRemovePickupDocument(request):
     PickupDetail.objects.filter(id=docId).delete()
     return 1
 
+
 # jsonhandler.django - json mai huncha action and operation
 # requesthandler - url mai auxa
 @csrf_exempt
 def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
-    type = request.META.get('CONTENT_TYPE')
+    _type = request.META.get('CONTENT_TYPE')
+    print("Request :",request.body)
     try:
         # print the details
-        if type == 'application/json':
+        if _type == 'application/json':
             try:
                 # try to convert body into json object
                 json_data = json.loads(request.body.decode(encoding='UTF-8'))
@@ -415,18 +418,16 @@ def jsonHandler(request: wsgi.WSGIRequest, action=None, operation=None):
             except Exception as e:
                 # maybe the data is not json.
                 # try other methodse
-                print(request.POST)
-                print(request.GET)
                 response = JsonResponse(
                     {'status': "Error", "Reason": "Json Encryption on data failed. Invalid data sent"})
-                response.status_code = 300
+                response.status_code = 400
                 return response
 
         elif action is not None and operation is not None:
             return handler.handle_request_direct(action, operation, request)
         else:
             response = JsonResponse({'status': "Error", "Reason": "Invalid content type on jsonHandler"})
-            response.status_code = 404
+            response.status_code = 400
             return response
     except Exception as e:
         print("Unaspected")

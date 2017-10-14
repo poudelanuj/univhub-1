@@ -23,11 +23,10 @@ urlpatterns = [
     url(r'^addmoderator/$', views.addmoderator, name='addmoderator'),
     url(r'^addcounselor/$', views.addcounselor, name='addcounselor'),
 
-    url(r'^jsonhandler.django', views.jsonHandler),
+    url(r'^jsonhandler.django(.*)', views.jsonHandler),
     url(r'^requesthandler/(?P<action>\w+)/(?P<operation>\w+)', views.jsonHandler),
 
     url(r'^ajax/CallForDeleteRole/$', views.ajaxCallForDeleteRole, name='ajaxCallForDeleteRole'),
     url(r'^ajax/CallForActivationRole/$', views.ajaxCallForActivationRole, name='ajaxCallForActivationRole'),
     url(r'^ajax/ajaxRemovePickupDocument/$', views.ajaxRemovePickupDocument, name='ajaxRemovePickupDocument'),
-
 ]

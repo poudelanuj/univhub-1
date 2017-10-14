@@ -6,14 +6,16 @@ import pkgutil
 from django.http import JsonResponse
 import sys, importlib
 import traceback
+import sys
 
-
-def error_response(error: str, code=404):
+def error_response(error: str, code=400):
+    print("Error :",error,file=sys.stdout)
     if code == 500:
         traceback.print_exc()
     response = JsonResponse(
         {"status": "error", "cause": error})
     response.status_code = code
+    print("Error:",error,file=sys.stderr)
     return response
 
 
@@ -45,18 +47,19 @@ def handle_request(request):
         action = request['action']['data']
         operation = request['action']['operation']
     except KeyError:
-        error_response('JSON action field is not valid ')
+        return error_response('JSON action field is not valid ')
     del request['action']
     return handle_request_direct(action, operation, request)
 
 
 def handle_request_direct(action, operation, request):
+    global action_map
     if action not in action_map:
-        error_response("Unknown action data : " + action)
+        return error_response("Unknown action data : " + action)
 
     if operation not in action_map[action]:
-        error_response(action + " doesn't have operation " + operation)
-    print("direct")
+        return error_response(action + " doesn't have operation " + operation)
+
     try:
         response = action_map[action][operation](request)
         if response is None:
@@ -64,6 +67,7 @@ def handle_request_direct(action, operation, request):
         else:
             return response
     except:
+        traceback.print_exc()
         return error_response("Internal Server error while serving request '" + operation + "' on '" + action + "' data", 500)
 
 
